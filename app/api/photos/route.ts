@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readData, writeData, ensureUploadDirs } from '@/lib/data';
+import { db } from '@/db';
+import { photos } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import { ensureUploadDirs } from '@/lib/data';
 import fs from 'fs';
 import path from 'path';
-
-interface PhotoEntry {
-  id: number;
-  name: string;
-  url: string;
-  createdAt: string;
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,11 +14,13 @@ export async function POST(request: NextRequest) {
     const photoFiles = formData.getAll('photos');
 
     if (!photoFiles || photoFiles.length === 0) {
-      return NextResponse.json({ error: 'No photos uploaded' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'No photos uploaded' },
+        { status: 400 },
+      );
     }
 
-    const photos = readData<PhotoEntry>('photos.json');
-    const entries: PhotoEntry[] = [];
+    const entries: { name: string; url: string; type: 'wedding'; createdAt: string }[] = [];
 
     for (const file of photoFiles) {
       if (file instanceof File && file.size > 0) {
@@ -30,11 +28,15 @@ export async function POST(request: NextRequest) {
         const buffer = Buffer.from(bytes);
         const ext = path.extname(file.name) || '.jpg';
         const filename = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
-        const filepath = path.join(process.cwd(), 'public/uploads/wedding-photos', filename);
+        const filepath = path.join(
+          process.cwd(),
+          'public/uploads/wedding-photos',
+          filename,
+        );
         fs.writeFileSync(filepath, buffer);
 
         entries.push({
-          id: Date.now() + Math.random(),
+          type: 'wedding',
           name,
           url: `/uploads/wedding-photos/${filename}`,
           createdAt: new Date().toISOString(),
@@ -42,16 +44,28 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    photos.push(...entries);
-    writeData('photos.json', photos);
+    if (entries.length > 0) {
+      await db.insert(photos).values(entries);
+    }
 
     return NextResponse.json({ success: true, count: entries.length });
-  } catch {
+  } catch (error) {
+    console.error('Photos POST error:', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
 
 export async function GET() {
-  const photos = readData<PhotoEntry>('photos.json');
-  return NextResponse.json(photos);
+  try {
+    const weddingPhotos = await db
+      .select()
+      .from(photos)
+      .where(eq(photos.type, 'wedding'))
+      .all();
+
+    return NextResponse.json(weddingPhotos);
+  } catch (error) {
+    console.error('Photos GET error:', error);
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
+  }
 }

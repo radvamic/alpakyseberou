@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+.gitignore
+*.md
+.env*
+data/*.db
+data/*.db-wal
+data/*.db-shm
+public/uploads
+.playwright
+test-results
