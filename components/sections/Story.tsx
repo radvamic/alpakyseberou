@@ -86,8 +86,16 @@ export default function Story() {
   const lineHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
 
   return (
-    <section id="story" className="relative py-24 md:py-32 bg-[#0A0A0A]">
-      <div className="mx-auto max-w-6xl px-6">
+    <section id="story" className="relative py-24 md:py-32 bg-[#0A0A0A] overflow-hidden">
+      {/* Very subtle alpaca pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.025] pointer-events-none"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 24' width='40' height='24'%3E%3Cpath d='M8 18 L10 14 L14 12 L18 14 L20 18' fill='none' stroke='%23C9A96E' stroke-width='0.5'/%3E%3C/svg%3E")`,
+          backgroundRepeat: 'repeat',
+        }}
+      />
+      <div className="relative mx-auto max-w-6xl px-6">
         <SectionHeader
           title={t('story.title') as string}
           subtitle={t('story.subtitle') as string}

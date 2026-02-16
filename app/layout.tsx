@@ -32,6 +32,7 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: "Michal & Klára — 29. 8. 2026",
   description: "Svatební web Michala a Kláry. 29. srpna 2026 v Mlýně Davídkov.",
+  icons: { icon: "/icon.svg" },
   openGraph: {
     title: "Michal & Klára — Svatba 2026",
     description: "Pojďte oslavit naši lásku s námi. 29. srpna 2026, Mlýn Davídkov.",
@@ -45,12 +46,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="cs">
-      <head>
-        <link
-          rel="icon"
-          href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💍</text></svg>"
-        />
-      </head>
+      <head />
       <body
         className={`${cormorant.variable} ${inter.variable} ${greatVibes.variable} ${playfair.variable} antialiased`}
       >

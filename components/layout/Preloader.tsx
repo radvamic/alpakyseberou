@@ -23,15 +23,56 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
           transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
         >
           <div className="relative flex flex-col items-center gap-6">
+            {/* Alpacas - subtle run / appear */}
+            <motion.div
+              className="flex items-end justify-center gap-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.svg
+                viewBox="0 0 48 24"
+                className="h-10 w-20 text-[#C9A96E]"
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <path
+                  d="M8 18 L10 14 L14 12 L18 14 L20 18 L18 20 L14 22 L10 20 Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="0.8"
+                  strokeLinejoin="round"
+                />
+                <path d="M12 10 L10 6 L12 8 L14 6 Z" fill="none" stroke="currentColor" strokeWidth="0.6" strokeLinejoin="round" />
+                <path d="M14 18 L16 14 L24 12" fill="none" stroke="currentColor" strokeWidth="0.6" strokeLinecap="round" />
+              </motion.svg>
+              <motion.svg
+                viewBox="0 0 48 24"
+                className="h-10 w-20 text-[#C9A96E]"
+                style={{ transform: 'scaleX(-1)' }}
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut', delay: 0.15 }}
+              >
+                <path
+                  d="M8 18 L10 14 L14 12 L18 14 L20 18 L18 20 L14 22 L10 20 Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="0.8"
+                  strokeLinejoin="round"
+                />
+                <path d="M12 10 L10 6 L12 8 L14 6 Z" fill="none" stroke="currentColor" strokeWidth="0.6" strokeLinejoin="round" />
+                <path d="M14 18 L16 14 L24 12" fill="none" stroke="currentColor" strokeWidth="0.6" strokeLinecap="round" />
+              </motion.svg>
+            </motion.div>
+
             {/* Monogram */}
             <motion.div
               className="relative"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
             >
               <svg width="120" height="120" viewBox="0 0 120 120" className="overflow-visible">
-                {/* Gold circle drawing */}
                 <motion.circle
                   cx="60"
                   cy="60"

@@ -19,6 +19,8 @@ import Gifts from '@/components/sections/Gifts';
 import FAQ from '@/components/sections/FAQ';
 import Guestbook from '@/components/sections/Guestbook';
 import WeddingPhotos from '@/components/sections/WeddingPhotos';
+import WhyAlpacas from '@/components/sections/WhyAlpacas';
+import AlpacaSectionDivider from '@/components/ui/AlpacaSectionDivider';
 import Footer from '@/components/layout/Footer';
 
 export default function Home() {
@@ -46,25 +48,27 @@ export default function Home() {
 
           <main>
             <Hero />
-            <div className="section-divider" />
+            <AlpacaSectionDivider />
             <Story />
-            <div className="section-divider" />
+            <AlpacaSectionDivider />
+            <WhyAlpacas />
+            <AlpacaSectionDivider />
             <Ceremony />
-            <div className="section-divider" />
+            <AlpacaSectionDivider />
             <Venue />
-            <div className="section-divider" />
+            <AlpacaSectionDivider />
             <RSVP />
-            <div className="section-divider" />
+            <AlpacaSectionDivider />
             <Gallery />
-            <div className="section-divider" />
+            <AlpacaSectionDivider />
             <WeddingParty />
-            <div className="section-divider" />
+            <AlpacaSectionDivider />
             <Gifts />
-            <div className="section-divider" />
+            <AlpacaSectionDivider />
             <FAQ />
-            <div className="section-divider" />
+            <AlpacaSectionDivider />
             <Guestbook />
-            <div className="section-divider" />
+            <AlpacaSectionDivider />
             <WeddingPhotos />
           </main>
 

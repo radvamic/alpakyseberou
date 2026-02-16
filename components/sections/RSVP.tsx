@@ -104,10 +104,42 @@ export default function RSVP() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="text-6xl mb-6">{attending ? '🎉' : '💛'}</div>
-            <h3 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-[#F5F0E8] mb-4">
-              {attending ? (t('rsvp.successYes') as string) : (t('rsvp.successNo') as string)}
-            </h3>
+            {attending ? (
+              <>
+                <div className="flex justify-center mb-6">
+                  <motion.svg
+                    viewBox="0 0 80 50"
+                    className="h-16 w-24 text-[#C9A96E]"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                  >
+                    <path
+                      d="M20 38 L24 30 L32 26 L40 30 L44 38 L40 44 L32 48 L24 44 Z"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                      strokeLinejoin="round"
+                    />
+                    <path d="M26 24 L23 18 L26 20 L29 18 Z" fill="none" stroke="currentColor" strokeWidth="0.8" strokeLinejoin="round" />
+                    <path d="M32 38 L36 34 L50 32" fill="none" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" />
+                  </motion.svg>
+                </div>
+                <h3 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-[#F5F0E8] mb-2">
+                  {t('rsvp.successYes') as string}
+                </h3>
+                <p className="text-[#B8A99A] text-sm font-[family-name:var(--font-cormorant)]">
+                  {t('rsvp.successAlpacaSay') as string}
+                </p>
+              </>
+            ) : (
+              <>
+                <div className="text-6xl mb-6">💛</div>
+                <h3 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-[#F5F0E8]">
+                  {t('rsvp.successNo') as string}
+                </h3>
+              </>
+            )}
           </motion.div>
         </div>
       </section>
