@@ -71,19 +71,19 @@ export default function Hero() {
           poster="/assets/images/hero-poster.jpg"
           className="hero-video"
         >
+          <source src="/assets/video/hero.webm" type="video/webm" />
           <source src="/assets/video/hero.mp4" type="video/mp4" />
-          <source src="/assets/video/hero.mp4" type="video/quicktime" />
         </video>
       </div>
 
       {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 z-[1]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70 z-[1]" />
 
       {/* Gold Particles */}
       <GoldParticles />
 
       {/* Content */}
-      <div className="relative z-10 flex h-full flex-col items-center justify-center px-4">
+      <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 overlay-text">
         {/* Names */}
         <div className="flex flex-col items-center gap-2 sm:gap-4">
           <h1 className="font-[family-name:var(--font-playfair)] text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-wider text-[#F5F0E8] overflow-hidden">

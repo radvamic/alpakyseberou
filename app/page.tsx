@@ -50,11 +50,11 @@ export default function Home() {
           <main>
             <Hero />
             <Story />
-            <AlpacaSectionDivider />
+            <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/why.png" imageWidth={200} imageHeight={140} />
             <WhyAlpacas />
-            <AlpacaSectionDivider />
+            <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/ceremony.png" imageWidth={240} imageHeight={140} />
             <Ceremony />
-            <AlpacaSectionDivider />
+            <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/venue.png" imageWidth={260} imageHeight={130} />
             <Venue />
             <AlpacaSectionDivider />
             <RSVP />

@@ -30,7 +30,7 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/assets/images/alpacas-v2.png"
+                src="/assets/images/alpacas/web/preloader.png"
                 alt="Alpaky"
                 width={260}
                 height={130}

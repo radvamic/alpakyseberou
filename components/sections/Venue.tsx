@@ -24,38 +24,54 @@ interface AccommodationBuilding {
 const accommodationBuildings: { cs: AccommodationBuilding[]; en: AccommodationBuilding[] } = {
   cs: [
     {
-      name: 'Hotelové křídlo 1',
-      subtitle: 'Osobitě zařízené pokoje s výhledem do zeleně',
-      desc: 'Pokoje v mezonetu nebo přízemí, vždy s výhledem do zeleně. Budete spát v peřinách, které ještě voní rozkvetlou loukou. Věřte nám, že na tohle místo jen tak nezapomenete.',
-      rooms: '22 pokojů',
-      image: '/assets/images/venue/mlyn-building.webp',
-      url: 'https://www.hotel-vsetice.cz/',
+      name: 'Klasik',
+      subtitle: 'Útulné pokoje s venkovským šarmem',
+      desc: 'Příjemné pokoje, kde zakusíte atmosféru bezstarostného venkova. Jednoduchý a čistý styl, ve kterém se budete cítit jako na prázdninách u babičky.',
+      rooms: '10 pokojů',
+      image: '/assets/images/venue/room-klasik.jpg',
+      url: 'https://www.hotel-vsetice.cz/pokoje',
     },
     {
-      name: 'Hotelové křídlo 2',
-      subtitle: 'Pokoje s výhledem na vodní hladinu',
-      desc: 'Druhé křídlo hotelu nabízí pokoje s výhledem na klidnou vodní hladinu. Vykročte z pokoje rovnou do orosené trávy, prohřejte se v sauně a osvěžte se v přírodním jezírku.',
-      rooms: '22 pokojů',
-      image: '/assets/images/venue/salanda-building.webp',
-      url: 'https://www.hotel-vsetice.cz/',
+      name: 'Komfort',
+      subtitle: 'Prostorné pokoje pro 2–4 hosty',
+      desc: 'Celkem 26 komfortních pokojů ve třech hotelových křídlech. Dva z pokojů disponují bezbariérovým přístupem. Ideální volba pro pohodlný odpočinek po svatebním veselí.',
+      rooms: '26 pokojů',
+      image: '/assets/images/venue/room-komfort.jpg',
+      url: 'https://www.hotel-vsetice.cz/pokoje',
+    },
+    {
+      name: 'Exclusive',
+      subtitle: 'Originální tematická apartmá',
+      desc: 'Osobitě zařízená apartmá, každé s vlastním příběhem — od orientálního Lázeňského pokoje s vířivou vanou po romantické Železné apartmá s nebesy. Ideální pro novomanžele a náročné hosty.',
+      rooms: '8 apartmá',
+      image: '/assets/images/venue/room-exclusive.jpg',
+      url: 'https://www.hotel-vsetice.cz/pokoje',
     },
   ],
   en: [
     {
-      name: 'Hotel Wing 1',
-      subtitle: 'Uniquely furnished rooms with views of the greenery',
-      desc: 'Mezzanine or ground floor rooms, always with views of the greenery. You\'ll sleep in bedding that still smells of blooming meadows. Trust us, you won\'t forget this place easily.',
-      rooms: '22 rooms',
-      image: '/assets/images/venue/mlyn-building.webp',
-      url: 'https://www.hotel-vsetice.cz/',
+      name: 'Klasik',
+      subtitle: 'Cozy rooms with countryside charm',
+      desc: 'Pleasant rooms where you\'ll experience the atmosphere of a carefree countryside. A simple, clean style that feels like a holiday at grandma\'s house.',
+      rooms: '10 rooms',
+      image: '/assets/images/venue/room-klasik.jpg',
+      url: 'https://www.hotel-vsetice.cz/pokoje',
     },
     {
-      name: 'Hotel Wing 2',
-      subtitle: 'Rooms with views of the water surface',
-      desc: 'The second wing of the hotel offers rooms with views of the calm water surface. Step out of your room straight onto the dewy grass, warm up in the sauna, and refresh yourself in the natural swimming pond.',
-      rooms: '22 rooms',
-      image: '/assets/images/venue/salanda-building.webp',
-      url: 'https://www.hotel-vsetice.cz/',
+      name: 'Komfort',
+      subtitle: 'Spacious rooms for 2–4 guests',
+      desc: 'A total of 26 comfort rooms across three hotel wings. Two rooms feature barrier-free access. The ideal choice for a comfortable rest after the wedding festivities.',
+      rooms: '26 rooms',
+      image: '/assets/images/venue/room-komfort.jpg',
+      url: 'https://www.hotel-vsetice.cz/pokoje',
+    },
+    {
+      name: 'Exclusive',
+      subtitle: 'Original themed suites',
+      desc: 'Uniquely furnished suites, each with its own story — from the oriental Spa Room with a whirlpool tub to the romantic Iron Suite with a canopy bed. Perfect for the newlyweds and discerning guests.',
+      rooms: '8 suites',
+      image: '/assets/images/venue/room-exclusive.jpg',
+      url: 'https://www.hotel-vsetice.cz/pokoje',
     },
   ],
 };
@@ -88,18 +104,22 @@ export default function Venue() {
 
   return (
     <section id="venue" className="relative py-24 md:py-32 bg-[#0A0A0A]">
-      {/* Full-width aerial photo */}
+      {/* Full-width venue video */}
       <div className="relative mb-16 md:mb-24 h-[50vh] md:h-[70vh] overflow-hidden">
-        <Image
-          src="/assets/images/venue/aerial.webp"
-          alt="Hotel Všetice - aerial view"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-[#0A0A0A]" />
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/assets/images/venue-poster.jpg"
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/assets/video/venue.mp4" type="video/mp4" />
+          <source src="/assets/video/venue.webm" type="video/webm" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-[#0A0A0A]" />
         {/* Overlay text */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <div className="absolute inset-0 flex flex-col items-center justify-center overlay-text">
           <motion.h2
             className="font-[family-name:var(--font-playfair)] text-4xl sm:text-5xl md:text-7xl text-[#F5F0E8] font-light tracking-wider"
             initial={{ opacity: 0, y: 30 }}
@@ -192,8 +212,8 @@ export default function Venue() {
           </h3>
           <p className="text-center text-sm text-[#B8A99A] mb-10">
             {locale === 'cs'
-              ? 'Jeden resort, více stylů ubytování'
-              : 'One resort, multiple accommodation styles'}
+              ? 'Tři kategorie pokojů pro každý vkus'
+              : 'Three room categories for every taste'}
           </p>
 
           {/* Building tabs */}
@@ -230,8 +250,8 @@ export default function Venue() {
                   fill
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/10" />
+                <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 overlay-text">
                   <div className="flex items-center gap-3 mb-2">
                     <h4 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-[#F5F0E8] font-light">
                       {buildings[activeBuilding].name}
@@ -291,7 +311,7 @@ export default function Venue() {
           transition={{ duration: 0.8 }}
         >
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2575.0!2d14.5186!3d49.8144!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b8f3c3c3c3c3c%3A0x0!2zSG90ZWwgVsWhZXRpY2U!5e0!3m2!1scs!2scz!4v1770743729446!5m2!1scs!2scz"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2575.0!2d14.5138085!3d49.789348!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b823ef333efd1%3A0x8703bf635045cf0!2sHotel+V%C5%A1etice!5e0!3m2!1scs!2scz!4v1770743729446!5m2!1scs!2scz"
             className="w-full h-[300px] md:h-[400px]"
             allowFullScreen
             loading="lazy"
@@ -310,7 +330,7 @@ export default function Venue() {
           <p className="mb-4 text-[#B8A99A]">{t('venue.address') as string}</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="https://www.google.com/maps/place/Hotel+V%C5%A1etice/@49.8144,14.5186,17z"
+              href="https://www.google.com/maps/place/Hotel+V%C5%A1etice/@49.789348,14.5138085,17z"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full border border-[#C9A96E]/30 px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:border-[#C9A96E] hover:bg-[#C9A96E]/10"

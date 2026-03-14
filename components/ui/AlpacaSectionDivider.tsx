@@ -2,41 +2,48 @@
 
 import { motion } from 'framer-motion';
 
-/** Minimal alpaca silhouette for divider - two facing each other */
-function AlpacaSilhouette({ className, flip }: { className?: string; flip?: boolean }) {
-  return (
-    <motion.svg
-      viewBox="0 0 48 24"
-      className={className}
-      style={flip ? { transform: 'scaleX(-1)' } : undefined}
-      initial={{ opacity: 0, y: 4 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-20px' }}
-      transition={{ duration: 0.5 }}
-    >
-      {/* Head, ear, neck - minimal line style */}
-      <path
-        d="M8 18 L10 14 L14 12 L18 14 L20 18 L18 20 L14 22 L10 20 Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="0.8"
-        strokeLinejoin="round"
-      />
-      <path d="M12 10 L10 6 L12 8 L14 6 Z" fill="none" stroke="currentColor" strokeWidth="0.6" strokeLinejoin="round" />
-      <path d="M14 18 L16 14 L24 12" fill="none" stroke="currentColor" strokeWidth="0.6" strokeLinecap="round" />
-    </motion.svg>
-  );
+interface AlpacaSectionDividerProps {
+  imageSrc?: string;
+  imageWidth?: number;
+  imageHeight?: number;
 }
 
-export default function AlpacaSectionDivider() {
+export default function AlpacaSectionDivider({
+  imageSrc,
+  imageWidth = 180,
+  imageHeight = 100,
+}: AlpacaSectionDividerProps) {
   return (
-    <div className="flex items-center justify-center gap-4 py-6" aria-hidden>
-      <div className="h-px flex-1 max-w-[120px] bg-gradient-to-r from-transparent to-[#C9A96E]/60" />
-      <div className="flex items-center justify-center gap-3 text-[#C9A96E]/80">
-        <AlpacaSilhouette className="h-6 w-12" />
-        <AlpacaSilhouette className="h-6 w-12" flip />
+    <div className="flex flex-col items-center justify-center py-8 md:py-10" aria-hidden>
+      <div className="flex items-center justify-center gap-4 w-full">
+        <div className="h-px flex-1 max-w-[120px] bg-gradient-to-r from-transparent to-[#C9A96E]/40" />
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.6 }}
+        >
+          {imageSrc ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={imageSrc}
+              alt=""
+              width={imageWidth}
+              height={imageHeight}
+              className="object-contain opacity-70"
+            />
+          ) : (
+            <div className="flex items-center gap-1 text-[#C9A96E]/50">
+              <svg viewBox="0 0 24 4" className="w-6 h-1">
+                <circle cx="2" cy="2" r="1.5" fill="currentColor" />
+                <circle cx="12" cy="2" r="1.5" fill="currentColor" />
+                <circle cx="22" cy="2" r="1.5" fill="currentColor" />
+              </svg>
+            </div>
+          )}
+        </motion.div>
+        <div className="h-px flex-1 max-w-[120px] bg-gradient-to-l from-transparent to-[#C9A96E]/40" />
       </div>
-      <div className="h-px flex-1 max-w-[120px] bg-gradient-to-l from-transparent to-[#C9A96E]/60" />
     </div>
   );
 }

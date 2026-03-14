@@ -106,7 +106,7 @@ export default function Story() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/assets/images/alpacas-story.png"
+            src="/assets/images/alpacas/web/story.png"
             alt="Alpaky"
             width={340}
             height={226}

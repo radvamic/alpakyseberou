@@ -107,6 +107,11 @@ html.lenis body {
   object-fit: cover;
 }
 
+/* Text overlay shadow for readability on images/videos */
+.overlay-text {
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
 /* Section divider */
 .section-divider {
   height: 1px;

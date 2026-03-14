@@ -94,7 +94,7 @@ const translations: Record<Locale, any> = {
       funFact: 'Necelá hodina z Prahy, proti proudu Vltavy, kde se poklidně tekoucí řeka promění v majestátní Slapskou přehradu.',
       features: [
         { icon: '👥', title: 'Kapacita', desc: 'Až 130 hostů' },
-        { icon: '🛏️', title: 'Ubytování', desc: '44 pokojů ve 2 křídlech' },
+        { icon: '🛏️', title: 'Ubytování', desc: '44 pokojů ve 3 kategoriích' },
         { icon: '🌿', title: 'Příroda', desc: 'Kouzelný venkov s koňmi' },
         { icon: '🚗', title: 'Dostupnost', desc: 'Necelá hodina z Prahy' },
       ],
@@ -146,8 +146,9 @@ const translations: Record<Locale, any> = {
       title: 'Ubytování & Doprava',
       subtitle: 'Vše, co potřebujete vědět',
       buildings: [
-        { name: 'Hotelové křídlo 1', desc: 'Osobitě zařízené pokoje s výhledem do zeleně. Mezonety i přízemí.', icon: '🏛️' },
-        { name: 'Hotelové křídlo 2', desc: 'Pokoje s výhledem na vodní hladinu a klidné okolí.', icon: '🏡' },
+        { name: 'Klasik', desc: 'Útulné pokoje s venkovským šarmem a čistým stylem.', icon: '🛏️' },
+        { name: 'Komfort', desc: '26 prostorných pokojů pro 2–4 hosty ve třech hotelových křídlech.', icon: '🏨' },
+        { name: 'Exclusive', desc: 'Originální tematická apartmá s vlastním příběhem a unikátním zařízením.', icon: '✨' },
       ],
       transport: {
         title: 'Jak se k nám dostat',
@@ -244,7 +245,7 @@ const translations: Record<Locale, any> = {
       teaserCta: 'Vyzkoušet fotokoutek',
     },
     footer: {
-      hashtag: '#MichalAKlara2026',
+      hashtag: '#KlaraAMichal2026',
       quote: '"V tobě jsem konečně našel domov, který jsem hledal celý život."',
       madeWith: 'Vytvořeno s',
       copyright: '© 2026 Klára & Michal',
@@ -330,7 +331,7 @@ const translations: Record<Locale, any> = {
       funFact: 'Less than an hour from Prague, following the Vltava upstream, where the gently flowing river transforms into the majestic Slapy Reservoir.',
       features: [
         { icon: '👥', title: 'Capacity', desc: 'Up to 130 guests' },
-        { icon: '🛏️', title: 'Accommodation', desc: '44 rooms in 2 wings' },
+        { icon: '🛏️', title: 'Accommodation', desc: '44 rooms in 3 categories' },
         { icon: '🌿', title: 'Nature', desc: 'Charming countryside with horses' },
         { icon: '🚗', title: 'Accessibility', desc: 'Less than 1 hour from Prague' },
       ],
@@ -382,8 +383,9 @@ const translations: Record<Locale, any> = {
       title: 'Accommodation & Transport',
       subtitle: 'Everything you need to know',
       buildings: [
-        { name: 'Hotel Wing 1', desc: 'Uniquely furnished rooms with views of the greenery. Mezzanines and ground floor.', icon: '🏛️' },
-        { name: 'Hotel Wing 2', desc: 'Rooms with views of the water surface and peaceful surroundings.', icon: '🏡' },
+        { name: 'Klasik', desc: 'Cozy rooms with countryside charm and a clean, simple style.', icon: '🛏️' },
+        { name: 'Komfort', desc: '26 spacious rooms for 2–4 guests across three hotel wings.', icon: '🏨' },
+        { name: 'Exclusive', desc: 'Original themed suites, each with its own story and unique furnishings.', icon: '✨' },
       ],
       transport: {
         title: 'How to get here',
@@ -480,7 +482,7 @@ const translations: Record<Locale, any> = {
       teaserCta: 'Try the photo booth',
     },
     footer: {
-      hashtag: '#MichalAKlara2026',
+      hashtag: '#KlaraAMichal2026',
       quote: '"In you, I finally found the home I\'d been searching for my whole life."',
       madeWith: 'Made with',
       copyright: '© 2026 Klára & Michal',
