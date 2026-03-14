@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 import GoldParticles from '@/components/ui/GoldParticles';
 
-const WEDDING_DATE = new Date('2026-08-29T14:00:00+02:00').getTime();
+const WEDDING_DATE = new Date('2026-09-26T14:00:00+02:00').getTime();
 
 function splitText(text: string) {
   return text.split('').map((char, i) => (
@@ -87,7 +87,7 @@ export default function Hero() {
         {/* Names */}
         <div className="flex flex-col items-center gap-2 sm:gap-4">
           <h1 className="font-[family-name:var(--font-playfair)] text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-wider text-[#F5F0E8] overflow-hidden">
-            {splitText('Michal')}
+            {splitText('Klára')}
           </h1>
           <motion.span
             className="font-[family-name:var(--font-great-vibes)] text-4xl sm:text-5xl md:text-6xl text-[#C9A96E]"
@@ -98,7 +98,7 @@ export default function Hero() {
             &
           </motion.span>
           <h1 className="font-[family-name:var(--font-playfair)] text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-wider text-[#F5F0E8] overflow-hidden">
-            {splitText('Klára')}
+            {splitText('Michal')}
           </h1>
         </div>
 

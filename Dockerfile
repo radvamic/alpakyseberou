@@ -18,9 +18,6 @@ ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
 
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs
-
 # Copy standalone output
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
@@ -29,13 +26,12 @@ COPY --from=builder /app/public ./public
 # Copy DB migrations for runtime
 COPY --from=builder /app/db/migrations ./db/migrations
 
-# Create data & upload dirs with correct permissions
+# Create data & upload dirs
 RUN mkdir -p /app/data \
              /app/public/uploads/guestbook \
-             /app/public/uploads/wedding-photos && \
-    chown -R nextjs:nodejs /app/data /app/public/uploads
+             /app/public/uploads/wedding-photos \
+             /app/public/uploads/photobooth \
+             /app/public/photobooth/couple
 
-USER nextjs
 EXPOSE 3000
-
 CMD ["node", "server.js"]

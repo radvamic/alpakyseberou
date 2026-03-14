@@ -129,3 +129,19 @@ export const questionnaireResponses = sqliteTable('questionnaire_responses', {
     .notNull()
     .default(sql`(datetime('now'))`),
 });
+
+// ---------------------------------------------------------------------------
+// AI Photo Booth
+// ---------------------------------------------------------------------------
+export const photoboothPhotos = sqliteTable('photobooth_photos', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userName: text('user_name').notNull(),
+  originalPhotoUrl: text('original_photo_url').notNull(),
+  generatedPhotoUrl: text('generated_photo_url').notNull(),
+  category: text('category').notNull(),
+  motifId: text('motif_id').notNull(),
+  isPublic: integer('is_public', { mode: 'boolean' }).default(false),
+  createdAt: text('created_at')
+    .notNull()
+    .default(sql`(datetime('now'))`),
+});

@@ -96,6 +96,24 @@ export default function Story() {
         }}
       />
       <div className="relative mx-auto max-w-6xl px-6">
+        {/* Alpaca illustration */}
+        <motion.div
+          className="flex justify-center mb-8"
+          initial={{ opacity: 0, y: -16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.8 }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/images/alpacas-story.png"
+            alt="Alpaky"
+            width={340}
+            height={226}
+            className="object-contain"
+          />
+        </motion.div>
+
         <SectionHeader
           title={t('story.title') as string}
           subtitle={t('story.subtitle') as string}

@@ -4,16 +4,16 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 
-const navItems = [
+const navItems: { href: string; key: string; external?: boolean }[] = [
   { href: '#story', key: 'nav.story' },
   { href: '#ceremony', key: 'nav.ceremony' },
   { href: '#venue', key: 'nav.venue' },
   { href: '#rsvp', key: 'nav.rsvp' },
   { href: '#gallery', key: 'nav.gallery' },
   { href: '#wedding-party', key: 'nav.party' },
-
   { href: '#faq', key: 'nav.faq' },
   { href: '#guestbook', key: 'nav.guestbook' },
+  { href: '/fotokoutek', key: 'nav.photobooth', external: true },
 ];
 
 export default function Navbar() {
@@ -69,7 +69,7 @@ export default function Navbar() {
             href="#hero"
             className="font-[family-name:var(--font-great-vibes)] text-2xl text-[#C9A96E] hover:text-[#D4AF37] transition-colors"
           >
-            M & K
+            K & M
           </a>
 
           {/* Desktop Nav */}
@@ -79,9 +79,11 @@ export default function Navbar() {
                 <a
                   href={item.href}
                   className={`text-xs tracking-[0.15em] uppercase transition-colors duration-300 ${
-                    activeSection === item.href
-                      ? 'text-[#C9A96E]'
-                      : 'text-[#B8A99A] hover:text-[#F5F0E8]'
+                    item.external
+                      ? 'border border-[#C9A96E]/20 rounded-full px-3 py-1 hover:bg-[#C9A96E]/10 text-[#C9A96E]'
+                      : activeSection === item.href
+                        ? 'text-[#C9A96E]'
+                        : 'text-[#B8A99A] hover:text-[#F5F0E8]'
                   }`}
                 >
                   {t(item.key) as string}

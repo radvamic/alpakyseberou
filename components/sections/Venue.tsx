@@ -24,74 +24,58 @@ interface AccommodationBuilding {
 const accommodationBuildings: { cs: AccommodationBuilding[]; en: AccommodationBuilding[] } = {
   cs: [
     {
-      name: 'Mlýn',
-      subtitle: 'Historická budova s moderním nádechem',
-      desc: 'Hlavní budova Mlýna Davídkov je autentickým místem s kouzelnou atmosférou. Dominantou je prostorná mlýnice, kde můžete cítit historii každého kamene. V přízemí se nachází stylová restaurace a v srdci budovy útulný krb, který dodává teplo a pohodu.',
-      rooms: '13 pokojů',
+      name: 'Hotelové křídlo 1',
+      subtitle: 'Osobitě zařízené pokoje s výhledem do zeleně',
+      desc: 'Pokoje v mezonetu nebo přízemí, vždy s výhledem do zeleně. Budete spát v peřinách, které ještě voní rozkvetlou loukou. Věřte nám, že na tohle místo jen tak nezapomenete.',
+      rooms: '22 pokojů',
       image: '/assets/images/venue/mlyn-building.webp',
-      url: 'https://www.mlyndavidkov.cz/pokoje/mlyn',
+      url: 'https://www.hotel-vsetice.cz/',
     },
     {
-      name: 'Šalanda',
-      subtitle: 'Ubytování v přírodě',
-      desc: 'Šalanda poskytuje komfortní ubytování s moderním zázemím. Pokoje jsou útulné a zaručují klidný odpočinek v přírodě. V budově se nachází stáje, které přidávají místu rustikální atmosféru.',
-      rooms: '10 pokojů',
+      name: 'Hotelové křídlo 2',
+      subtitle: 'Pokoje s výhledem na vodní hladinu',
+      desc: 'Druhé křídlo hotelu nabízí pokoje s výhledem na klidnou vodní hladinu. Vykročte z pokoje rovnou do orosené trávy, prohřejte se v sauně a osvěžte se v přírodním jezírku.',
+      rooms: '22 pokojů',
       image: '/assets/images/venue/salanda-building.webp',
-      url: 'https://www.mlyndavidkov.cz/pokoje/salanda',
-    },
-    {
-      name: 'Vila Toyen',
-      subtitle: 'Soukromí v dechberoucí přírodě',
-      desc: 'Elegantní secesní vila naproti hlavnímu areálu s nezaměnitelnou atmosférou. Nabízí stylové prostory s nádherným interiérem, inspirativní zahradou a okolní přírodou. Spojuje eleganci, klid a exkluzivní prostředí.',
-      rooms: '5 pokojů',
-      image: '/assets/images/venue/vila-toyen-building.webp',
-      url: 'https://www.mlyndavidkov.cz/pokoje/vila-toyen',
+      url: 'https://www.hotel-vsetice.cz/',
     },
   ],
   en: [
     {
-      name: 'Mlýn (The Mill)',
-      subtitle: 'A historic building with a modern touch',
-      desc: 'The main building of Mlýn Davídkov is an authentic place with a magical atmosphere. Its centerpiece is the spacious mill hall, where you can feel the history in every stone. The ground floor features a stylish restaurant and a cozy fireplace in the heart of the building.',
-      rooms: '13 rooms',
+      name: 'Hotel Wing 1',
+      subtitle: 'Uniquely furnished rooms with views of the greenery',
+      desc: 'Mezzanine or ground floor rooms, always with views of the greenery. You\'ll sleep in bedding that still smells of blooming meadows. Trust us, you won\'t forget this place easily.',
+      rooms: '22 rooms',
       image: '/assets/images/venue/mlyn-building.webp',
-      url: 'https://www.mlyndavidkov.cz/en/pokoje/mlyn',
+      url: 'https://www.hotel-vsetice.cz/',
     },
     {
-      name: 'Šalanda',
-      subtitle: 'Accommodation in nature',
-      desc: 'Šalanda offers comfortable accommodation with modern facilities. The rooms are cozy and guarantee a peaceful rest surrounded by nature. The building includes stables that add a rustic atmosphere to the place.',
-      rooms: '10 rooms',
+      name: 'Hotel Wing 2',
+      subtitle: 'Rooms with views of the water surface',
+      desc: 'The second wing of the hotel offers rooms with views of the calm water surface. Step out of your room straight onto the dewy grass, warm up in the sauna, and refresh yourself in the natural swimming pond.',
+      rooms: '22 rooms',
       image: '/assets/images/venue/salanda-building.webp',
-      url: 'https://www.mlyndavidkov.cz/en/pokoje/salanda',
-    },
-    {
-      name: 'Vila Toyen',
-      subtitle: 'Privacy in breathtaking nature',
-      desc: 'An elegant Art Nouveau villa opposite the main grounds with an unmistakable atmosphere. It offers stylish spaces with a beautiful interior, an inspiring garden and surrounding nature. It combines elegance, tranquility and an exclusive setting.',
-      rooms: '5 rooms',
-      image: '/assets/images/venue/vila-toyen-building.webp',
-      url: 'https://www.mlyndavidkov.cz/en/pokoje/vila-toyen',
+      url: 'https://www.hotel-vsetice.cz/',
     },
   ],
 };
 
 const highlights = {
   cs: [
-    { icon: '💒', title: '1000+ svateb', desc: 'Legendární svatební mlýn, kde se odehrálo přes tisíc příběhů lásky.' },
-    { icon: '🏞️', title: 'Absolutní soukromí', desc: 'Resort obklopený přírodou — nikdo vás nebude rušit. Celý areál patří jen vám.' },
+    { icon: '🏞️', title: 'Absolutní soukromí', desc: 'Statek obklopený přírodou — nikdo vás nebude rušit. Celý areál patří jen vám.' },
     { icon: '🍽️', title: 'Vynikající gastronomie', desc: 'Každá úspěšná svatba je spojena s dokonalým gastronomickým zážitkem.' },
-    { icon: '🌊', title: '6 obřadních míst', desc: 'Molo, Bašta, Palouk, Vila, Stodola, Nádvoří — vyberte si to své.' },
-    { icon: '👰', title: 'Přípravny pro novomanžele', desc: 'Speciální přípravna pro nevěstu i ženicha a novomanželský pokoj.' },
-    { icon: '🌿', title: 'Malebné údolí', desc: 'Dechberoucí příroda, která umocňuje dokonalý zážitek z každé strany.' },
+    { icon: '🐴', title: 'Koně & jízdárna', desc: 'Statek s vlastní jízdárnou — koně jsou součástí kouzelné atmosféry místa.' },
+    { icon: '🧖', title: 'Sauna & jezírko', desc: 'Prohřejte se v sauně a osvěžte se v přírodním jezírku přímo v areálu.' },
+    { icon: '🌿', title: 'Kouzelný venkov', desc: 'Malebná krajina jižně od Prahy, kde cvrčci si notují milostnou píseň.' },
+    { icon: '🛏️', title: '44 pokojů', desc: 'Osobitě zařízené pokoje s ubytovací kapacitou až 130 hostů.' },
   ],
   en: [
-    { icon: '💒', title: '1000+ Weddings', desc: 'A legendary wedding mill where over a thousand love stories have unfolded.' },
-    { icon: '🏞️', title: 'Complete Privacy', desc: 'A resort surrounded by nature — no one will disturb you. The entire venue is yours.' },
+    { icon: '🏞️', title: 'Complete Privacy', desc: 'An estate surrounded by nature — no one will disturb you. The entire venue is yours.' },
     { icon: '🍽️', title: 'Exquisite Gastronomy', desc: 'Every successful wedding is paired with a perfect gastronomic experience.' },
-    { icon: '🌊', title: '6 Ceremony Spots', desc: 'Molo, Bašta, Palouk, Vila, Stodola, Nádvoří — pick your favorite.' },
-    { icon: '👰', title: 'Bridal & Groom Suites', desc: 'Dedicated preparation rooms for the bride and groom, plus a newlywed suite.' },
-    { icon: '🌿', title: 'Picturesque Valley', desc: 'Breathtaking nature that enhances the perfect experience from every angle.' },
+    { icon: '🐴', title: 'Horses & Riding', desc: 'An estate with its own riding hall — horses are part of the magical atmosphere.' },
+    { icon: '🧖', title: 'Sauna & Pond', desc: 'Warm up in the sauna and refresh yourself in the natural swimming pond on-site.' },
+    { icon: '🌿', title: 'Enchanting Countryside', desc: 'A picturesque landscape south of Prague where crickets sing love songs.' },
+    { icon: '🛏️', title: '44 Rooms', desc: 'Uniquely furnished rooms with accommodation capacity for up to 130 guests.' },
   ],
 };
 
@@ -108,7 +92,7 @@ export default function Venue() {
       <div className="relative mb-16 md:mb-24 h-[50vh] md:h-[70vh] overflow-hidden">
         <Image
           src="/assets/images/venue/aerial.webp"
-          alt="Mlýn Davídkov - aerial view"
+          alt="Hotel Všetice - aerial view"
           fill
           className="object-cover"
           priority
@@ -160,7 +144,7 @@ export default function Venue() {
           <p className="text-sm text-[#E8D5B5]">{t('venue.funFact') as string}</p>
         </motion.div>
 
-        {/* Why Mlýn is unique - Highlights */}
+        {/* Why this venue - Highlights */}
         <motion.div
           className="mb-20"
           initial={{ opacity: 0 }}
@@ -169,7 +153,7 @@ export default function Venue() {
           transition={{ duration: 0.8 }}
         >
           <h3 className="text-center font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-[#F5F0E8] font-light mb-12">
-            {locale === 'cs' ? 'Proč právě Mlýn Davídkov' : 'Why Mlýn Davídkov'}
+            {locale === 'cs' ? 'Proč právě Hotel Všetice' : 'Why Hotel Všetice'}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {venueHighlights.map((item, i) => (
@@ -307,7 +291,7 @@ export default function Venue() {
           transition={{ duration: 0.8 }}
         >
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2567.9193529732015!2d14.991282699999996!3d49.9378545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470c6e141bb905d5%3A0x39685235cf89b41!2zTWzDvW4gRGF2w61ka292!5e0!3m2!1scs!2scz!4v1770743729446!5m2!1scs!2scz"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2575.0!2d14.5186!3d49.8144!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b8f3c3c3c3c3c%3A0x0!2zSG90ZWwgVsWhZXRpY2U!5e0!3m2!1scs!2scz!4v1770743729446!5m2!1scs!2scz"
             className="w-full h-[300px] md:h-[400px]"
             allowFullScreen
             loading="lazy"
@@ -326,7 +310,7 @@ export default function Venue() {
           <p className="mb-4 text-[#B8A99A]">{t('venue.address') as string}</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="https://www.google.com/maps/place/Ml%C3%BDn+Dav%C3%ADdkov/@49.9378545,14.9912827,17z"
+              href="https://www.google.com/maps/place/Hotel+V%C5%A1etice/@49.8144,14.5186,17z"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full border border-[#C9A96E]/30 px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:border-[#C9A96E] hover:bg-[#C9A96E]/10"
@@ -334,12 +318,12 @@ export default function Venue() {
               {t('venue.navigate') as string}
             </a>
             <a
-              href="https://www.mlyndavidkov.cz/"
+              href="https://www.hotel-vsetice.cz/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full border border-[#2A2520] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#B8A99A] transition-all duration-500 hover:border-[#C9A96E]/30 hover:text-[#E8D5B5]"
             >
-              mlyndavidkov.cz
+              hotel-vsetice.cz
             </a>
           </div>
         </motion.div>

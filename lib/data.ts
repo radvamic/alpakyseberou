@@ -5,6 +5,7 @@ export function ensureUploadDirs() {
   const dirs = [
     path.join(process.cwd(), 'public/uploads/guestbook'),
     path.join(process.cwd(), 'public/uploads/wedding-photos'),
+    path.join(process.cwd(), 'public/uploads/photobooth'),
   ];
   for (const dir of dirs) {
     if (!fs.existsSync(dir)) {

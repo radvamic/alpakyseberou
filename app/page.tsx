@@ -20,6 +20,7 @@ import FAQ from '@/components/sections/FAQ';
 import Guestbook from '@/components/sections/Guestbook';
 import WeddingPhotos from '@/components/sections/WeddingPhotos';
 import WhyAlpacas from '@/components/sections/WhyAlpacas';
+import PhotoBoothTeaser from '@/components/sections/PhotoBoothTeaser';
 import AlpacaSectionDivider from '@/components/ui/AlpacaSectionDivider';
 import Footer from '@/components/layout/Footer';
 
@@ -48,7 +49,6 @@ export default function Home() {
 
           <main>
             <Hero />
-            <AlpacaSectionDivider />
             <Story />
             <AlpacaSectionDivider />
             <WhyAlpacas />
@@ -68,6 +68,8 @@ export default function Home() {
             <FAQ />
             <AlpacaSectionDivider />
             <Guestbook />
+            <AlpacaSectionDivider />
+            <PhotoBoothTeaser />
             <AlpacaSectionDivider />
             <WeddingPhotos />
           </main>

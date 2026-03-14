@@ -30,12 +30,12 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Michal & Klára — 29. 8. 2026",
-  description: "Svatební web Michala a Kláry. 29. srpna 2026 v Mlýně Davídkov.",
+  title: "Klára & Michal — 26. 9. 2026",
+  description: "Svatební web Michala a Kláry. 26. září 2026 v Hotelu Všetice.",
   icons: { icon: "/icon.svg" },
   openGraph: {
-    title: "Michal & Klára — Svatba 2026",
-    description: "Pojďte oslavit naši lásku s námi. 29. srpna 2026, Mlýn Davídkov.",
+    title: "Klára & Michal — Svatba 2026",
+    description: "Pojďte oslavit naši lásku s námi. 26. září 2026, Hotel Všetice.",
   },
 };
 

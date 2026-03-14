@@ -23,7 +23,7 @@ export default function Ceremony() {
 
   const handleAddToCalendar = () => {
     const url =
-      'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Svatba+Michal+%26+Kl%C3%A1ra&dates=20260828T120000Z/20260830T000000Z&location=Ml%C3%BDn+Dav%C3%ADdkov%2C+Hryzely+36%2C+281+63+Barchovice-Z%C3%A1smuky&details=Svatebn%C3%AD+v%C3%ADkend+Michala+a+Kl%C3%A1ry';
+      'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Svatba+Michal+%26+Kl%C3%A1ra&dates=20260925T120000Z/20260927T000000Z&location=Hotel+V%C5%A1etice%2C+V%C5%A1etice+6%2C+257+44+Netvo%C5%99ice&details=Svatebn%C3%AD+v%C3%ADkend+Michala+a+Kl%C3%A1ry';
     window.open(url, '_blank');
   };
 
