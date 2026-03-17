@@ -146,9 +146,9 @@ const translations: Record<Locale, any> = {
       title: 'Ubytování & Doprava',
       subtitle: 'Vše, co potřebujete vědět',
       buildings: [
-        { name: 'Klasik', desc: 'Útulné pokoje s venkovským šarmem a čistým stylem.', icon: '🛏️' },
-        { name: 'Komfort', desc: '26 prostorných pokojů pro 2–4 hosty ve třech hotelových křídlech.', icon: '🏨' },
         { name: 'Exclusive', desc: 'Originální tematická apartmá s vlastním příběhem a unikátním zařízením.', icon: '✨' },
+        { name: 'Komfort', desc: '26 prostorných pokojů pro 2–4 hosty ve třech hotelových křídlech.', icon: '🏨' },
+        { name: 'Klasik', desc: 'Útulné pokoje s venkovským šarmem a čistým stylem.', icon: '🛏️' },
       ],
       transport: {
         title: 'Jak se k nám dostat',
@@ -383,9 +383,9 @@ const translations: Record<Locale, any> = {
       title: 'Accommodation & Transport',
       subtitle: 'Everything you need to know',
       buildings: [
-        { name: 'Klasik', desc: 'Cozy rooms with countryside charm and a clean, simple style.', icon: '🛏️' },
-        { name: 'Komfort', desc: '26 spacious rooms for 2–4 guests across three hotel wings.', icon: '🏨' },
         { name: 'Exclusive', desc: 'Original themed suites, each with its own story and unique furnishings.', icon: '✨' },
+        { name: 'Komfort', desc: '26 spacious rooms for 2–4 guests across three hotel wings.', icon: '🏨' },
+        { name: 'Klasik', desc: 'Cozy rooms with countryside charm and a clean, simple style.', icon: '🛏️' },
       ],
       transport: {
         title: 'How to get here',

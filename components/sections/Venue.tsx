@@ -24,11 +24,11 @@ interface AccommodationBuilding {
 const accommodationBuildings: { cs: AccommodationBuilding[]; en: AccommodationBuilding[] } = {
   cs: [
     {
-      name: 'Klasik',
-      subtitle: 'Útulné pokoje s venkovským šarmem',
-      desc: 'Příjemné pokoje, kde zakusíte atmosféru bezstarostného venkova. Jednoduchý a čistý styl, ve kterém se budete cítit jako na prázdninách u babičky.',
-      rooms: '10 pokojů',
-      image: '/assets/images/venue/room-klasik.jpg',
+      name: 'Exclusive',
+      subtitle: 'Originální tematická apartmá',
+      desc: 'Osobitě zařízená apartmá, každé s vlastním příběhem — od orientálního Lázeňského pokoje s vířivou vanou po romantické Železné apartmá s nebesy. Ideální pro novomanžele a náročné hosty.',
+      rooms: '8 apartmá',
+      image: '/assets/images/venue/room-exclusive.jpg',
       url: 'https://www.hotel-vsetice.cz/pokoje',
     },
     {
@@ -40,21 +40,21 @@ const accommodationBuildings: { cs: AccommodationBuilding[]; en: AccommodationBu
       url: 'https://www.hotel-vsetice.cz/pokoje',
     },
     {
-      name: 'Exclusive',
-      subtitle: 'Originální tematická apartmá',
-      desc: 'Osobitě zařízená apartmá, každé s vlastním příběhem — od orientálního Lázeňského pokoje s vířivou vanou po romantické Železné apartmá s nebesy. Ideální pro novomanžele a náročné hosty.',
-      rooms: '8 apartmá',
-      image: '/assets/images/venue/room-exclusive.jpg',
+      name: 'Klasik',
+      subtitle: 'Útulné pokoje s venkovským šarmem',
+      desc: 'Příjemné pokoje, kde zakusíte atmosféru bezstarostného venkova. Jednoduchý a čistý styl, ve kterém se budete cítit jako na prázdninách u babičky.',
+      rooms: '10 pokojů',
+      image: '/assets/images/venue/room-klasik.jpg',
       url: 'https://www.hotel-vsetice.cz/pokoje',
     },
   ],
   en: [
     {
-      name: 'Klasik',
-      subtitle: 'Cozy rooms with countryside charm',
-      desc: 'Pleasant rooms where you\'ll experience the atmosphere of a carefree countryside. A simple, clean style that feels like a holiday at grandma\'s house.',
-      rooms: '10 rooms',
-      image: '/assets/images/venue/room-klasik.jpg',
+      name: 'Exclusive',
+      subtitle: 'Original themed suites',
+      desc: 'Uniquely furnished suites, each with its own story — from the oriental Spa Room with a whirlpool tub to the romantic Iron Suite with a canopy bed. Perfect for the newlyweds and discerning guests.',
+      rooms: '8 suites',
+      image: '/assets/images/venue/room-exclusive.jpg',
       url: 'https://www.hotel-vsetice.cz/pokoje',
     },
     {
@@ -66,11 +66,11 @@ const accommodationBuildings: { cs: AccommodationBuilding[]; en: AccommodationBu
       url: 'https://www.hotel-vsetice.cz/pokoje',
     },
     {
-      name: 'Exclusive',
-      subtitle: 'Original themed suites',
-      desc: 'Uniquely furnished suites, each with its own story — from the oriental Spa Room with a whirlpool tub to the romantic Iron Suite with a canopy bed. Perfect for the newlyweds and discerning guests.',
-      rooms: '8 suites',
-      image: '/assets/images/venue/room-exclusive.jpg',
+      name: 'Klasik',
+      subtitle: 'Cozy rooms with countryside charm',
+      desc: 'Pleasant rooms where you\'ll experience the atmosphere of a carefree countryside. A simple, clean style that feels like a holiday at grandma\'s house.',
+      rooms: '10 rooms',
+      image: '/assets/images/venue/room-klasik.jpg',
       url: 'https://www.hotel-vsetice.cz/pokoje',
     },
   ],
@@ -121,7 +121,7 @@ export default function Venue() {
         {/* Overlay text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center overlay-text">
           <motion.h2
-            className="font-[family-name:var(--font-playfair)] text-4xl sm:text-5xl md:text-7xl text-[#F5F0E8] font-light tracking-wider"
+            className="font-[family-name:var(--font-playfair)] text-4xl sm:text-5xl md:text-7xl text-[#F5F0E8] font-light tracking-wider [text-shadow:none]"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -253,7 +253,7 @@ export default function Venue() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/10" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 overlay-text">
                   <div className="flex items-center gap-3 mb-2">
-                    <h4 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-[#F5F0E8] font-light">
+                    <h4 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-[#F5F0E8] font-light [text-shadow:none]">
                       {buildings[activeBuilding].name}
                     </h4>
                     <span className="rounded-full border border-[#C9A96E]/30 bg-[#C9A96E]/10 px-3 py-1 text-xs text-[#C9A96E]">

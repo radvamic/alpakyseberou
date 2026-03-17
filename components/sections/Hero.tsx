@@ -86,7 +86,7 @@ export default function Hero() {
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 overlay-text">
         {/* Names */}
         <div className="flex flex-col items-center gap-2 sm:gap-4">
-          <h1 className="font-[family-name:var(--font-playfair)] text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-wider text-[#F5F0E8] overflow-hidden">
+          <h1 className="font-[family-name:var(--font-playfair)] text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-wider text-[#F5F0E8] overflow-hidden [text-shadow:none]">
             {splitText('Klára')}
           </h1>
           <motion.span
@@ -97,7 +97,7 @@ export default function Hero() {
           >
             &
           </motion.span>
-          <h1 className="font-[family-name:var(--font-playfair)] text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-wider text-[#F5F0E8] overflow-hidden">
+          <h1 className="font-[family-name:var(--font-playfair)] text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-wider text-[#F5F0E8] overflow-hidden [text-shadow:none]">
             {splitText('Michal')}
           </h1>
         </div>
