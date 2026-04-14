@@ -79,7 +79,7 @@ export default function StepCouplePhotos({
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <p className="text-xs text-[#6A6560] mb-3">
+          <p className="text-xs text-[#B8A99A]/60 mb-3">
             {t('photobooth.coupleMax') as string}
           </p>
           <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory">
@@ -102,7 +102,7 @@ export default function StepCouplePhotos({
                     alt={locale === 'cs' ? photo.labelCs : photo.labelEn}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23141414" width="100" height="100"/><text x="50" y="55" text-anchor="middle" fill="%23C9A96E" font-size="32">🦙</text></svg>';
+                      (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23FDFAF5" width="100" height="100"/><text x="50" y="55" text-anchor="middle" fill="%23BE764C" font-size="32">🦙</text></svg>';
                     }}
                   />
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-2 py-2">
@@ -116,7 +116,7 @@ export default function StepCouplePhotos({
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                     >
-                      <svg className="w-3.5 h-3.5 text-[#0A0A0A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                      <svg className="w-3.5 h-3.5 text-[#F5F0E8]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                     </motion.div>

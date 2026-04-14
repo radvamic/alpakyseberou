@@ -49,7 +49,7 @@ export default function Footer() {
           transition={{ duration: 0.8, delay: 0.3 }}
         >
           <span className="font-[family-name:var(--font-great-vibes)] text-3xl text-[#C9A96E]">
-            M & K
+            K & M
           </span>
         </motion.div>
 

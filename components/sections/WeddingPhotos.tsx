@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { QRCodeSVG } from 'qrcode.react';
 import { useI18n } from '@/lib/i18n';
 import SectionHeader from '@/components/ui/SectionHeader';
@@ -72,6 +72,8 @@ export default function WeddingPhotos() {
     setTimeout(() => setSubmitted(false), 3000);
   };
 
+  const [expanded, setExpanded] = useState(false);
+
   const albumCards = [
     {
       title: 'Google Photos',
@@ -105,241 +107,239 @@ export default function WeddingPhotos() {
   ];
 
   return (
-    <section id="wedding-photos" className="relative py-24 md:py-32 bg-[#141414]">
+    <section id="wedding-photos" className="relative pt-0 pb-8 bg-[#141414]">
       <div className="mx-auto max-w-4xl px-6">
         <SectionHeader
           title={t('weddingPhotos.title') as string}
           subtitle={t('weddingPhotos.subtitle') as string}
         />
 
-        {/* How it works */}
-        <motion.div
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <p className="text-base md:text-lg text-[#B8A99A] leading-relaxed max-w-2xl mx-auto">
-            {locale === 'cs'
-              ? 'Naskenujte QR kód nebo klikněte na tlačítko — otevře se sdílené album, kam můžete přidávat fotky přímo z telefonu. Fotky se nahrávají na pozadí, takže nemusíte čekat.'
-              : 'Scan the QR code or tap the button — it will open a shared album where you can add photos directly from your phone. Photos upload in the background, so no waiting around.'}
-          </p>
-        </motion.div>
-
-        {/* Shared Album Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-          {albumCards.map((album, i) => (
-            <motion.div
-              key={i}
-              className="group rounded-2xl border border-[#2A2520] bg-[#0A0A0A]/60 p-8 text-center hover:border-[#C9A96E]/30 transition-all duration-500"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.15 }}
+        {/* Expand toggle */}
+        <div className="flex justify-center mb-8">
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#C9A96E] transition-colors duration-300"
+          >
+            <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
+            {expanded
+              ? (locale === 'cs' ? 'Skrýt' : 'Hide')
+              : (locale === 'cs' ? 'Zobrazit' : 'Show')}
+            <motion.span
+              animate={{ rotate: expanded ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="text-[#C9A96E]"
             >
-              {/* Icon & Title */}
-              <div className="flex items-center justify-center gap-3 mb-4">
-                {album.icon}
-                <h3 className="font-[family-name:var(--font-playfair)] text-xl text-[#F5F0E8] font-light">
-                  {album.title}
-                </h3>
-              </div>
-
-              {/* Description */}
-              <p className="text-sm text-[#B8A99A] mb-6 leading-relaxed">
-                {album.desc}
-              </p>
-
-              {/* QR Code */}
-              <div className="flex justify-center mb-6">
-                <div className="rounded-xl bg-white p-4 inline-block">
-                  <QRCodeSVG
-                    value={album.url}
-                    size={140}
-                    level="M"
-                    bgColor="#FFFFFF"
-                    fgColor="#0A0A0A"
-                  />
-                </div>
-              </div>
-
-              {/* Direct link button */}
-              <a
-                href={album.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-[#C9A96E]/30 px-6 py-3 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:border-[#C9A96E] hover:bg-[#C9A96E]/10"
-              >
-                {locale === 'cs' ? 'Otevřít album' : 'Open album'}
-              </a>
-            </motion.div>
-          ))}
+              ↓
+            </motion.span>
+            <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
+          </button>
         </div>
 
-        {/* Steps */}
-        <motion.div
-          className="mb-16 grid grid-cols-1 sm:grid-cols-3 gap-4"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          {(locale === 'cs'
-            ? [
-                { step: '1', title: 'Naskenujte QR', desc: 'Otevřete fotoaparát a namiřte na QR kód' },
-                { step: '2', title: 'Přidejte fotky', desc: 'Vyberte fotky z galerie a přidejte do alba' },
-                { step: '3', title: 'Hotovo!', desc: 'Fotky se nahrají na pozadí automaticky' },
-              ]
-            : [
-                { step: '1', title: 'Scan QR', desc: 'Open your camera and point at the QR code' },
-                { step: '2', title: 'Add photos', desc: 'Select photos from gallery and add to album' },
-                { step: '3', title: 'Done!', desc: 'Photos upload in the background automatically' },
-              ]
-          ).map((item, i) => (
-            <div
-              key={i}
-              className="flex items-start gap-4 rounded-xl border border-[#2A2520] bg-[#0A0A0A]/40 p-5"
+        <AnimatePresence>
+          {expanded && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+              style={{ overflow: 'hidden' }}
             >
-              <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-[#C9A96E]/30 text-xs text-[#C9A96E] font-semibold">
-                {item.step}
-              </span>
-              <div>
-                <h4 className="font-[family-name:var(--font-cormorant)] text-base font-semibold text-[#F5F0E8] mb-1">
-                  {item.title}
-                </h4>
-                <p className="text-xs text-[#B8A99A]">{item.desc}</p>
+              {/* How it works */}
+              <div className="text-center mb-12">
+                <p className="text-base md:text-lg text-[#B8A99A] leading-relaxed max-w-2xl mx-auto">
+                  {locale === 'cs'
+                    ? 'Naskenujte QR kód nebo klikněte na tlačítko — otevře se sdílené album, kam můžete přidávat fotky přímo z telefonu. Fotky se nahrávají na pozadí, takže nemusíte čekat.'
+                    : 'Scan the QR code or tap the button — it will open a shared album where you can add photos directly from your phone. Photos upload in the background, so no waiting around.'}
+                </p>
               </div>
-            </div>
-          ))}
-        </motion.div>
 
-        {/* Web Upload fallback */}
-        <motion.div
-          className="text-center"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <button
-            onClick={() => setShowWebUpload(!showWebUpload)}
-            className="text-xs tracking-[0.15em] uppercase text-[#5a5248] hover:text-[#B8A99A] transition-colors"
-          >
-            {locale === 'cs'
-              ? showWebUpload ? 'Skrýt nahrávání přes web' : 'Nebo nahrát fotky přes web'
-              : showWebUpload ? 'Hide web upload' : 'Or upload photos via web'}
-          </button>
-        </motion.div>
-
-        {showWebUpload && (
-          <motion.div
-            className="mt-8 rounded-2xl border border-[#2A2520] bg-[#0A0A0A]/60 p-6 md:p-10"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            transition={{ duration: 0.4 }}
-          >
-            {submitted ? (
-              <motion.div
-                className="text-center py-8"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-              >
-                <div className="text-4xl mb-4">📸</div>
-                <p className="text-[#E8D5B5]">{t('weddingPhotos.success') as string}</p>
-              </motion.div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label className="block mb-2 text-sm text-[#E8D5B5]">
-                    {t('weddingPhotos.name') as string}
-                  </label>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Jan Novák"
-                  />
-                </div>
-
-                <div
-                  className={`relative rounded-xl border-2 border-dashed p-10 text-center transition-all duration-300 cursor-pointer ${
-                    isDragging
-                      ? 'border-[#C9A96E] bg-[#C9A96E]/5'
-                      : 'border-[#2A2520] hover:border-[#C9A96E]/30'
-                  }`}
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    setIsDragging(true);
-                  }}
-                  onDragLeave={() => setIsDragging(false)}
-                  onDrop={handleDrop}
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  <div className="text-4xl mb-3 opacity-50">📸</div>
-                  <p className="text-sm text-[#B8A99A]">
-                    {t('weddingPhotos.dragDrop') as string}
-                  </p>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={(e) => e.target.files && addFiles(e.target.files)}
-                    className="hidden"
-                  />
-                </div>
-
-                {previews.length > 0 && (
-                  <div className="flex gap-2 flex-wrap">
-                    {previews.map((src, i) => (
-                      <div
-                        key={i}
-                        className="w-20 h-20 rounded-lg overflow-hidden border border-[#2A2520]"
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={src} alt="" className="w-full h-full object-cover" />
+              {/* Shared Album Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+                {albumCards.map((album, i) => (
+                  <motion.div
+                    key={i}
+                    className="group rounded-2xl border border-[#2A2520] bg-[#111111] p-8 text-center hover:border-[#C9A96E]/20 transition-all duration-500"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: i * 0.15 }}
+                  >
+                    <div className="flex items-center justify-center gap-3 mb-4">
+                      {album.icon}
+                      <h3 className="font-[family-name:var(--font-playfair)] text-xl text-[#F5F0E8] font-light">
+                        {album.title}
+                      </h3>
+                    </div>
+                    <p className="text-sm text-[#B8A99A] mb-6 leading-relaxed">
+                      {album.desc}
+                    </p>
+                    <div className="flex justify-center mb-6">
+                      <div className="rounded-xl bg-[#1A1A1A] border border-[#2A2520] p-4 inline-block">
+                        <QRCodeSVG
+                          value={album.url}
+                          size={140}
+                          level="M"
+                          bgColor="#1A1A1A"
+                          fgColor="#C9A96E"
+                        />
                       </div>
-                    ))}
-                  </div>
-                )}
+                    </div>
+                    <a
+                      href={album.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full border border-[#C9A96E]/30 px-6 py-3 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:border-[#C9A96E] hover:bg-[#C9A96E]/10"
+                    >
+                      {locale === 'cs' ? 'Otevřít album' : 'Open album'}
+                    </a>
+                  </motion.div>
+                ))}
+              </div>
 
+              {/* Steps */}
+              <div className="mb-16 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {(locale === 'cs'
+                  ? [
+                      { step: '1', title: 'Naskenujte QR', desc: 'Otevřete fotoaparát a namiřte na QR kód' },
+                      { step: '2', title: 'Přidejte fotky', desc: 'Vyberte fotky z galerie a přidejte do alba' },
+                      { step: '3', title: 'Hotovo!', desc: 'Fotky se nahrají na pozadí automaticky' },
+                    ]
+                  : [
+                      { step: '1', title: 'Scan QR', desc: 'Open your camera and point at the QR code' },
+                      { step: '2', title: 'Add photos', desc: 'Select photos from gallery and add to album' },
+                      { step: '3', title: 'Done!', desc: 'Photos upload in the background automatically' },
+                    ]
+                ).map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-start gap-4 rounded-xl border border-[#2A2520] bg-[#111111] p-5"
+                  >
+                    <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-[#C9A96E]/30 text-xs text-[#C9A96E] font-semibold">
+                      {item.step}
+                    </span>
+                    <div>
+                      <h4 className="font-[family-name:var(--font-cormorant)] text-base font-semibold text-[#F5F0E8] mb-1">
+                        {item.title}
+                      </h4>
+                      <p className="text-xs text-[#B8A99A]">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Web Upload fallback */}
+              <div className="text-center">
                 <button
-                  type="submit"
-                  disabled={files.length === 0}
-                  className="rounded-full border border-[#C9A96E] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:bg-[#C9A96E]/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                  onClick={() => setShowWebUpload(!showWebUpload)}
+                  className="text-xs tracking-[0.15em] uppercase text-[#B8A99A]/60 hover:text-[#B8A99A] transition-colors"
                 >
-                  {t('weddingPhotos.submit') as string}
+                  {locale === 'cs'
+                    ? showWebUpload ? 'Skrýt nahrávání přes web' : 'Nebo nahrát fotky přes web'
+                    : showWebUpload ? 'Hide web upload' : 'Or upload photos via web'}
                 </button>
-              </form>
-            )}
-          </motion.div>
-        )}
+              </div>
 
-        {/* Uploaded photos grid */}
-        {photos.length > 0 && (
-          <div className="mt-16 columns-2 md:columns-3 gap-4 space-y-4">
-            {photos
-              .slice()
-              .reverse()
-              .map((photo, i) => (
+              {showWebUpload && (
                 <motion.div
-                  key={photo.id}
-                  className="break-inside-avoid rounded-xl overflow-hidden border border-[#2A2520] hover:border-[#C9A96E]/20 transition-colors duration-500"
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: (i % 3) * 0.05 }}
+                  className="mt-8 rounded-2xl border border-[#2A2520] bg-[#111111] p-6 md:p-10"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  transition={{ duration: 0.4 }}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={photo.url} alt={`By ${photo.name}`} className="w-full" />
-                  <div className="p-3 bg-[#141414]">
-                    <p className="text-xs text-[#B8A99A]">{photo.name}</p>
-                  </div>
+                  {submitted ? (
+                    <motion.div
+                      className="text-center py-8"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                    >
+                      <div className="text-4xl mb-4">📸</div>
+                      <p className="text-[#C9A96E]">{t('weddingPhotos.success') as string}</p>
+                    </motion.div>
+                  ) : (
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                      <div>
+                        <label className="block mb-2 text-sm text-[#C9A96E]">
+                          {t('weddingPhotos.name') as string}
+                        </label>
+                        <input
+                          type="text"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          placeholder="Jan Novák"
+                          className="w-full rounded-xl border border-[#2A2520] bg-[#1A1A1A] px-4 py-3 text-[#F5F0E8] placeholder-[#4A4540] focus:border-[#C9A96E]/50 focus:outline-none transition-colors"
+                        />
+                      </div>
+
+                      <div
+                        className={`relative rounded-xl border-2 border-dashed p-10 text-center transition-all duration-300 cursor-pointer ${
+                          isDragging
+                            ? 'border-[#C9A96E] bg-[#C9A96E]/5'
+                            : 'border-[#2A2520] hover:border-[#C9A96E]/30'
+                        }`}
+                        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                        onDragLeave={() => setIsDragging(false)}
+                        onDrop={handleDrop}
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <div className="text-4xl mb-3 opacity-50">📸</div>
+                        <p className="text-sm text-[#B8A99A]">
+                          {t('weddingPhotos.dragDrop') as string}
+                        </p>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          multiple
+                          accept="image/*"
+                          onChange={(e) => e.target.files && addFiles(e.target.files)}
+                          className="hidden"
+                        />
+                      </div>
+
+                      {previews.length > 0 && (
+                        <div className="flex gap-2 flex-wrap">
+                          {previews.map((src, i) => (
+                            <div key={i} className="w-20 h-20 rounded-lg overflow-hidden border border-[#2A2520]">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img src={src} alt="" className="w-full h-full object-cover" />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      <button
+                        type="submit"
+                        disabled={files.length === 0}
+                        className="rounded-full border border-[#C9A96E] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:bg-[#C9A96E]/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                      >
+                        {t('weddingPhotos.submit') as string}
+                      </button>
+                    </form>
+                  )}
                 </motion.div>
-              ))}
-          </div>
-        )}
+              )}
+
+              {/* Uploaded photos grid */}
+              {photos.length > 0 && (
+                <div className="mt-16 columns-2 md:columns-3 gap-4 space-y-4 pb-8">
+                  {photos.slice().reverse().map((photo, i) => (
+                    <motion.div
+                      key={photo.id}
+                      className="break-inside-avoid rounded-xl overflow-hidden border border-[#2A2520] hover:border-[#C9A96E]/20 transition-colors duration-500"
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: (i % 3) * 0.05 }}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={photo.url} alt={`By ${photo.name}`} className="w-full" />
+                      <div className="p-3 bg-[#111111]">
+                        <p className="text-xs text-[#B8A99A]">{photo.name}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );

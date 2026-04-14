@@ -49,21 +49,22 @@ export default function Home() {
 
           <main>
             <Hero />
-            <Story />
-            <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/why.png" imageWidth={200} imageHeight={140} />
-            <WhyAlpacas />
-            <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/ceremony.png" imageWidth={240} imageHeight={140} />
-            <Ceremony />
-            <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/venue.png" imageWidth={260} imageHeight={130} />
+            <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/venue2.png" imageWidth={100} imageHeight={47} />
             <Venue />
+            <div className="bg-[#141414]">
+              <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/ceremony.png" imageWidth={240} imageHeight={140} />
+              <Ceremony />
+            </div>
             <AlpacaSectionDivider />
             <RSVP />
+            <div className="bg-[#141414]">
+              <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/story.png" imageWidth={220} imageHeight={146} />
+              <Story />
+            </div>
+            <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/why.png" imageWidth={200} imageHeight={140} />
+            <WhyAlpacas />
             <AlpacaSectionDivider />
             <Gallery />
-            <AlpacaSectionDivider />
-            <WeddingParty />
-            <AlpacaSectionDivider />
-            <Gifts />
             <AlpacaSectionDivider />
             <FAQ />
             <AlpacaSectionDivider />

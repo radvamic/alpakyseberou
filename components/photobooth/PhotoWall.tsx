@@ -89,7 +89,7 @@ export default function PhotoWall() {
           return (
             <motion.div
               key={entry.id}
-              className="break-inside-avoid rounded-xl border border-[#2A2520] bg-[#141414] overflow-hidden hover:border-[#C9A96E]/20 transition-colors duration-500 cursor-pointer"
+              className="break-inside-avoid rounded-xl border border-[#2A2520] bg-[#111111] overflow-hidden hover:border-[#C9A96E]/20 transition-colors duration-500 cursor-pointer"
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -107,14 +107,14 @@ export default function PhotoWall() {
                 />
               </div>
               <div className="p-3 flex items-center gap-3">
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#C9A96E]/30 to-[#D4AF37]/10 flex items-center justify-center text-xs text-[#C9A96E] font-semibold shrink-0">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#C9A96E]/30 to-[#C9A96E]/10 flex items-center justify-center text-xs text-[#C9A96E] font-semibold shrink-0">
                   {entry.userName.charAt(0).toUpperCase()}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <span className="font-[family-name:var(--font-cormorant)] text-sm text-[#F5F0E8] font-semibold block truncate">
+                  <span                     className="font-[family-name:var(--font-cormorant)] text-sm text-[#F5F0E8] font-semibold block truncate">
                     {entry.userName}
                   </span>
-                  <span className="text-[10px] text-[#6A6560]">
+                  <span className="text-[10px] text-[#B8A99A]/60">
                     {motif ? (locale === 'cs' ? motif.nameCs : motif.nameEn) : ''} · {formatDate(entry.createdAt)}
                   </span>
                 </div>
@@ -150,7 +150,7 @@ export default function PhotoWall() {
             </motion.div>
             <button
               onClick={() => setLightboxUrl(null)}
-              className="absolute top-6 right-6 text-white/70 hover:text-white text-2xl transition-colors"
+              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#C9A96E] hover:border-[#C9A96E]/50 transition-all duration-300"
             >
               ✕
             </button>

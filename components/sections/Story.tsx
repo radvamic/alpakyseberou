@@ -28,9 +28,10 @@ const storyPhotos = [
 ];
 
 export default function Story() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const containerRef = useRef<HTMLDivElement>(null);
   const chapters = t('story.chapters') as unknown as Chapter[];
+  const [expanded, setExpanded] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   // Only photos that actually exist (have a src) for lightbox navigation
@@ -78,15 +79,11 @@ export default function Story() {
     return () => { document.body.style.overflow = ''; };
   }, [lightboxIndex]);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  });
-
+  const { scrollYProgress } = useScroll();
   const lineHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
 
   return (
-    <section id="story" className="relative py-24 md:py-32 bg-[#0A0A0A] overflow-hidden">
+    <section id="story" className="relative pt-0 pb-8 bg-[#141414] overflow-hidden">
       {/* Very subtle alpaca pattern */}
       <div
         className="absolute inset-0 opacity-[0.025] pointer-events-none"
@@ -96,28 +93,41 @@ export default function Story() {
         }}
       />
       <div className="relative mx-auto max-w-6xl px-6">
-        {/* Alpaca illustration */}
-        <motion.div
-          className="flex justify-center mb-8"
-          initial={{ opacity: 0, y: -16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.8 }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/images/alpacas/web/story.png"
-            alt="Alpaky"
-            width={340}
-            height={226}
-            className="object-contain"
-          />
-        </motion.div>
-
         <SectionHeader
           title={t('story.title') as string}
           subtitle={t('story.subtitle') as string}
         />
+
+        {/* Expand toggle */}
+        <div className="flex justify-center mb-8">
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#C9A96E] transition-colors duration-300"
+          >
+            <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
+            {expanded
+              ? (locale === 'cs' ? 'Skrýt' : 'Hide')
+              : (locale === 'cs' ? 'Zobrazit příběh' : 'Show story')}
+            <motion.span
+              animate={{ rotate: expanded ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="text-[#C9A96E]"
+            >
+              ↓
+            </motion.span>
+            <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
+          </button>
+        </div>
+
+        <AnimatePresence>
+        {expanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+            style={{ overflow: 'hidden' }}
+          >
 
         <div ref={containerRef} className="relative">
           {/* Animated gold timeline line */}
@@ -211,6 +221,9 @@ export default function Story() {
             })}
           </div>
         </div>
+          </motion.div>
+        )}
+        </AnimatePresence>
       </div>
 
       {/* Lightbox */}

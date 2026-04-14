@@ -126,7 +126,7 @@ export default function StepResult({
         {canShare && (
           <button
             onClick={handleShare}
-            className="flex items-center justify-center gap-2 rounded-full border border-[#2A2520] px-6 py-3 text-sm text-[#B8A99A] transition-all hover:border-[#C9A96E]/30 hover:text-[#E8D5B5]"
+            className="flex items-center justify-center gap-2 rounded-full border border-[#2A2520] px-6 py-3 text-sm text-[#B8A99A] transition-all hover:border-[#C9A96E]/30 hover:text-[#C9A96E]"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
@@ -138,7 +138,7 @@ export default function StepResult({
         {!saved ? (
           <button
             onClick={() => setShowSaveModal(true)}
-            className="flex items-center justify-center gap-2 rounded-full border border-[#2A2520] px-6 py-3 text-sm text-[#B8A99A] transition-all hover:border-[#C9A96E]/30 hover:text-[#E8D5B5]"
+            className="flex items-center justify-center gap-2 rounded-full border border-[#2A2520] px-6 py-3 text-sm text-[#B8A99A] transition-all hover:border-[#C9A96E]/30 hover:text-[#C9A96E]"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
@@ -169,7 +169,7 @@ export default function StepResult({
         >
           {t('photobooth.newPhoto') as string}
         </button>
-        <span className="text-xs text-[#6A6560] ml-2">
+        <span className="text-xs text-[#B8A99A]/60 ml-2">
           ({t('photobooth.remaining') as string}: {remaining})
         </span>
       </div>
@@ -185,7 +185,7 @@ export default function StepResult({
             onClick={() => setShowSaveModal(false)}
           >
             <motion.div
-              className="w-full sm:w-auto sm:min-w-[400px] bg-[#141414] border border-[#2A2520] rounded-t-2xl sm:rounded-2xl p-6"
+              className="w-full sm:w-auto sm:min-w-[400px] bg-[#111111] border border-[#2A2520] rounded-t-2xl sm:rounded-2xl p-6"
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 100, opacity: 0 }}
@@ -197,7 +197,7 @@ export default function StepResult({
 
               <div className="space-y-4">
                 <div>
-                  <label className="block mb-2 text-sm text-[#E8D5B5]">
+                  <label className="block mb-2 text-sm text-[#C9A96E]">
                     {t('photobooth.yourName') as string}
                   </label>
                   <input
@@ -205,7 +205,7 @@ export default function StepResult({
                     value={saveName}
                     onChange={(e) => setSaveName(e.target.value)}
                     placeholder={locale === 'cs' ? 'Jan Novák' : 'John Doe'}
-                    className="w-full rounded-xl border border-[#2A2520] bg-[#0A0A0A] px-4 py-3 text-[#F5F0E8] placeholder-[#4A453E] focus:border-[#C9A96E]/50 focus:outline-none transition-colors"
+                    className="w-full rounded-xl border border-[#2A2520] bg-[#1A1A1A] px-4 py-3 text-[#F5F0E8] placeholder-[#4A4540] focus:border-[#C9A96E]/50 focus:outline-none transition-colors"
                   />
                 </div>
 

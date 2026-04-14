@@ -16,7 +16,7 @@ interface GuestbookEntry {
 }
 
 export default function Guestbook() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [entries, setEntries] = useState<GuestbookEntry[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [name, setName] = useState('');
@@ -80,17 +80,45 @@ export default function Guestbook() {
     });
   };
 
+  const [expanded, setExpanded] = useState(false);
+
   return (
-    <section id="guestbook" className="relative py-24 md:py-32 bg-[#0A0A0A]">
+    <section id="guestbook" className="relative pt-0 pb-8 bg-[#141414]">
       <div className="mx-auto max-w-5xl px-6">
         <SectionHeader
           title={t('guestbook.title') as string}
           subtitle={t('guestbook.subtitle') as string}
         />
 
+        <div className="flex justify-center mb-8">
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#C9A96E] transition-colors duration-300"
+          >
+            <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
+            {expanded ? (locale === 'cs' ? 'Skrýt' : 'Hide') : (locale === 'cs' ? 'Zanechat vzkaz' : 'Leave a message')}
+            <motion.span
+              animate={{ rotate: expanded ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="text-[#C9A96E]"
+            >↓</motion.span>
+            <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
+          </button>
+        </div>
+
+        <AnimatePresence>
+        {expanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+            style={{ overflow: 'hidden' }}
+          >
+
         {/* Form */}
         <motion.div
-          className="mb-20 rounded-2xl border border-[#2A2520] bg-[#141414] p-6 md:p-10"
+          className="mb-20 rounded-2xl border border-[#2A2520] bg-[#111111] p-6 md:p-10"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -106,7 +134,7 @@ export default function Guestbook() {
                 exit={{ opacity: 0 }}
               >
                 <div className="text-4xl mb-4">💛</div>
-                <p className="text-[#E8D5B5] text-lg">
+                <p className="text-[#C9A96E] text-lg">
                   {t('guestbook.success') as string}
                 </p>
               </motion.div>
@@ -120,7 +148,7 @@ export default function Guestbook() {
                 exit={{ opacity: 0 }}
               >
                 <div>
-                  <label className="block mb-2 text-sm text-[#E8D5B5]">
+                  <label className="block mb-2 text-sm text-[#C9A96E]">
                     {t('guestbook.name') as string}
                   </label>
                   <input
@@ -128,13 +156,13 @@ export default function Guestbook() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
-                    className="w-full rounded-xl border border-[#2A2520] bg-[#0A0A0A] px-4 py-3 text-[#F5F0E8] placeholder-[#4A453E] focus:border-[#C9A96E]/50 focus:outline-none transition-colors"
+                    className="w-full rounded-xl border border-[#2A2520] bg-[#1A1A1A] px-4 py-3 text-[#F5F0E8] placeholder-[#4A4540] focus:border-[#C9A96E]/50 focus:outline-none transition-colors"
                     placeholder="..."
                   />
                 </div>
 
                 <div>
-                  <label className="block mb-2 text-sm text-[#E8D5B5]">
+                  <label className="block mb-2 text-sm text-[#C9A96E]">
                     {t('guestbook.message') as string}
                   </label>
                   <textarea
@@ -142,14 +170,14 @@ export default function Guestbook() {
                     onChange={(e) => setMessage(e.target.value)}
                     required
                     rows={4}
-                    className="w-full rounded-xl border border-[#2A2520] bg-[#0A0A0A] px-4 py-3 text-[#F5F0E8] placeholder-[#4A453E] focus:border-[#C9A96E]/50 focus:outline-none transition-colors resize-none"
+                    className="w-full rounded-xl border border-[#2A2520] bg-[#1A1A1A] px-4 py-3 text-[#F5F0E8] placeholder-[#4A4540] focus:border-[#C9A96E]/50 focus:outline-none transition-colors resize-none"
                     placeholder="..."
                   />
                 </div>
 
                 {/* Photo upload */}
                 <div>
-                  <label className="block mb-2 text-sm text-[#E8D5B5]">
+                  <label className="block mb-2 text-sm text-[#C9A96E]">
                     {t('guestbook.photos') as string}
                   </label>
                   <label className="inline-flex items-center gap-2 cursor-pointer rounded-xl border border-[#2A2520] px-6 py-3 text-sm text-[#B8A99A] hover:border-[#C9A96E]/30 transition-colors">
@@ -190,7 +218,7 @@ export default function Guestbook() {
 
                 {/* Visibility toggle */}
                 <div>
-                  <label className="block mb-3 text-sm text-[#E8D5B5]">
+                  <label className="block mb-3 text-sm text-[#C9A96E]">
                     {t('guestbook.visibility') as string}
                   </label>
                   <div className="flex gap-3">
@@ -200,15 +228,13 @@ export default function Guestbook() {
                       className={`flex-1 rounded-xl border px-4 py-4 text-left transition-all duration-300 ${
                         isPublic
                           ? 'border-[#C9A96E] bg-[#C9A96E]/10'
-                          : 'border-[#2A2520] bg-[#0A0A0A] hover:border-[#2A2520]/80'
+                          : 'border-[#2A2520] bg-[#1A1A1A] hover:border-[#2A2520]/80'
                       }`}
                     >
                       <div className="flex items-center gap-3 mb-1">
                         <div
                           className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
-                            isPublic
-                              ? 'border-[#C9A96E]'
-                              : 'border-[#4A453E]'
+                            isPublic ? 'border-[#C9A96E]' : 'border-[#4A4540]'
                           }`}
                         >
                           {isPublic && (
@@ -234,15 +260,13 @@ export default function Guestbook() {
                       className={`flex-1 rounded-xl border px-4 py-4 text-left transition-all duration-300 ${
                         !isPublic
                           ? 'border-[#C9A96E] bg-[#C9A96E]/10'
-                          : 'border-[#2A2520] bg-[#0A0A0A] hover:border-[#2A2520]/80'
+                          : 'border-[#2A2520] bg-[#1A1A1A] hover:border-[#2A2520]/80'
                       }`}
                     >
                       <div className="flex items-center gap-3 mb-1">
                         <div
                           className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
-                            !isPublic
-                              ? 'border-[#C9A96E]'
-                              : 'border-[#4A453E]'
+                            !isPublic ? 'border-[#C9A96E]' : 'border-[#4A4540]'
                           }`}
                         >
                           {!isPublic && (
@@ -294,7 +318,7 @@ export default function Guestbook() {
                 .map((entry, i) => (
                   <motion.div
                     key={entry.id}
-                    className="break-inside-avoid rounded-xl border border-[#2A2520] bg-[#141414] p-5 hover:border-[#C9A96E]/20 transition-colors duration-500"
+                    className="break-inside-avoid rounded-xl border border-[#2A2520] bg-[#111111] p-5 hover:border-[#C9A96E]/20 transition-colors duration-500"
                     initial={{ opacity: 0, y: 15 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -339,20 +363,20 @@ export default function Guestbook() {
                     )}
 
                     {/* Message content */}
-                    <p className="text-sm text-[#E8D5B5] leading-relaxed mb-4 italic">
+                    <p className="text-sm text-[#C9A96E]/80 leading-relaxed mb-4 italic">
                       &ldquo;{entry.message}&rdquo;
                     </p>
 
                     {/* Author & date */}
                     <div className="flex items-center gap-3 pt-3 border-t border-[#2A2520]/50">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#C9A96E]/30 to-[#D4AF37]/10 flex items-center justify-center text-xs text-[#C9A96E] font-semibold">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#C9A96E]/30 to-[#C9A96E]/10 flex items-center justify-center text-xs text-[#C9A96E] font-semibold">
                         {entry.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
                         <span className="font-[family-name:var(--font-cormorant)] text-sm text-[#F5F0E8] font-semibold block">
                           {entry.name}
                         </span>
-                        <span className="text-[10px] text-[#6A6560]">
+                        <span className="text-[10px] text-[#B8A99A]/60">
                           {formatDate(entry.createdAt)}
                         </span>
                       </div>
@@ -362,13 +386,16 @@ export default function Guestbook() {
             </div>
           </div>
         )}
+          </motion.div>
+        )}
+        </AnimatePresence>
       </div>
 
       {/* Lightbox */}
       <AnimatePresence>
         {lightboxPhoto && (
           <motion.div
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm cursor-pointer"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md cursor-pointer"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -390,7 +417,7 @@ export default function Guestbook() {
             </motion.div>
             <button
               onClick={() => setLightboxPhoto(null)}
-              className="absolute top-6 right-6 text-white/70 hover:text-white text-2xl transition-colors"
+              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#C9A96E] hover:border-[#C9A96E]/50 transition-all duration-300"
             >
               ✕
             </button>

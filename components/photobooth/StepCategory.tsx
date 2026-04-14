@@ -28,7 +28,7 @@ export default function StepCategory({ onSelect, onBack }: StepCategoryProps) {
           <motion.button
             key={cat.id}
             onClick={() => onSelect(cat.id)}
-            className="w-full rounded-xl border border-[#2A2520] bg-[#141414] p-4 sm:p-5 text-left transition-all duration-300 hover:border-[#C9A96E]/40 hover:bg-[#C9A96E]/5 group"
+            className="w-full rounded-xl border border-[#2A2520] bg-[#1A1A1A] p-4 sm:p-5 text-left transition-all duration-300 hover:border-[#C9A96E]/40 hover:bg-[#C9A96E]/5 group"
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: i * 0.08 }}

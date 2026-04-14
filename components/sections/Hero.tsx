@@ -111,6 +111,14 @@ export default function Hero() {
         >
           {t('hero.date') as string}
         </motion.p>
+        <motion.p
+          className="mt-2 font-[family-name:var(--font-cormorant)] text-sm sm:text-base tracking-[0.2em] text-[#B8A99A]"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 4.35 }}
+        >
+          {t('hero.weekend') as string}
+        </motion.p>
 
         {/* Divider */}
         <motion.div

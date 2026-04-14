@@ -30,7 +30,8 @@ export default function AlpacaSectionDivider({
               alt=""
               width={imageWidth}
               height={imageHeight}
-              className="object-contain opacity-70"
+              style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, flexShrink: 0 }}
+              className="opacity-70 block"
             />
           ) : (
             <div className="flex items-center gap-1 text-[#C9A96E]/50">

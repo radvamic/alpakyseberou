@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 import SectionHeader from '@/components/ui/SectionHeader';
@@ -18,6 +18,8 @@ export default function RSVP() {
     menuPreference: '',
     children: false,
     childrenCount: '0',
+    childrenUnder6: '0',
+    childrenOver6: '0',
     allergies: '',
     songRequest: '',
     songNever: '',
@@ -30,114 +32,70 @@ export default function RSVP() {
   };
 
   const fireConfetti = () => {
-    const colors = ['#C9A96E', '#D4AF37', '#E8D5B5', '#F5F0E8'];
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors,
-    });
+    const colors = ['#C9A96E', '#E8D5B5', '#D4AF37', '#F5F0E8'];
+    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors });
     setTimeout(() => {
-      confetti({
-        particleCount: 50,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 },
-        colors,
-      });
-      confetti({
-        particleCount: 50,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 },
-        colors,
-      });
+      confetti({ particleCount: 50, angle: 60, spread: 55, origin: { x: 0 }, colors });
+      confetti({ particleCount: 50, angle: 120, spread: 55, origin: { x: 1 }, colors });
     }, 250);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (isAttending?: boolean) => {
+    const finalAttending = isAttending ?? attending;
     try {
       await fetch('/api/rsvp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, attending }),
+        body: JSON.stringify({ ...formData, attending: finalAttending }),
       });
     } catch {
       // Continue even if API fails
     }
     setSubmitted(true);
-    if (attending) fireConfetti();
+    if (finalAttending) fireConfetti();
   };
 
   const totalSteps = attending ? 3 : 1;
+  const [direction, setDirection] = useState(1);
+  const [expanded, setExpanded] = useState(false);
+  const formRef = useRef<HTMLDivElement>(null);
+
+  const nextStep = () => { setDirection(1); setStep((s) => Math.min(s + 1, totalSteps)); };
+  const prevStep = () => { setDirection(-1); setStep((s) => Math.max(s - 1, 1)); };
 
   const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 200 : -200,
-      opacity: 0,
-    }),
+    enter: (d: number) => ({ x: d > 0 ? 60 : -60, opacity: 0 }),
     center: { x: 0, opacity: 1 },
-    exit: (direction: number) => ({
-      x: direction > 0 ? -200 : 200,
-      opacity: 0,
-    }),
-  };
-
-  const [direction, setDirection] = useState(1);
-
-  const nextStep = () => {
-    setDirection(1);
-    setStep((s) => Math.min(s + 1, totalSteps));
-  };
-
-  const prevStep = () => {
-    setDirection(-1);
-    setStep((s) => Math.max(s - 1, 1));
+    exit: (d: number) => ({ x: d > 0 ? -60 : 60, opacity: 0 }),
   };
 
   if (submitted) {
     return (
-      <section id="rsvp" className="relative py-24 md:py-32 bg-[#141414]">
-        <div className="mx-auto max-w-2xl px-6 text-center">
+      <section id="rsvp" className="relative py-24 md:py-32 bg-[#0A0A0A]">
+        <div className="mx-auto max-w-xl px-6 text-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
             {attending ? (
               <>
-                <div className="flex justify-center mb-6">
-                  <motion.svg
-                    viewBox="0 0 80 50"
-                    className="h-16 w-24 text-[#C9A96E]"
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                  >
-                    <path
-                      d="M20 38 L24 30 L32 26 L40 30 L44 38 L40 44 L32 48 L24 44 Z"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                      strokeLinejoin="round"
-                    />
-                    <path d="M26 24 L23 18 L26 20 L29 18 Z" fill="none" stroke="currentColor" strokeWidth="0.8" strokeLinejoin="round" />
-                    <path d="M32 38 L36 34 L50 32" fill="none" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" />
-                  </motion.svg>
-                </div>
-                <h3 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-[#F5F0E8] mb-2">
+                <div className="mb-6 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#C9A96E] to-transparent" />
+                <h3 className="font-[family-name:var(--font-playfair)] text-3xl md:text-4xl text-[#F5F0E8] font-light mb-4">
                   {t('rsvp.successYes') as string}
                 </h3>
-                <p className="text-[#B8A99A] text-sm font-[family-name:var(--font-cormorant)]">
+                <p className="text-[#B8A99A] font-[family-name:var(--font-cormorant)] text-lg">
                   {t('rsvp.successAlpacaSay') as string}
                 </p>
+                <div className="mt-8 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#C9A96E] to-transparent" />
               </>
             ) : (
               <>
-                <div className="text-6xl mb-6">💛</div>
-                <h3 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-[#F5F0E8]">
+                <div className="mb-6 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#C9A96E] to-transparent" />
+                <h3 className="font-[family-name:var(--font-playfair)] text-3xl text-[#F5F0E8] font-light">
                   {t('rsvp.successNo') as string}
                 </h3>
+                <div className="mt-8 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#C9A96E] to-transparent" />
               </>
             )}
           </motion.div>
@@ -147,309 +105,339 @@ export default function RSVP() {
   }
 
   return (
-    <section id="rsvp" className="relative py-24 md:py-32 bg-[#141414]">
+    <section id="rsvp" className="relative py-24 md:py-32 bg-[#0A0A0A]">
       <div className="mx-auto max-w-2xl px-6">
         <SectionHeader
           title={t('rsvp.title') as string}
           subtitle={t('rsvp.subtitle') as string}
         />
 
-        {/* Progress indicator */}
-        {attending && (
-          <div className="mb-10 flex items-center justify-center gap-2">
-            {Array.from({ length: totalSteps }).map((_, i) => (
-              <div
-                key={i}
-                className={`h-1 rounded-full transition-all duration-500 ${
-                  i + 1 <= step ? 'w-8 bg-[#C9A96E]' : 'w-4 bg-[#2A2520]'
-                }`}
-              />
-            ))}
-            <span className="ml-3 text-xs text-[#B8A99A]">
-              {t('rsvp.step') as string} {step} {t('rsvp.of') as string} {totalSteps}
-            </span>
-          </div>
+        {/* Expand toggle */}
+        {!expanded && (
+          <motion.div
+            className="flex justify-center mb-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <button
+              onClick={() => {
+                setExpanded(true);
+                setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+              }}
+              className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#C9A96E] transition-colors duration-300"
+            >
+              <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
+              {t('rsvp.title') as string}
+              <motion.span className="text-[#C9A96E]">↓</motion.span>
+              <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
+            </button>
+          </motion.div>
         )}
 
-        <div className="rounded-2xl border border-[#2A2520] bg-[#0A0A0A]/60 p-6 md:p-10 overflow-hidden">
-          <AnimatePresence mode="wait" custom={direction}>
-            {step === 1 && (
-              <motion.div
-                key="step1"
-                custom={direction}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.4 }}
-                className="space-y-6"
-              >
-                {/* Name */}
-                <div>
-                  <label className="block mb-2 text-sm text-[#E8D5B5]">
-                    {t('rsvp.name') as string}
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => updateField('name', e.target.value)}
-                    placeholder="Jan Novák"
-                  />
+        <AnimatePresence>
+        {expanded && (
+          <motion.div
+            ref={formRef}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+            style={{ overflow: 'hidden' }}
+          >
+
+        {/* Step indicator */}
+        {attending && (
+          <motion.div
+            className="mb-12 flex items-center justify-center gap-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            {Array.from({ length: totalSteps }).map((_, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <div className={`flex h-7 w-7 items-center justify-center rounded-full border text-xs transition-all duration-500 ${
+                  i + 1 < step
+                    ? 'border-[#C9A96E] bg-[#C9A96E] text-[#0A0A0A]'
+                    : i + 1 === step
+                      ? 'border-[#C9A96E] text-[#C9A96E]'
+                      : 'border-[#2A2520] text-[#2A2520]'
+                }`}>
+                  {i + 1 < step ? '✓' : i + 1}
                 </div>
-
-                {/* Email */}
-                <div>
-                  <label className="block mb-2 text-sm text-[#E8D5B5]">
-                    {t('rsvp.email') as string}
-                  </label>
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => updateField('email', e.target.value)}
-                    placeholder="jan@email.cz"
-                  />
-                </div>
-
-                {/* Attendance */}
-                <div>
-                  <label className="block mb-3 text-sm text-[#E8D5B5]">
-                    {t('rsvp.attendance') as string}
-                  </label>
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setAttending(true)}
-                      className={`flex-1 rounded-xl border px-6 py-4 text-sm transition-all duration-300 ${
-                        attending === true
-                          ? 'border-[#C9A96E] bg-[#C9A96E]/10 text-[#C9A96E]'
-                          : 'border-[#2A2520] text-[#B8A99A] hover:border-[#C9A96E]/30'
-                      }`}
-                    >
-                      {t('rsvp.attending') as string}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setAttending(false)}
-                      className={`flex-1 rounded-xl border px-6 py-4 text-sm transition-all duration-300 ${
-                        attending === false
-                          ? 'border-[#C9A96E] bg-[#C9A96E]/10 text-[#C9A96E]'
-                          : 'border-[#2A2520] text-[#B8A99A] hover:border-[#C9A96E]/30'
-                      }`}
-                    >
-                      {t('rsvp.notAttending') as string}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Action buttons */}
-                <div className="flex justify-end pt-4">
-                  {attending === false ? (
-                    <button
-                      onClick={handleSubmit}
-                      disabled={!formData.name}
-                      className="rounded-full border border-[#C9A96E] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:bg-[#C9A96E]/10 disabled:opacity-30 disabled:cursor-not-allowed"
-                    >
-                      {t('rsvp.submit') as string}
-                    </button>
-                  ) : attending === true ? (
-                    <button
-                      onClick={nextStep}
-                      disabled={!formData.name}
-                      className="rounded-full border border-[#C9A96E] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:bg-[#C9A96E]/10 disabled:opacity-30 disabled:cursor-not-allowed"
-                    >
-                      {t('rsvp.next') as string}
-                    </button>
-                  ) : null}
-                </div>
-              </motion.div>
-            )}
-
-            {step === 2 && attending && (
-              <motion.div
-                key="step2"
-                custom={direction}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.4 }}
-                className="space-y-6"
-              >
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {/* Guest count */}
-                  <div>
-                    <label className="block mb-2 text-sm text-[#E8D5B5]">
-                      {t('rsvp.guestCount') as string}
-                    </label>
-                    <select
-                      value={formData.guests}
-                      onChange={(e) => updateField('guests', e.target.value)}
-                    >
-                      {[1, 2, 3, 4, 5].map((n) => (
-                        <option key={n} value={n}>
-                          {n}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Menu */}
-                  <div>
-                    <label className="block mb-2 text-sm text-[#E8D5B5]">
-                      {t('rsvp.menu') as string}
-                    </label>
-                    <select
-                      value={formData.menuPreference}
-                      onChange={(e) => updateField('menuPreference', e.target.value)}
-                    >
-                      <option value="">--</option>
-                      {menuOptions.map((opt, i) => (
-                        <option key={i} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {/* Children */}
-                <div>
-                  <label className="block mb-3 text-sm text-[#E8D5B5]">
-                    {t('rsvp.children') as string}
-                  </label>
-                  <div className="flex gap-3">
-                    <button
-                      type="button"
-                      onClick={() => updateField('children', true)}
-                      className={`rounded-xl border px-6 py-3 text-sm transition-all duration-300 ${
-                        formData.children
-                          ? 'border-[#C9A96E] bg-[#C9A96E]/10 text-[#C9A96E]'
-                          : 'border-[#2A2520] text-[#B8A99A] hover:border-[#C9A96E]/30'
-                      }`}
-                    >
-                      {t('rsvp.yes') as string}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => updateField('children', false)}
-                      className={`rounded-xl border px-6 py-3 text-sm transition-all duration-300 ${
-                        !formData.children
-                          ? 'border-[#C9A96E] bg-[#C9A96E]/10 text-[#C9A96E]'
-                          : 'border-[#2A2520] text-[#B8A99A] hover:border-[#C9A96E]/30'
-                      }`}
-                    >
-                      {t('rsvp.no') as string}
-                    </button>
-                  </div>
-                </div>
-
-                {formData.children && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                  >
-                    <label className="block mb-2 text-sm text-[#E8D5B5]">
-                      {t('rsvp.childrenCount') as string}
-                    </label>
-                    <select
-                      value={formData.childrenCount}
-                      onChange={(e) => updateField('childrenCount', e.target.value)}
-                    >
-                      {[1, 2, 3, 4].map((n) => (
-                        <option key={n} value={n}>
-                          {n}
-                        </option>
-                      ))}
-                    </select>
-                  </motion.div>
+                {i < totalSteps - 1 && (
+                  <div className={`h-[1px] w-12 transition-all duration-500 ${i + 1 < step ? 'bg-[#C9A96E]' : 'bg-[#2A2520]'}`} />
                 )}
+              </div>
+            ))}
+          </motion.div>
+        )}
 
-                <div className="flex justify-between pt-4">
-                  <button
-                    onClick={prevStep}
-                    className="text-sm text-[#B8A99A] hover:text-[#C9A96E] transition-colors"
-                  >
-                    {t('rsvp.back') as string}
-                  </button>
-                  <button
-                    onClick={nextStep}
-                    className="rounded-full border border-[#C9A96E] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:bg-[#C9A96E]/10"
-                  >
-                    {t('rsvp.next') as string}
-                  </button>
-                </div>
-              </motion.div>
-            )}
-
-            {step === 3 && attending && (
-              <motion.div
-                key="step3"
-                custom={direction}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.4 }}
-                className="space-y-6"
-              >
-                {/* Allergies */}
-                <div>
-                  <label className="block mb-2 text-sm text-[#E8D5B5]">
-                    {t('rsvp.allergies') as string}
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.allergies}
-                    onChange={(e) => updateField('allergies', e.target.value)}
-                    placeholder="Bez lepku, laktózy..."
-                  />
-                </div>
-
-                {/* Song request */}
-                <div>
-                  <label className="block mb-2 text-sm text-[#E8D5B5]">
-                    {t('rsvp.songRequest') as string}
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.songRequest}
-                    onChange={(e) => updateField('songRequest', e.target.value)}
-                    placeholder="Your favorite song..."
-                  />
-                </div>
-
-                {/* Song never */}
-                <div>
-                  <label className="block mb-2 text-sm text-[#E8D5B5]">
-                    {t('rsvp.songNever') as string}
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.songNever}
-                    onChange={(e) => updateField('songNever', e.target.value)}
-                    placeholder="Please not this one..."
-                  />
-                </div>
-
-                <div className="flex justify-between pt-4">
-                  <button
-                    onClick={prevStep}
-                    className="text-sm text-[#B8A99A] hover:text-[#C9A96E] transition-colors"
-                  >
-                    {t('rsvp.back') as string}
-                  </button>
-                  <button
-                    onClick={handleSubmit}
-                    className="rounded-full border border-[#C9A96E] bg-[#C9A96E]/10 px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:bg-[#C9A96E]/20"
-                  >
-                    {t('rsvp.submit') as string}
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        <div className="flex justify-center mb-6">
+          <button
+            onClick={() => setExpanded(false)}
+            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#5a5248] hover:text-[#C9A96E] transition-colors duration-300"
+          >
+            <span className="h-px w-10 bg-[#C9A96E]/20 group-hover:bg-[#C9A96E]/50 transition-colors duration-300" />
+            {t('rsvp.name') as string === 'Vaše jméno' ? 'Skrýt' : 'Hide'} ↑
+            <span className="h-px w-10 bg-[#C9A96E]/20 group-hover:bg-[#C9A96E]/50 transition-colors duration-300" />
+          </button>
         </div>
+
+        <div className="relative border border-[#C9A96E]/15 px-8 py-10 md:px-12 md:py-14">
+          {/* Corner accents */}
+          <span className="absolute top-0 left-0 w-4 h-4 border-t border-l border-[#C9A96E]/50" />
+          <span className="absolute top-0 right-0 w-4 h-4 border-t border-r border-[#C9A96E]/50" />
+          <span className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-[#C9A96E]/50" />
+          <span className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-[#C9A96E]/50" />
+
+        <AnimatePresence mode="wait" custom={direction}>
+          {step === 1 && (
+            <motion.div
+              key="step1"
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.35 }}
+              className="space-y-10"
+            >
+              {/* Name */}
+              <div className="group">
+                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#C9A96E]">
+                  {t('rsvp.name') as string}
+                </label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => updateField('name', e.target.value)}
+                  placeholder="Jan Novák"
+                  className="rsvp-input"
+                />
+              </div>
+
+              {/* Email */}
+              <div className="group">
+                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#C9A96E]">
+                  {t('rsvp.email') as string}
+                </label>
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => updateField('email', e.target.value)}
+                  placeholder="jan@email.cz"
+                  className="rsvp-input"
+                />
+              </div>
+
+              {/* Attendance — clicking directly triggers action */}
+              <div>
+                <label className="block mb-4 text-xs tracking-[0.2em] uppercase text-[#C9A96E]">
+                  {t('rsvp.attendance') as string}
+                </label>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button
+                    type="button"
+                    disabled={!formData.name}
+                    onClick={() => { setAttending(true); setDirection(1); setStep(2); }}
+                    className="flex-1 py-4 text-sm tracking-[0.15em] uppercase transition-all duration-500 border-b-2 border-[#2A2520] text-[#B8A99A] hover:border-[#C9A96E]/40 hover:text-[#E8D5B5] disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    {t('rsvp.attending') as string}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!formData.name}
+                    onClick={() => { setAttending(false); handleSubmit(false); }}
+                    className="flex-1 py-4 text-sm tracking-[0.15em] uppercase transition-all duration-500 border-b-2 border-[#2A2520] text-[#B8A99A] hover:border-[#C9A96E]/40 hover:text-[#E8D5B5] disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    {t('rsvp.notAttending') as string}
+                  </button>
+                </div>
+                {!formData.name && (
+                  <p className="mt-3 text-xs text-[#5a5248] italic">
+                    {t('rsvp.name') as string === 'Vaše jméno' ? '* vyplňte nejprve jméno' : '* please fill in your name first'}
+                  </p>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {step === 2 && attending && (
+            <motion.div
+              key="step2"
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.35 }}
+              className="space-y-10"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                <div>
+                  <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#C9A96E]">
+                    {t('rsvp.guestCount') as string}
+                  </label>
+                  <select
+                    value={formData.guests}
+                    onChange={(e) => updateField('guests', e.target.value)}
+                    className="rsvp-input"
+                  >
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <option key={n} value={n}>{n}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#C9A96E]">
+                    {t('rsvp.menu') as string}
+                  </label>
+                  <select
+                    value={formData.menuPreference}
+                    onChange={(e) => updateField('menuPreference', e.target.value)}
+                    className="rsvp-input"
+                  >
+                    <option value="">—</option>
+                    {menuOptions.map((opt, i) => (
+                      <option key={i} value={opt}>{opt}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block mb-4 text-xs tracking-[0.2em] uppercase text-[#C9A96E]">
+                  {t('rsvp.children') as string}
+                </label>
+                <div className="flex gap-4">
+                  {[true, false].map((val) => (
+                    <button
+                      key={String(val)}
+                      type="button"
+                      onClick={() => updateField('children', val)}
+                      className={`px-8 py-3 text-sm tracking-[0.15em] uppercase transition-all duration-500 border-b-2 ${
+                        formData.children === val
+                          ? 'border-[#C9A96E] text-[#C9A96E]'
+                          : 'border-[#2A2520] text-[#B8A99A] hover:border-[#C9A96E]/40'
+                      }`}
+                    >
+                      {val ? t('rsvp.yes') as string : t('rsvp.no') as string}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {formData.children && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="grid grid-cols-2 gap-10"
+                >
+                  <div>
+                    <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#C9A96E]">
+                      {t('rsvp.childrenUnder6') as string}
+                    </label>
+                    <select
+                      value={formData.childrenUnder6}
+                      onChange={(e) => updateField('childrenUnder6', e.target.value)}
+                      className="rsvp-input"
+                    >
+                      {[0, 1, 2, 3, 4].map((n) => (
+                        <option key={n} value={n}>{n}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#C9A96E]">
+                      {t('rsvp.childrenOver6') as string}
+                    </label>
+                    <select
+                      value={formData.childrenOver6}
+                      onChange={(e) => updateField('childrenOver6', e.target.value)}
+                      className="rsvp-input"
+                    >
+                      {[0, 1, 2, 3, 4].map((n) => (
+                        <option key={n} value={n}>{n}</option>
+                      ))}
+                    </select>
+                  </div>
+                </motion.div>
+              )}
+
+              <div className="flex justify-between pt-4">
+                <button onClick={prevStep} className="rsvp-back">
+                  ← {t('rsvp.back') as string}
+                </button>
+                <button onClick={nextStep} className="rsvp-btn">
+                  {t('rsvp.next') as string} →
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {step === 3 && attending && (
+            <motion.div
+              key="step3"
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.35 }}
+              className="space-y-10"
+            >
+              <div>
+                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#C9A96E]">
+                  {t('rsvp.allergies') as string}
+                </label>
+                <input
+                  type="text"
+                  value={formData.allergies}
+                  onChange={(e) => updateField('allergies', e.target.value)}
+                  placeholder="Bez lepku, laktózy…"
+                  className="rsvp-input"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#C9A96E]">
+                  {t('rsvp.songRequest') as string}
+                </label>
+                <input
+                  type="text"
+                  value={formData.songRequest}
+                  onChange={(e) => updateField('songRequest', e.target.value)}
+                  placeholder="Váš oblíbený song…"
+                  className="rsvp-input"
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#C9A96E]">
+                  {t('rsvp.songNever') as string}
+                </label>
+                <input
+                  type="text"
+                  value={formData.songNever}
+                  onChange={(e) => updateField('songNever', e.target.value)}
+                  placeholder="Jen ne tohle…"
+                  className="rsvp-input"
+                />
+              </div>
+
+              <div className="flex justify-between pt-4">
+                <button onClick={prevStep} className="rsvp-back">
+                  ← {t('rsvp.back') as string}
+                </button>
+                <button onClick={handleSubmit} className="rsvp-btn">
+                  {t('rsvp.submit') as string}
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        </div>
+        </motion.div>
+        )}
+        </AnimatePresence>
       </div>
     </section>
   );

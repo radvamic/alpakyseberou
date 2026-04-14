@@ -150,16 +150,16 @@ export default function StepUpload({ onPhotoSelected }: StepUploadProps) {
         className={`w-full cursor-pointer rounded-2xl border-2 border-dashed p-8 sm:p-12 text-center transition-all duration-300 ${
           isDragging
             ? 'border-[#C9A96E] bg-[#C9A96E]/10'
-            : 'border-[#2A2520] hover:border-[#C9A96E]/30 hover:bg-[#141414]'
+            : 'border-[#2A2520] hover:border-[#C9A96E]/30 hover:bg-[#1A1A1A]'
         }`}
       >
         <div className="flex flex-col items-center gap-4">
           <div className="text-4xl sm:text-5xl opacity-50">🦙</div>
           <div>
-            <p className="text-sm text-[#E8D5B5] mb-1">
+            <p className="text-sm text-[#C9A96E]/80 mb-1">
               {t('photobooth.dragDrop') as string}
             </p>
-            <p className="text-xs text-[#6A6560]">
+            <p className="text-xs text-[#B8A99A]/60">
               {t('photobooth.maxSize') as string}
             </p>
           </div>

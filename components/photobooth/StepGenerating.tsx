@@ -87,7 +87,7 @@ export default function StepGenerating({ locale }: StepGeneratingProps) {
       {/* Status message */}
       <motion.p
         key={msgIndex}
-        className="text-sm text-[#E8D5B5] text-center font-[family-name:var(--font-cormorant)] text-lg"
+        className="text-sm text-[#C9A96E]/80 text-center font-[family-name:var(--font-cormorant)] text-lg"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
@@ -97,7 +97,7 @@ export default function StepGenerating({ locale }: StepGeneratingProps) {
       </motion.p>
 
       {/* Timer */}
-      <p className="text-xs text-[#6A6560]">
+      <p className="text-xs text-[#B8A99A]/60">
         {elapsed}s
         {elapsed > 25 && (
           <span className="ml-2 text-[#B8A99A]">

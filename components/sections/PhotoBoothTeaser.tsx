@@ -8,7 +8,7 @@ export default function PhotoBoothTeaser() {
   const { t } = useI18n();
 
   return (
-    <section className="relative py-20 md:py-28 bg-[#141414] overflow-hidden">
+    <section className="relative py-20 md:py-28 bg-[#0A0A0A] overflow-hidden">
       {/* Subtle background glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#C9A96E]/5 rounded-full blur-3xl" />

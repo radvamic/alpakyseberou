@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 
 const navItems: { href: string; key: string; external?: boolean }[] = [
   { href: '#story', key: 'nav.story' },
-  { href: '#ceremony', key: 'nav.ceremony' },
   { href: '#venue', key: 'nav.venue' },
+  { href: '#accommodation', key: 'nav.accommodation' },
+  { href: '#ceremony', key: 'nav.ceremony' },
   { href: '#rsvp', key: 'nav.rsvp' },
   { href: '#gallery', key: 'nav.gallery' },
   { href: '#wedding-party', key: 'nav.party' },
@@ -47,6 +49,12 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, []);
 
+  const pathname = usePathname();
+  const isSubpage = pathname !== '/';
+
+  const resolveHref = (href: string) =>
+    href.startsWith('#') && isSubpage ? `/${href}` : href;
+
   const toggleLang = () => {
     setLocale(locale === 'cs' ? 'en' : 'cs');
   };
@@ -66,7 +74,7 @@ export default function Navbar() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           {/* Logo */}
           <a
-            href="#hero"
+            href={resolveHref('#hero')}
             className="font-[family-name:var(--font-great-vibes)] text-2xl text-[#C9A96E] hover:text-[#D4AF37] transition-colors"
           >
             K & M
@@ -77,7 +85,7 @@ export default function Navbar() {
             {navItems.map((item) => (
               <li key={item.href}>
                 <a
-                  href={item.href}
+                  href={resolveHref(item.href)}
                   className={`text-xs tracking-[0.15em] uppercase transition-colors duration-300 ${
                     item.external
                       ? 'border border-[#C9A96E]/20 rounded-full px-3 py-1 hover:bg-[#C9A96E]/10 text-[#C9A96E]'
@@ -136,7 +144,7 @@ export default function Navbar() {
               {navItems.map((item, i) => (
                 <motion.a
                   key={item.href}
-                  href={item.href}
+                  href={resolveHref(item.href)}
                   onClick={() => setMobileOpen(false)}
                   className={`font-[family-name:var(--font-cormorant)] text-2xl tracking-wider transition-colors ${
                     activeSection === item.href ? 'text-[#C9A96E]' : 'text-[#F5F0E8]'

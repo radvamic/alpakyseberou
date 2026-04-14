@@ -30,7 +30,7 @@ export default function StepMotif({ category, onSelect, onBack }: StepMotifProps
           <motion.button
             key={motif.id}
             onClick={() => onSelect(motif.id)}
-            className="rounded-xl border border-[#2A2520] bg-[#141414] p-3 sm:p-4 text-center transition-all duration-300 hover:border-[#C9A96E]/40 hover:bg-[#C9A96E]/5 group min-h-[100px] flex flex-col items-center justify-center gap-2"
+            className="rounded-xl border border-[#2A2520] bg-[#1A1A1A] p-3 sm:p-4 text-center transition-all duration-300 hover:border-[#C9A96E]/40 hover:bg-[#C9A96E]/5 group min-h-[100px] flex flex-col items-center justify-center gap-2"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.25, delay: i * 0.05 }}
@@ -40,7 +40,7 @@ export default function StepMotif({ category, onSelect, onBack }: StepMotifProps
             <h4 className="font-[family-name:var(--font-cormorant)] text-sm sm:text-base text-[#F5F0E8] group-hover:text-[#C9A96E] transition-colors leading-tight">
               {locale === 'cs' ? motif.nameCs : motif.nameEn}
             </h4>
-            <p className="text-[10px] sm:text-xs text-[#6A6560] leading-tight">
+            <p className="text-[10px] sm:text-xs text-[#B8A99A]/60 leading-tight">
               {locale === 'cs' ? motif.descCs : motif.descEn}
             </p>
           </motion.button>

@@ -11,23 +11,49 @@ interface Question {
 }
 
 export default function FAQ() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const questions = t('faq.questions') as unknown as Question[];
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [expanded, setExpanded] = useState(false);
 
   return (
-    <section id="faq" className="relative py-24 md:py-32 bg-[#0A0A0A]">
+    <section id="faq" className="relative pt-0 pb-8 bg-[#0A0A0A]">
       <div className="mx-auto max-w-3xl px-6">
         <SectionHeader
           title={t('faq.title') as string}
           subtitle={t('faq.subtitle') as string}
         />
 
-        <div className="space-y-3">
+        <div className="flex justify-center mb-8">
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#C9A96E] transition-colors duration-300"
+          >
+            <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
+            {expanded ? (locale === 'cs' ? 'Skrýt' : 'Hide') : (locale === 'cs' ? 'Zobrazit' : 'Show')}
+            <motion.span
+              animate={{ rotate: expanded ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="text-[#C9A96E]"
+            >↓</motion.span>
+            <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
+          </button>
+        </div>
+
+        <AnimatePresence>
+        {expanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+            style={{ overflow: 'hidden' }}
+          >
+        <div className="space-y-3 pb-8">
           {questions.map((item, i) => (
             <motion.div
               key={i}
-              className="overflow-hidden rounded-xl border border-[#2A2520] bg-[#141414] hover:border-[#C9A96E]/20 transition-colors duration-500"
+              className="overflow-hidden rounded-xl border border-[#2A2520] bg-[#111111] hover:border-[#C9A96E]/20 transition-colors duration-500"
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -67,6 +93,9 @@ export default function FAQ() {
             </motion.div>
           ))}
         </div>
+          </motion.div>
+        )}
+        </AnimatePresence>
       </div>
     </section>
   );

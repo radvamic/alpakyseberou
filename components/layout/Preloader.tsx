@@ -40,16 +40,16 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
 
             {/* Monogram */}
             <motion.div
-              className="relative"
+              className="relative flex items-center justify-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <svg width="120" height="120" viewBox="0 0 120 120" className="overflow-visible">
+              <svg width="160" height="160" viewBox="0 0 160 160" className="absolute overflow-visible">
                 <motion.circle
-                  cx="60"
-                  cy="60"
-                  r="55"
+                  cx="80"
+                  cy="80"
+                  r="75"
                   fill="none"
                   stroke="#C9A96E"
                   strokeWidth="0.5"
@@ -58,9 +58,9 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
                   transition={{ duration: 2, ease: [0.76, 0, 0.24, 1] }}
                 />
                 <motion.circle
-                  cx="60"
-                  cy="60"
-                  r="50"
+                  cx="80"
+                  cy="80"
+                  r="68"
                   fill="none"
                   stroke="#C9A96E"
                   strokeWidth="0.3"
@@ -69,14 +69,16 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
                   transition={{ duration: 2, ease: [0.76, 0, 0.24, 1], delay: 0.2 }}
                 />
               </svg>
-              <motion.span
-                className="absolute inset-0 flex items-center justify-center font-[family-name:var(--font-great-vibes)] text-4xl text-[#C9A96E]"
+              <motion.div
+                className="relative w-[170px] h-[170px]"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.6, ease: [0.76, 0, 0.24, 1] }}
               >
-                K & M
-              </motion.span>
+                <span className="absolute top-[10px] left-[12px] font-[family-name:var(--font-great-vibes)] text-6xl leading-none text-[#C9A96E]">K</span>
+                <span className="absolute top-[65px] left-[77px] font-[family-name:var(--font-great-vibes)] text-4xl leading-none text-[#C9A96E]">&</span>
+                <span className="absolute top-[106px] left-[68px] font-[family-name:var(--font-great-vibes)] text-6xl leading-none text-[#C9A96E]">M</span>
+              </motion.div>
             </motion.div>
 
             {/* Date */}
@@ -86,7 +88,7 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.2 }}
             >
-              29 . 08 . 2026
+              26 . 09 . 2026
             </motion.p>
 
             {/* Loading line */}

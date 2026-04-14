@@ -131,16 +131,16 @@ export default function PhotoBoothWizard() {
       {showProgress && (
         <div className="mb-8 flex items-center justify-center gap-2">
           {progressSteps.map((s, i) => (
-            <button
-              key={s}
-              onClick={() => {
-                if (i < currentProgressIndex) goTo(s as WizardStep);
-              }}
-              className={`h-1 rounded-full transition-all duration-500 ${
-                i <= currentProgressIndex ? 'w-10 bg-[#C9A96E]' : 'w-5 bg-[#2A2520]'
-              } ${i < currentProgressIndex ? 'cursor-pointer hover:bg-[#D4AF37]' : 'cursor-default'}`}
-            />
-          ))}
+        <button
+            key={s}
+            onClick={() => {
+              if (i < currentProgressIndex) goTo(s as WizardStep);
+            }}
+            className={`h-1 rounded-full transition-all duration-500 ${
+              i <= currentProgressIndex ? 'w-10 bg-[#C9A96E]' : 'w-5 bg-[#2A2520]'
+            } ${i < currentProgressIndex ? 'cursor-pointer hover:bg-[#B8935A]' : 'cursor-default'}`}
+          />
+                    ))}
           <span className="ml-3 text-xs text-[#B8A99A]">
             {t('photobooth.step') as string} {currentProgressIndex + 1} / {progressSteps.length}
           </span>
@@ -168,7 +168,7 @@ export default function PhotoBoothWizard() {
       </AnimatePresence>
 
       {/* Steps */}
-      <div className="rounded-2xl border border-[#2A2520] bg-[#0A0A0A]/60 p-4 sm:p-6 md:p-10 overflow-hidden min-h-[400px]">
+      <div className="rounded-2xl border border-[#2A2520] bg-[#111111] p-4 sm:p-6 md:p-10 overflow-hidden min-h-[400px]">
         <AnimatePresence mode="wait" custom={direction}>
           {step === 'upload' && (
             <motion.div
