@@ -427,7 +427,7 @@ export default function RSVP() {
                 <button onClick={prevStep} className="rsvp-back">
                   ← {t('rsvp.back') as string}
                 </button>
-                <button onClick={handleSubmit} className="rsvp-btn">
+                <button onClick={() => handleSubmit()} className="rsvp-btn">
                   {t('rsvp.submit') as string}
                 </button>
               </div>
