@@ -71,7 +71,7 @@ export default function RSVP() {
 
   if (submitted) {
     return (
-      <section id="rsvp" className="relative py-24 md:py-32 bg-[#0A0A0A]">
+      <section id="rsvp" className="relative pt-4 pb-24 md:pt-6 md:pb-32 bg-[#0A0A0A]">
         <div className="mx-auto max-w-xl px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -105,7 +105,7 @@ export default function RSVP() {
   }
 
   return (
-    <section id="rsvp" className="relative py-24 md:py-32 bg-[#0A0A0A]">
+    <section id="rsvp" className="relative pt-4 pb-24 md:pt-6 md:pb-32 bg-[#0A0A0A]">
       <div className="mx-auto max-w-2xl px-6">
         <SectionHeader
           title={t('rsvp.title') as string}

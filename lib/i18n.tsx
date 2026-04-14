@@ -214,7 +214,7 @@ const translations: Record<Locale, any> = {
     alpacas: {
       title: 'Proč alpaky?',
       subtitle: 'Malé vyznání',
-      text: 'Alpaky máme oba moc rádi. Jsou pro nás symbolem klidu, něhy a společných chvil v přírodě. Chtěli jsme je mít i na našem svatebním webu — jako malý kousek nás.',
+      text: 'Alpaky nás provázejí od samého začátku. Na jednom z prvních rande mě Klárka vzala na procházku — a od té chvíle jsme si je oba zamilovali. Dělají nám radost, děláme si z nich legraci a občas si říkáme, že jsme vlastně sami trochu alpaky. Roztomilí, trochu svérázní a k sobě zkrátka patřící.',
     },
     photobooth: {
       title: 'AI Fotokoutek',
@@ -258,7 +258,7 @@ const translations: Record<Locale, any> = {
     },
     footer: {
       hashtag: '#KlaraAMichal2026',
-      quote: '"V tobě jsem konečně našel domov, který jsem hledal celý život."',
+      quote: '"Společně zvládneme cokoliv. Ostatně, zvládli jsme i tenhle web."',
       madeWith: 'Vytvořeno s',
       copyright: '© 2026 Klára & Michal',
     },
@@ -463,7 +463,7 @@ const translations: Record<Locale, any> = {
     alpacas: {
       title: 'Why alpacas?',
       subtitle: 'A little confession',
-      text: 'We both love alpacas. They\'re our symbol of calm, tenderness, and time spent in nature together. We wanted them on our wedding site too — a little piece of us.',
+      text: 'Alpacas have been with us since the very beginning. On one of our first dates, Klárka took me for a walk — and from that moment, we both fell for them. They make us smile, we laugh about them endlessly, and sometimes we say we\'re a little bit alpacas ourselves. Adorable, a little quirky, and simply meant for each other.',
     },
     photobooth: {
       title: 'AI Photo Booth',
@@ -507,7 +507,7 @@ const translations: Record<Locale, any> = {
     },
     footer: {
       hashtag: '#KlaraAMichal2026',
-      quote: '"In you, I finally found the home I\'d been searching for my whole life."',
+      quote: '"Together we can handle anything. After all, we even built this website."',
       madeWith: 'Made with',
       copyright: '© 2026 Klára & Michal',
     },

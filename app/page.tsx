@@ -55,7 +55,7 @@ export default function Home() {
               <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/ceremony.png" imageWidth={240} imageHeight={140} />
               <Ceremony />
             </div>
-            <AlpacaSectionDivider />
+            <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/rsvp.png" imageWidth={165} imageHeight={75} />
             <RSVP />
             <div className="bg-[#141414]">
               <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/story.png" imageWidth={220} imageHeight={146} />
@@ -63,16 +63,22 @@ export default function Home() {
             </div>
             <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/why.png" imageWidth={200} imageHeight={140} />
             <WhyAlpacas />
-            <AlpacaSectionDivider />
-            <Gallery />
+            <div className="bg-[#141414]">
+              <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/gallery.png" imageWidth={220} imageHeight={100} />
+              <Gallery />
+            </div>
             <AlpacaSectionDivider />
             <FAQ />
-            <AlpacaSectionDivider />
-            <Guestbook />
+            <div className="bg-[#141414]">
+              <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/guestbook.png" imageWidth={165} imageHeight={90} />
+              <Guestbook />
+            </div>
             <AlpacaSectionDivider />
             <PhotoBoothTeaser />
-            <AlpacaSectionDivider />
-            <WeddingPhotos />
+            <div className="bg-[#141414]">
+              <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/photos.png" imageWidth={165} imageHeight={75} />
+              <WeddingPhotos />
+            </div>
           </main>
 
           <Footer />
