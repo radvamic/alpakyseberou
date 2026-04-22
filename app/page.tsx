@@ -20,6 +20,7 @@ import FAQ from '@/components/sections/FAQ';
 import Guestbook from '@/components/sections/Guestbook';
 import WeddingPhotos from '@/components/sections/WeddingPhotos';
 import WhyAlpacas from '@/components/sections/WhyAlpacas';
+import WeddingColors from '@/components/sections/WeddingColors';
 import PhotoBoothTeaser from '@/components/sections/PhotoBoothTeaser';
 import AlpacaSectionDivider from '@/components/ui/AlpacaSectionDivider';
 import Footer from '@/components/layout/Footer';
@@ -69,6 +70,10 @@ export default function Home() {
             </div>
             <AlpacaSectionDivider />
             <FAQ />
+            <div className="bg-[#141414]">
+              <AlpacaSectionDivider />
+              <WeddingColors />
+            </div>
             <div className="bg-[#141414]">
               <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/guestbook.png" imageWidth={165} imageHeight={90} />
               <Guestbook />

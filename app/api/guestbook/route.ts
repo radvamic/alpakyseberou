@@ -3,6 +3,8 @@ import { db } from '@/db';
 import { guestbookEntries, photos } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { ensureUploadDirs } from '@/lib/data';
+import { isAdmin } from '@/lib/admin-auth';
+import { sendGuestbookNotification } from '@/lib/mailer';
 import fs from 'fs';
 import path from 'path';
 
@@ -68,6 +70,14 @@ export async function POST(request: NextRequest) {
       .where(eq(photos.guestbookEntryId, entry.id))
       .all();
 
+    // Send notification email (non-blocking)
+    sendGuestbookNotification({
+      name,
+      message,
+      isPublic,
+      photos: entryPhotos.map((p) => p.url),
+    }).catch((err) => console.error('Email notification failed:', err));
+
     return NextResponse.json({
       success: true,
       entry: {
@@ -75,15 +85,18 @@ export async function POST(request: NextRequest) {
         photos: entryPhotos.map((p) => p.url),
       },
     });
+
   } catch (error) {
     console.error('Guestbook POST error:', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const entries = await db.select().from(guestbookEntries).all();
+    const admin = isAdmin(request);
+    const allEntries = await db.select().from(guestbookEntries).all();
+    const visibleEntries = admin ? allEntries : allEntries.filter((e) => e.isPublic);
     const allPhotos = await db
       .select()
       .from(photos)
@@ -99,7 +112,7 @@ export async function GET() {
       }
     }
 
-    const result = entries.map((entry) => ({
+    const result = visibleEntries.map((entry) => ({
       id: entry.id,
       name: entry.name,
       message: entry.message,

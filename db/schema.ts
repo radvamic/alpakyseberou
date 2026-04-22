@@ -16,6 +16,7 @@ export const rsvps = sqliteTable('rsvps', {
   allergies: text('allergies').default(''),
   songRequest: text('song_request').default(''),
   songNever: text('song_never').default(''),
+  stayDuration: text('stay_duration').default(''),
   createdAt: text('created_at')
     .notNull()
     .default(sql`(datetime('now'))`),

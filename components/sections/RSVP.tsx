@@ -23,9 +23,11 @@ export default function RSVP() {
     allergies: '',
     songRequest: '',
     songNever: '',
+    stayDuration: '',
   });
 
   const menuOptions = t('rsvp.menuOptions') as unknown as string[];
+  const stayDurationOptions = t('rsvp.stayDurationOptions') as unknown as { value: string; label: string }[];
 
   const updateField = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -363,6 +365,35 @@ export default function RSVP() {
                   </div>
                 </motion.div>
               )}
+
+              <div>
+                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#C9A96E]">
+                  {t('rsvp.stayDuration') as string}
+                </label>
+                <div className="mb-6 border-l-2 border-[#C9A96E]/30 pl-5 space-y-2">
+                  {(t('rsvp.stayDurationDesc') as string).split('. ').filter(Boolean).map((sentence, i, arr) => (
+                    <p key={i} className="text-base text-[#B8A99A] font-[family-name:var(--font-cormorant)] leading-relaxed">
+                      {sentence}{i < arr.length - 1 ? '.' : ''}
+                    </p>
+                  ))}
+                </div>
+                <div className="flex flex-col gap-3">
+                  {stayDurationOptions.map((opt) => (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => updateField('stayDuration', opt.value)}
+                      className={`w-full text-left px-5 py-3 text-sm tracking-[0.1em] transition-all duration-500 border-b-2 ${
+                        formData.stayDuration === opt.value
+                          ? 'border-[#C9A96E] text-[#C9A96E]'
+                          : 'border-[#2A2520] text-[#B8A99A] hover:border-[#C9A96E]/40 hover:text-[#E8D5B5]'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
               <div className="flex justify-between pt-4">
                 <button onClick={prevStep} className="rsvp-back">

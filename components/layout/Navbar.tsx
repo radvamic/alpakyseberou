@@ -12,6 +12,7 @@ const navItems: { href: string; key: string; external?: boolean }[] = [
   { href: '#rsvp', key: 'nav.rsvp' },
   { href: '#story', key: 'nav.story' },
   { href: '#gallery', key: 'nav.gallery' },
+  { href: '#colors', key: 'nav.colors' },
   { href: '#faq', key: 'nav.faq' },
   { href: '#guestbook', key: 'nav.guestbook' },
   { href: '/fotokoutek', key: 'nav.photobooth', external: true },

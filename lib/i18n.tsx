@@ -16,10 +16,10 @@ const I18nContext = createContext<I18nContextType | null>(null);
 const translations: Record<Locale, any> = {
   cs: {
     nav: {
-      story: 'Náš příběh',
+      story: 'Příběh',
       ceremony: 'Harmonogram',
-      venue: 'Místo konání',
-      rsvp: 'Potvrdit účast',
+      venue: 'Místo',
+      rsvp: 'Účast',
       gallery: 'Galerie',
       party: 'Svatební party',
       accommodation: 'Ubytování',
@@ -27,7 +27,8 @@ const translations: Record<Locale, any> = {
       faq: 'FAQ',
       guestbook: 'Nástěnka',
       photobooth: 'Fotokoutek',
-      photos: 'Vaše fotky',
+      photos: 'Fotky',
+      colors: 'Barvy',
       langSwitch: 'EN',
     },
     hero: {
@@ -128,6 +129,14 @@ const translations: Record<Locale, any> = {
       allergies: 'Alergie / dietní omezení',
       songRequest: 'Jakou písničku musíme hrát?',
       songNever: 'Jakou písničku nesmíme hrát?',
+      stayDuration: 'Délka pobytu',
+      stayDurationDesc: 'Naše svatba je na celý víkend a moc rádi se s vámi budeme veselit od pátku do neděle. Ubytování máme pro každého. Jídla, pití a zábavy bude dost. Ale samozřejmě pokud na celý víkend nemůžete, budeme rádi i když přijedete jen na sobotu.',
+      stayDurationOptions: [
+        { value: 'fri_sat', label: 'Budu spát v pátek i v sobotu — full wellness' },
+        { value: 'fri_only', label: 'Pouze v pátek' },
+        { value: 'sat_only', label: 'Pouze v sobotu' },
+        { value: 'ceremony_only', label: 'Budu pouze na obřad' },
+      ],
       submit: 'Odeslat odpověď',
       successYes: 'Děkujeme! Těšíme se na vás!',
       successAlpacaSay: 'Alpaka říká: Těšíme se na vás!',
@@ -256,6 +265,19 @@ const translations: Record<Locale, any> = {
       teaserText: 'Nechte naši AI alpáku přeměnit vaši fotku v umělecké dílo! Vyberte si styl, scénu nebo pozadí a vytvořte si unikátní vzpomínku na naši svatbu.',
       teaserCta: 'Vyzkoušet fotokoutek',
     },
+    colors: {
+      title: 'Barvy svatby',
+      subtitle: 'Naše barevná paleta',
+      description: 'Chceme, aby naše svatba byla vizuálně jednotná a elegantní. Pokud vás napadne, čím přispět k celkovému dojmu — inspirujte se naší paletou barev.',
+      dressCodeHint: 'Dress code: formální elegance v těchto odstínech je vítána, nikoli podmínkou.',
+      swatches: [
+        { name: 'Forest Green', hex: '#3B5249' },
+        { name: 'Dusky Rose', hex: '#9E6B6B' },
+        { name: 'Ivory', hex: '#F0E0D5' },
+        { name: 'Champagne', hex: '#C9A96E' },
+        { name: 'Light Champagne', hex: '#D6C9A5' },
+      ],
+    },
     footer: {
       hashtag: '#KlaraAMichal2026',
       quote: '"Společně zvládneme cokoliv. Ostatně, zvládli jsme i tenhle web."',
@@ -265,7 +287,7 @@ const translations: Record<Locale, any> = {
   },
   en: {
     nav: {
-      story: 'Our Story',
+      story: 'Story',
       ceremony: 'Schedule',
       venue: 'Venue',
       rsvp: 'RSVP',
@@ -274,9 +296,10 @@ const translations: Record<Locale, any> = {
       accommodation: 'Stay',
       gifts: 'Gifts',
       faq: 'FAQ',
-      guestbook: 'Message Board',
+      guestbook: 'Board',
       photobooth: 'Photo Booth',
-      photos: 'Your Photos',
+      photos: 'Photos',
+      colors: 'Colors',
       langSwitch: 'CZ',
     },
     hero: {
@@ -377,6 +400,14 @@ const translations: Record<Locale, any> = {
       allergies: 'Allergies / dietary restrictions',
       songRequest: 'What song must we play?',
       songNever: 'What song must we NOT play?',
+      stayDuration: 'Length of stay',
+      stayDurationDesc: 'Our wedding is a full weekend celebration and we\'d love to share it with you from Friday to Sunday. We have accommodation for everyone. There will be plenty of food, drinks and fun. But of course, if you can\'t make the whole weekend, we\'ll be just as happy to see you on Saturday.',
+      stayDurationOptions: [
+        { value: 'fri_sat', label: 'Staying Friday & Saturday — full wellness' },
+        { value: 'fri_only', label: 'Friday only' },
+        { value: 'sat_only', label: 'Saturday only' },
+        { value: 'ceremony_only', label: 'Ceremony only' },
+      ],
       submit: 'Confirm',
       successYes: 'Thank you! We look forward to seeing you!',
       successAlpacaSay: 'The alpaca says: We can\'t wait to see you!',
@@ -504,6 +535,19 @@ const translations: Record<Locale, any> = {
       teaserSubtitle: 'Fun with alpacas',
       teaserText: 'Let our AI alpaca transform your photo into a work of art! Choose a style, scene, or background and create a unique memory of our wedding.',
       teaserCta: 'Try the photo booth',
+    },
+    colors: {
+      title: 'Wedding Colors',
+      subtitle: 'Our color palette',
+      description: 'We want our wedding to be visually cohesive and elegant. If you\'d like to complement the overall look — feel free to draw inspiration from our color palette.',
+      dressCodeHint: 'Dress code: formal elegance in these shades is welcome, not required.',
+      swatches: [
+        { name: 'Forest Green', hex: '#3B5249' },
+        { name: 'Dusky Rose', hex: '#9E6B6B' },
+        { name: 'Ivory', hex: '#F0E0D5' },
+        { name: 'Champagne', hex: '#C9A96E' },
+        { name: 'Light Champagne', hex: '#D6C9A5' },
+      ],
     },
     footer: {
       hashtag: '#KlaraAMichal2026',
