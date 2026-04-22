@@ -26,6 +26,9 @@ COPY --from=builder /app/public ./public
 # Copy DB migrations for runtime
 COPY --from=builder /app/db/migrations ./db/migrations
 
+# Copy migration startup script
+COPY --from=builder /app/scripts/migrate.cjs ./scripts/migrate.cjs
+
 # Create data & upload dirs
 RUN mkdir -p /app/data \
              /app/public/uploads/guestbook \
@@ -34,4 +37,4 @@ RUN mkdir -p /app/data \
              /app/public/photobooth/couple
 
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["sh", "-c", "node scripts/migrate.cjs && node server.js"]
