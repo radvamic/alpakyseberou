@@ -21,7 +21,7 @@ import Guestbook from '@/components/sections/Guestbook';
 import WeddingPhotos from '@/components/sections/WeddingPhotos';
 import WhyAlpacas from '@/components/sections/WhyAlpacas';
 import WeddingColors from '@/components/sections/WeddingColors';
-import PhotoBoothTeaser from '@/components/sections/PhotoBoothTeaser';
+// import PhotoBoothTeaser from '@/components/sections/PhotoBoothTeaser';
 import AlpacaSectionDivider from '@/components/ui/AlpacaSectionDivider';
 import Footer from '@/components/layout/Footer';
 
@@ -79,7 +79,7 @@ export default function Home() {
               <Guestbook />
             </div>
             <AlpacaSectionDivider />
-            <PhotoBoothTeaser />
+            {/* <PhotoBoothTeaser /> */}
             <div className="bg-[#141414]">
               <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/photos.png" imageWidth={165} imageHeight={75} />
               <WeddingPhotos />

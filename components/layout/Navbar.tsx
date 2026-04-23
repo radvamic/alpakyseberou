@@ -15,7 +15,7 @@ const navItems: { href: string; key: string; external?: boolean }[] = [
   { href: '#colors', key: 'nav.colors' },
   { href: '#faq', key: 'nav.faq' },
   { href: '#guestbook', key: 'nav.guestbook' },
-  { href: '/fotokoutek', key: 'nav.photobooth', external: true },
+  // { href: '/fotokoutek', key: 'nav.photobooth', external: true },
 ];
 
 export default function Navbar() {
