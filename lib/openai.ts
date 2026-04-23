@@ -63,6 +63,8 @@ export async function generatePhoto({
     }
   }
 
+  console.log('[photobooth] Sending images to OpenAI:', imageFiles.map(f => `${f.name} (${f.type}, ${f.size}B)`));
+
   const response = await getOpenAI().images.edit({
     model: 'gpt-image-1',
     image: imageFiles,
