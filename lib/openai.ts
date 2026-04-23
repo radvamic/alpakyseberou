@@ -3,6 +3,20 @@ import fs from 'fs';
 import path from 'path';
 import { ensureUploadDirs } from './data';
 
+function mimeTypeForExt(ext: string): string {
+  switch (ext.toLowerCase()) {
+    case '.jpg':
+    case '.jpeg':
+      return 'image/jpeg';
+    case '.webp':
+      return 'image/webp';
+    case '.gif':
+      return 'image/gif';
+    default:
+      return 'image/png';
+  }
+}
+
 let _openai: OpenAI | null = null;
 
 function getOpenAI(): OpenAI {
@@ -30,15 +44,22 @@ export async function generatePhoto({
   const imageFiles: File[] = [];
 
   const userPhotoBuffer = fs.readFileSync(userPhotoPath);
-  const userBlob = new Blob([new Uint8Array(userPhotoBuffer)], { type: 'image/png' });
-  imageFiles.push(new File([userBlob], 'user_photo.png', { type: 'image/png' }));
+  const userExt = path.extname(userPhotoPath);
+  const userMime = mimeTypeForExt(userExt);
+  const userFileName = `user_photo${userExt || '.png'}`;
+  const userBlob = new Blob([new Uint8Array(userPhotoBuffer)], { type: userMime });
+  imageFiles.push(new File([userBlob], userFileName, { type: userMime }));
 
   for (let i = 0; i < couplePhotoPaths.length; i++) {
     const fullPath = path.join(process.cwd(), 'public', couplePhotoPaths[i]);
     if (fs.existsSync(fullPath)) {
+      const ext = path.extname(fullPath);
+      // Skip HEIC files — OpenAI API does not support them
+      if (['.heic', '.heif'].includes(ext.toLowerCase())) continue;
+      const mime = mimeTypeForExt(ext);
       const buf = fs.readFileSync(fullPath);
-      const blob = new Blob([new Uint8Array(buf)], { type: 'image/png' });
-      imageFiles.push(new File([blob], `couple_photo_${i}.png`, { type: 'image/png' }));
+      const blob = new Blob([new Uint8Array(buf)], { type: mime });
+      imageFiles.push(new File([blob], `couple_photo_${i}${ext}`, { type: mime }));
     }
   }
 
