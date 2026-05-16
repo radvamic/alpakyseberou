@@ -180,9 +180,13 @@ const translations: Record<Locale, any> = {
     },
     gifts: {
       title: 'Dary',
-      subtitle: 'Vaše přítomnost je pro nás ten největší dar',
-      text: 'Pokud nás ale přesto chcete obdarovat, budeme rádi za příspěvek na naše společné dobrodružství — seznam přání či cestovní fond najdete níže.',
-      cta: 'Přispět na cestovní fond',
+      subtitle: 'Výprava je nejlepší s vámi',
+      kicker: 'Expedice svatba',
+      paragraphs: [
+        'Naše svatba není jen obřad. Je to víkendová expedice za jídlem, pitím, tancem a smíchem s lidmi, které máme nejradši.',
+        'Největší dárek pro nás bude, když se do téhle výpravy přidáte. Pokud nám chcete přibalit i něco navíc, budeme vděční za příspěvek na společné zážitky.',
+      ],
+      note: 'Plyšové alpaky povoleny pouze po předchozí domluvě.',
     },
     faq: {
       title: 'Často kladené otázky',
@@ -193,6 +197,7 @@ const translations: Record<Locale, any> = {
         { q: 'Kde zaparkuji?', a: 'Parkování je zdarma přímo v areálu Hotelu Všetice.' },
         { q: 'Mohu přespat v areálu?', a: 'Ano! Hotel Všetice nabízí ubytování ve 44 pokojích s celkovou kapacitou 130 hostů.' },
         { q: 'Kdy bych měl/a přijet?', a: 'Doporučujeme přijet v pátek 25. září, abyste si užili celý svatební víkend.' },
+        { q: 'Jak je to s dary?', a: 'Největší dárek pro nás bude, když dorazíte a užijete si s námi celý víkend. Pokud nám chcete přibalit i něco navíc, budeme vděční za příspěvek na společné zážitky. Plyšové alpaky povoleny pouze po předchozí domluvě.' },
         { q: 'Bude dort?', a: 'A jaký! Nechte se překvapit.' },
         { q: 'Mohu nahrát fotky ze svatby?', a: 'Rozhodně! V sekci "Vaše fotky" můžete po svatbě nahrát všechny vaše záběry.' },
       ],
@@ -273,10 +278,11 @@ const translations: Record<Locale, any> = {
       swatches: [
         { name: 'Forest Green', hex: '#3B5249' },
         { name: 'Dusky Rose', hex: '#9E6B6B' },
-        { name: 'Ivory', hex: '#F0E0D5' },
+        { name: 'Bílá', hex: '#FFFFFF', brideOnly: true },
         { name: 'Champagne', hex: '#C9A96E' },
         { name: 'Light Champagne', hex: '#D6C9A5' },
       ],
+      brideOnlyLabel: 'Vyhrazeno pro nevěstu 👰',
     },
     footer: {
       hashtag: '#KlaraAMichal2026',
@@ -451,9 +457,13 @@ const translations: Record<Locale, any> = {
     },
     gifts: {
       title: 'Gifts',
-      subtitle: 'Your presence is the greatest gift of all',
-      text: 'However, if you wish to give us something, we\'d be grateful for a contribution to our shared adventure — you can find our wish list or travel fund below.',
-      cta: 'Contribute to travel fund',
+      subtitle: 'This expedition is better with you',
+      kicker: 'Wedding expedition',
+      paragraphs: [
+        'Our wedding is not just a ceremony. It is a weekend expedition in pursuit of food, drinks, dancing, and laughter with the people we love most.',
+        'The greatest gift for us will be having you join the expedition. If you would like to pack something extra for us too, we will be grateful for a contribution toward shared experiences.',
+      ],
+      note: 'Plush alpacas allowed by prior arrangement only.',
     },
     faq: {
       title: 'Frequently Asked Questions',
@@ -464,6 +474,7 @@ const translations: Record<Locale, any> = {
         { q: 'Where can I park?', a: 'Free parking is available on-site at Hotel Všetice.' },
         { q: 'Can I stay at the venue?', a: 'Yes! Hotel Všetice offers accommodation in 44 rooms with a total capacity of 130 guests.' },
         { q: 'When should I arrive?', a: 'We recommend arriving on Friday, September 25th, to enjoy the entire wedding weekend.' },
+        { q: 'What about gifts?', a: 'The greatest gift for us will be having you there to enjoy the whole weekend with us. If you would like to pack something extra for us too, we will be grateful for a contribution toward shared experiences. Plush alpacas allowed by prior arrangement only.' },
         { q: 'Will there be cake?', a: 'You bet! Prepare to be amazed.' },
         { q: 'Can I upload my wedding photos?', a: 'Absolutely! In the "Your Photos" section, you can upload all your shots after the wedding.' },
       ],
@@ -544,10 +555,11 @@ const translations: Record<Locale, any> = {
       swatches: [
         { name: 'Forest Green', hex: '#3B5249' },
         { name: 'Dusky Rose', hex: '#9E6B6B' },
-        { name: 'Ivory', hex: '#F0E0D5' },
+        { name: 'White', hex: '#FFFFFF', brideOnly: true },
         { name: 'Champagne', hex: '#C9A96E' },
         { name: 'Light Champagne', hex: '#D6C9A5' },
       ],
+      brideOnlyLabel: 'Reserved for the bride 👰',
     },
     footer: {
       hashtag: '#KlaraAMichal2026',

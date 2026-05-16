@@ -7,9 +7,10 @@ import SectionHeader from '@/components/ui/SectionHeader';
 interface Swatch {
   name: string;
   hex: string;
+  brideOnly?: boolean;
 }
 
-function ColorSwatch({ swatch, index }: { swatch: Swatch; index: number }) {
+function ColorSwatch({ swatch, index, brideOnlyLabel }: { swatch: Swatch; index: number; brideOnlyLabel: string }) {
   const isLight = isLightColor(swatch.hex);
 
   return (
@@ -27,7 +28,7 @@ function ColorSwatch({ swatch, index }: { swatch: Swatch; index: number }) {
       >
         <div
           className="w-28 h-28 sm:w-36 sm:h-36 rounded-full shadow-lg"
-          style={{ backgroundColor: swatch.hex }}
+          style={{ backgroundColor: swatch.hex, border: swatch.brideOnly ? '1px solid rgba(255,255,255,0.25)' : undefined }}
         />
         <motion.div
           className="absolute inset-0 rounded-full"
@@ -40,18 +41,35 @@ function ColorSwatch({ swatch, index }: { swatch: Swatch; index: number }) {
         <div
           className="absolute inset-0 rounded-full border border-white/10"
         />
+        {/* bride-only diagonal strikethrough */}
+        {swatch.brideOnly && (
+          <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+            <svg viewBox="0 0 100 100" className="w-full h-full">
+              <line x1="15" y1="15" x2="85" y2="85" stroke="#9E6B6B" strokeWidth="3.5" strokeLinecap="round" />
+              <line x1="85" y1="15" x2="15" y2="85" stroke="#9E6B6B" strokeWidth="3.5" strokeLinecap="round" />
+            </svg>
+          </div>
+        )}
       </motion.div>
 
       <div className="text-center">
-        <p className="font-[family-name:var(--font-cormorant)] text-sm sm:text-base tracking-[0.18em] uppercase text-[#B8A99A]">
+        <p
+          className="font-[family-name:var(--font-cormorant)] text-sm sm:text-base tracking-[0.18em] uppercase text-[#B8A99A]"
+          style={swatch.brideOnly ? { textDecoration: 'line-through', textDecorationColor: '#9E6B6B', textDecorationThickness: '2px' } : undefined}
+        >
           {swatch.name}
         </p>
         <p
           className="mt-1 font-[family-name:var(--font-inter)] text-xs tracking-widest uppercase"
-          style={{ color: swatch.hex === '#F0E0D5' ? '#B8A99A' : swatch.hex }}
+          style={{ color: isLight ? '#B8A99A' : swatch.hex }}
         >
           {swatch.hex}
         </p>
+        {swatch.brideOnly && (
+          <p className="mt-2 font-[family-name:var(--font-cormorant)] text-xs italic text-[#9E6B6B]/80 max-w-[120px]">
+            {brideOnlyLabel}
+          </p>
+        )}
       </div>
     </motion.div>
   );
@@ -67,6 +85,7 @@ function isLightColor(hex: string): boolean {
 export default function WeddingColors() {
   const { t } = useI18n();
   const swatches = t('colors.swatches') as unknown as Swatch[];
+  const brideOnlyLabel = t('colors.brideOnlyLabel') as string;
 
   return (
     <section id="colors" className="relative py-20 sm:py-28 bg-[#141414] overflow-hidden">
@@ -88,7 +107,7 @@ export default function WeddingColors() {
         {/* Color swatches */}
         <div className="flex flex-wrap justify-center gap-10 sm:gap-16 mb-14">
           {swatches.map((swatch, i) => (
-            <ColorSwatch key={swatch.name} swatch={swatch} index={i} />
+            <ColorSwatch key={swatch.name} swatch={swatch} index={i} brideOnlyLabel={brideOnlyLabel} />
           ))}
         </div>
 

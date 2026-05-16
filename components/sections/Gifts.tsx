@@ -1,68 +1,59 @@
 'use client';
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 import SectionHeader from '@/components/ui/SectionHeader';
 
 export default function Gifts() {
-  const { t, locale } = useI18n();
-  const [expanded, setExpanded] = useState(false);
+  const { t } = useI18n();
+  const paragraphs = t('gifts.paragraphs') as string[];
 
   return (
-    <section id="gifts" className="relative pt-0 pb-8 bg-[#141414]">
-      <div className="mx-auto max-w-3xl px-6">
+    <section id="gifts" className="relative scroll-mt-24 pt-0 pb-8 bg-[#141414] overflow-hidden">
+      <div
+        className="absolute inset-0 opacity-[0.025]"
+        style={{
+          backgroundImage: 'radial-gradient(circle, #C9A96E 1px, transparent 1px)',
+          backgroundSize: '44px 44px',
+        }}
+      />
+
+      <div className="relative mx-auto max-w-3xl px-6">
         <SectionHeader
           title={t('gifts.title') as string}
           subtitle={t('gifts.subtitle') as string}
         />
 
-        <div className="flex justify-center mb-8">
-          <button
-            onClick={() => setExpanded(!expanded)}
-            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#C9A96E] transition-colors duration-300"
-          >
-            <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
-            {expanded
-              ? (locale === 'cs' ? 'Skrýt' : 'Hide')
-              : (locale === 'cs' ? 'Zobrazit' : 'Show')}
-            <motion.span
-              animate={{ rotate: expanded ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
-              className="text-[#C9A96E]"
-            >
-              ↓
-            </motion.span>
-            <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
-          </button>
-        </div>
+        <motion.div
+          className="relative mb-8 rounded-[2rem] border border-[#2A2520] bg-[#0F0F0F]/85 p-8 text-center shadow-2xl shadow-black/20 sm:p-10"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
+        >
+          <div className="mx-auto mb-8 flex w-fit items-center gap-3 font-[family-name:var(--font-cormorant)] text-xs tracking-[0.24em] uppercase text-[#C9A96E]/80">
+            <span className="h-px w-8 bg-[#C9A96E]/40" />
+            {t('gifts.kicker') as string}
+            <span className="h-px w-8 bg-[#C9A96E]/40" />
+          </div>
 
-        <AnimatePresence>
-          {expanded && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-              style={{ overflow: 'hidden' }}
-            >
-              <div className="text-center pb-8">
-                <div className="mb-8">
-                  <span className="text-5xl">🎁</span>
-                </div>
-                <p className="text-base md:text-lg text-[#B8A99A] leading-relaxed mb-10 max-w-2xl mx-auto">
-                  {t('gifts.text') as string}
-                </p>
-                <a
-                  href="#"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#C9A96E]/30 bg-[#C9A96E]/5 px-10 py-4 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:border-[#C9A96E] hover:bg-[#C9A96E]/10"
-                >
-                  {t('gifts.cta') as string}
-                </a>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          <div className="mx-auto max-w-2xl space-y-5">
+            {paragraphs.map((paragraph, index) => (
+              <p
+                key={index}
+                className="font-[family-name:var(--font-cormorant)] text-lg leading-relaxed text-[#B8A99A] sm:text-xl"
+              >
+                {paragraph}
+              </p>
+            ))}
+          </div>
+
+          <div className="mx-auto my-8 h-[1px] max-w-xs bg-gradient-to-r from-transparent via-[#C9A96E]/40 to-transparent" />
+
+          <p className="font-[family-name:var(--font-inter)] text-xs uppercase tracking-[0.2em] text-[#C9A96E]/70">
+            {t('gifts.note') as string}
+          </p>
+        </motion.div>
       </div>
     </section>
   );

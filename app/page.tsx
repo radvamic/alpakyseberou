@@ -69,6 +69,8 @@ export default function Home() {
               <Gallery />
             </div>
             <AlpacaSectionDivider />
+            <Gifts />
+            <AlpacaSectionDivider />
             <FAQ />
             <div className="bg-[#141414]">
               <AlpacaSectionDivider />
