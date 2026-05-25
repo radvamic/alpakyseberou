@@ -26,7 +26,9 @@ export default function RSVP() {
     stayDuration: '',
   });
 
-  const menuOptions = t('rsvp.menuOptions') as unknown as string[];
+  const menuOptions = ((t('rsvp.menuOptions') as unknown as string[]) ?? []).filter(
+    (opt) => !/^(ryba|fish)$/i.test(opt),
+  );
   const stayDurationOptions = t('rsvp.stayDurationOptions') as unknown as { value: string; label: string }[];
 
   const updateField = (field: string, value: string | boolean) => {

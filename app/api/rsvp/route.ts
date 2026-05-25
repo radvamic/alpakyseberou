@@ -28,6 +28,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const normalizedMenu =
+      menuPreference && !/^(ryba|fish)$/i.test(menuPreference) ? menuPreference : '';
+
     const [entry] = await db
       .insert(rsvps)
       .values({
@@ -37,7 +40,7 @@ export async function POST(request: NextRequest) {
         guests: parseInt(guests) || 1,
         children: Boolean(children),
         childrenCount: parseInt(childrenCount) || 0,
-        menuPreference: menuPreference || '',
+        menuPreference: normalizedMenu,
         allergies: allergies || '',
         songRequest: songRequest || '',
         songNever: songNever || '',
@@ -52,7 +55,7 @@ export async function POST(request: NextRequest) {
       email: email || '',
       attending: Boolean(attending),
       guests: parseInt(guests) || 1,
-      menuPreference: menuPreference || '',
+      menuPreference: normalizedMenu,
       stayDuration: stayDuration || '',
       children: Boolean(children),
       childrenCount: parseInt(childrenCount) || 0,
