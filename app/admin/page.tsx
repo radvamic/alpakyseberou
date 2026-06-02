@@ -80,7 +80,7 @@ interface TableChallengeStats {
   avgPhotosPerGuest: number;
 }
 
-type Tab = 'rsvp' | 'guestbook' | 'photobooth' | 'camera' | 'table-challenge';
+type Tab = 'rsvp' | 'guestbook' | 'photobooth' | 'camera' | 'table-challenge' | 'guest-photos';
 type GuestbookFilter = 'all' | 'public' | 'private';
 
 const STAY_LABELS: Record<string, string> = {
@@ -135,16 +135,19 @@ export default function AdminPage() {
   const [guestbookFilter, setGuestbookFilter] = useState<GuestbookFilter>('all');
   const [expandedSession, setExpandedSession] = useState<number | null>(null);
   const [expandedTableGuest, setExpandedTableGuest] = useState<string | null>(null);
+  const [guestPhotos, setGuestPhotos] = useState<TableChallengePhoto[]>([]);
+  const [deletingPhotoId, setDeletingPhotoId] = useState<number | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [r, g, p, c, tc] = await Promise.all([
+      const [r, g, p, c, tc, gp] = await Promise.all([
         fetch('/api/rsvp').then((x) => x.json()),
         fetch('/api/guestbook').then((x) => x.json()),
         fetch('/api/admin/photobooth').then((x) => x.json()),
         fetch('/api/admin/camera').then((x) => x.json()),
         fetch('/api/admin/table-challenge').then((x) => x.json()),
+        fetch('/api/admin/photos?type=wedding').then((x) => x.json()),
       ]);
       setRsvps(Array.isArray(r) ? r : []);
       setGuestbook(Array.isArray(g) ? g : []);
@@ -157,6 +160,7 @@ export default function AdminPage() {
         setTableChallengeGuests([]);
         setTableChallengeStats(null);
       }
+      setGuestPhotos(Array.isArray(gp) ? gp : []);
     } catch {
       // ignore
     } finally {
@@ -165,6 +169,20 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  const deleteGuestPhoto = async (id: number) => {
+    if (!confirm('Opravdu smazat tuto fotku? (soubor i záznam v databázi)')) return;
+    setDeletingPhotoId(id);
+    try {
+      const res = await fetch(`/api/admin/photos?id=${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('delete failed');
+      setGuestPhotos((prev) => prev.filter((p) => p.id !== id));
+    } catch {
+      alert('Smazání se nepovedlo.');
+    } finally {
+      setDeletingPhotoId(null);
+    }
+  };
 
   const [emailTest, setEmailTest] = useState<{ ok: boolean; error?: string; config?: Record<string, string> } | null>(null);
   const [emailTesting, setEmailTesting] = useState(false);
@@ -219,6 +237,7 @@ export default function AdminPage() {
     { id: 'photobooth', label: 'Fotokoutek', count: photobooth.length },
     { id: 'camera', label: 'Kamera', count: totalCameraPhotos },
     { id: 'table-challenge', label: 'Úkoly', count: totalTablePhotos },
+    { id: 'guest-photos', label: 'Fotky hostů', count: guestPhotos.length },
   ];
 
   const siteBase = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://alpakyseberou.cz';
@@ -670,6 +689,61 @@ export default function AdminPage() {
                       {expandedSession === s.id && s.photos.length === 0 && (
                         <p className="px-5 pb-5 text-xs text-[#5a5248] italic">Žádné fotky.</p>
                       )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ================================================================
+              GUEST PHOTOS TAB
+          ================================================================ */}
+          {tab === 'guest-photos' && (
+            <div className="space-y-6">
+              <p className="text-xs text-[#5a5248] font-[family-name:var(--font-cormorant)]">
+                Fotky nahrané hosty přes web (sekce „Vaše fotky ze svatby“). Smazáním zmizí z webu i z disku serveru.
+              </p>
+
+              {guestPhotos.length === 0 ? (
+                <p className="text-center py-16 font-[family-name:var(--font-cormorant)] text-[#5a5248] italic">
+                  Žádné fotky od hostů.
+                </p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {guestPhotos.map((photo) => (
+                    <div
+                      key={photo.id}
+                      className="relative border border-[#C9A96E]/10 p-4 hover:border-[#C9A96E]/25 transition-colors"
+                    >
+                      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#C9A96E]/30" />
+                      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#C9A96E]/30" />
+                      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#C9A96E]/30" />
+                      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#C9A96E]/30" />
+
+                      <a href={photo.url} target="_blank" rel="noreferrer" className="block mb-3">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={photo.url}
+                          alt=""
+                          className="w-full aspect-square object-cover border border-[#2A2520]"
+                        />
+                      </a>
+
+                      <p className="font-[family-name:var(--font-playfair)] text-[#F5F0E8] text-sm truncate">
+                        {photo.name}
+                      </p>
+                      <p className="text-xs text-[#5a5248] mt-0.5">{formatDate(photo.createdAt)}</p>
+                      <p className="text-[10px] text-[#4A4540] mt-1 truncate">ID {photo.id}</p>
+
+                      <button
+                        type="button"
+                        onClick={() => deleteGuestPhoto(photo.id)}
+                        disabled={deletingPhotoId === photo.id}
+                        className="mt-3 w-full text-xs tracking-[0.12em] uppercase py-2 border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-40"
+                      >
+                        {deletingPhotoId === photo.id ? 'Mažu…' : 'Smazat'}
+                      </button>
                     </div>
                   ))}
                 </div>
