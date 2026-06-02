@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface CameraShutterProps {
@@ -20,29 +20,94 @@ export default function CameraShutter({
   uploading,
   uploadError,
 }: CameraShutterProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const [flash, setFlash] = useState(false);
+  const [cameraReady, setCameraReady] = useState(false);
+  const [cameraError, setCameraError] = useState<string | null>(null);
 
   const remaining = maxPhotos - photosTaken;
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    // Reset input so the same photo can trigger again if needed
-    e.target.value = '';
+  const stopCamera = useCallback(() => {
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current = null;
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+    setCameraReady(false);
+  }, []);
+
+  const startCamera = useCallback(async () => {
+    stopCamera();
+    setCameraError(null);
+
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setCameraError('Tvůj prohlížeč nepodporuje přímé focení. Zkus Safari nebo Chrome.');
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: { ideal: 'environment' },
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
+        },
+        audio: false,
+      });
+
+      streamRef.current = stream;
+      const video = videoRef.current;
+      if (!video) {
+        stream.getTracks().forEach((t) => t.stop());
+        return;
+      }
+
+      video.srcObject = stream;
+      await video.play();
+      setCameraReady(true);
+    } catch {
+      setCameraError(
+        'Potřebujeme přístup ke kameře. Povol ho v nastavení prohlížeče a obnov stránku.',
+      );
+    }
+  }, [stopCamera]);
+
+  useEffect(() => {
+    startCamera();
+    return () => stopCamera();
+  }, [startCamera, stopCamera]);
+
+  const capturePhoto = async () => {
+    if (uploading || !cameraReady || !videoRef.current) return;
+
+    const video = videoRef.current;
+    if (video.videoWidth === 0 || video.videoHeight === 0) return;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    ctx.drawImage(video, 0, 0);
+
+    const blob = await new Promise<Blob | null>((resolve) => {
+      canvas.toBlob(resolve, 'image/jpeg', 0.92);
+    });
+    if (!blob) return;
+
+    const file = new File([blob], `photo-${Date.now()}.jpg`, {
+      type: 'image/jpeg',
+    });
+
     setFlash(true);
     setTimeout(() => setFlash(false), 300);
     await onPhotoTaken(file);
   };
 
-  const triggerCamera = () => {
-    if (uploading) return;
-    inputRef.current?.click();
-  };
-
   return (
-    <div className="min-h-screen bg-[#0A0A0A] flex flex-col items-center justify-between py-10 px-6">
-      {/* Flash overlay */}
+    <div className="min-h-screen bg-[#0A0A0A] flex flex-col items-center justify-between py-8 px-4">
       <AnimatePresence>
         {flash && (
           <motion.div
@@ -56,8 +121,7 @@ export default function CameraShutter({
         )}
       </AnimatePresence>
 
-      {/* Header */}
-      <div className="text-center w-full">
+      <div className="text-center w-full shrink-0">
         <span className="block font-[family-name:var(--font-great-vibes)] text-xl text-[#C9A96E]">
           Klára &amp; Michal
         </span>
@@ -66,10 +130,45 @@ export default function CameraShutter({
         </p>
       </div>
 
-      {/* Film counter */}
-      <div className="flex flex-col items-center gap-4 w-full max-w-xs">
+      {/* Live viewfinder — no iOS "Retake" sheet */}
+      <div className="relative w-full max-w-sm aspect-[3/4] my-4 overflow-hidden border border-[#C9A96E]/20 bg-[#111]">
+        <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#C9A96E]/40 z-10" />
+        <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#C9A96E]/40 z-10" />
+        <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#C9A96E]/40 z-10" />
+        <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#C9A96E]/40 z-10" />
+
+        {cameraError ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center">
+            <p className="text-[#B8A99A] text-sm">{cameraError}</p>
+            <button
+              type="button"
+              onClick={startCamera}
+              className="text-[#C9A96E] text-sm underline underline-offset-2"
+            >
+              Zkusit znovu
+            </button>
+          </div>
+        ) : (
+          <>
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              className={`absolute inset-0 w-full h-full object-cover ${cameraReady ? 'opacity-100' : 'opacity-0'}`}
+            />
+            {!cameraReady && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full border-2 border-[#C9A96E] border-t-transparent animate-spin" />
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      <div className="flex flex-col items-center gap-3 w-full max-w-xs shrink-0">
         <div className="text-center">
-          <span className="font-[family-name:var(--font-playfair)] text-6xl font-light text-[#F5F0E8]">
+          <span className="font-[family-name:var(--font-playfair)] text-5xl font-light text-[#F5F0E8]">
             {remaining}
           </span>
           <span className="text-[#4A4540] text-lg"> / {maxPhotos}</span>
@@ -78,7 +177,6 @@ export default function CameraShutter({
           </p>
         </div>
 
-        {/* Film strip progress */}
         <div className="w-full flex gap-[3px]">
           {Array.from({ length: maxPhotos }).map((_, i) => (
             <div
@@ -92,20 +190,11 @@ export default function CameraShutter({
         </div>
       </div>
 
-      {/* Shutter button */}
-      <div className="flex flex-col items-center gap-5">
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          capture="environment"
-          className="hidden"
-          onChange={handleFileChange}
-        />
-
+      <div className="flex flex-col items-center gap-4 shrink-0 pb-2">
         <motion.button
-          onClick={triggerCamera}
-          disabled={uploading}
+          type="button"
+          onClick={capturePhoto}
+          disabled={uploading || !cameraReady || !!cameraError}
           whileTap={{ scale: 0.94 }}
           className="relative w-24 h-24 rounded-full bg-[#C9A96E] shadow-[0_0_40px_rgba(201,169,110,0.3)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           aria-label="Vyfotit"
@@ -126,8 +215,10 @@ export default function CameraShutter({
             >
               <p className="text-red-400 text-sm">{uploadError}</p>
               <button
-                onClick={triggerCamera}
-                className="text-[#C9A96E] text-sm underline underline-offset-2"
+                type="button"
+                onClick={capturePhoto}
+                disabled={!cameraReady || uploading}
+                className="text-[#C9A96E] text-sm underline underline-offset-2 disabled:opacity-50"
               >
                 Zkusit znovu
               </button>
@@ -136,7 +227,7 @@ export default function CameraShutter({
         </AnimatePresence>
 
         <p className="text-[#4A4540] text-xs text-center">
-          {uploading ? 'Nahráváme fotku…' : 'Stiskni a foť'}
+          {uploading ? 'Nahráváme fotku…' : cameraReady ? 'Stiskni a foť' : 'Načítáme kameru…'}
         </p>
       </div>
     </div>

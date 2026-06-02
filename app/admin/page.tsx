@@ -137,6 +137,7 @@ export default function AdminPage() {
   const [expandedTableGuest, setExpandedTableGuest] = useState<string | null>(null);
   const [guestPhotos, setGuestPhotos] = useState<TableChallengePhoto[]>([]);
   const [deletingPhotoId, setDeletingPhotoId] = useState<number | null>(null);
+  const [deletingGuestbookId, setDeletingGuestbookId] = useState<number | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -169,6 +170,20 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  const deleteGuestbookEntry = async (id: number) => {
+    if (!confirm('Opravdu smazat tento vzkaz včetně příložených fotek?')) return;
+    setDeletingGuestbookId(id);
+    try {
+      const res = await fetch(`/api/admin/guestbook?id=${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('delete failed');
+      setGuestbook((prev) => prev.filter((g) => g.id !== id));
+    } catch {
+      alert('Smazání se nepovedlo.');
+    } finally {
+      setDeletingGuestbookId(null);
+    }
+  };
 
   const deleteGuestPhoto = async (id: number) => {
     if (!confirm('Opravdu smazat tuto fotku? (soubor i záznam v databázi)')) return;
@@ -482,6 +497,15 @@ export default function AdminPage() {
                           ))}
                         </div>
                       )}
+
+                      <button
+                        type="button"
+                        onClick={() => deleteGuestbookEntry(g.id)}
+                        disabled={deletingGuestbookId === g.id}
+                        className="mt-4 w-full text-xs tracking-[0.12em] uppercase py-2 border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-40"
+                      >
+                        {deletingGuestbookId === g.id ? 'Mažu…' : 'Smazat vzkaz'}
+                      </button>
                     </div>
                   ))}
                 </div>
