@@ -16,7 +16,7 @@
     "@studio-freight/lenis": "^1.0.42",
     "@types/nodemailer": "^8.0.0",
     "@types/sharp": "^0.31.1",
-    "better-sqlite3": "^12.6.2",
+    "better-sqlite3": "^12.10.0",
     "canvas-confetti": "^1.9.4",
     "drizzle-orm": "^0.45.1",
     "formidable": "^3.5.4",

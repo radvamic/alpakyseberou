@@ -10,12 +10,18 @@ interface NameEntryProps {
 
 export default function NameEntry({ onSubmit, loading }: NameEntryProps) {
   const [name, setName] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = name.trim();
     if (!trimmed) return;
-    await onSubmit(trimmed);
+    setError(null);
+    try {
+      await onSubmit(trimmed);
+    } catch {
+      setError('Něco se pokazilo. Zkus to znovu.');
+    }
   };
 
   return (
@@ -58,6 +64,10 @@ export default function NameEntry({ onSubmit, loading }: NameEntryProps) {
           >
             {loading ? 'Načítám…' : 'Začít fotit'}
           </motion.button>
+
+          {error && (
+            <p className="text-red-400 text-sm text-center pt-1">{error}</p>
+          )}
         </form>
 
         <p className="mt-8 text-[#4A4540] text-xs">

@@ -60,8 +60,6 @@ export default function KameraPage() {
       localStorage.setItem(TOKEN_KEY, data.token);
       setSession(data);
       setView(data.photosTaken >= data.maxPhotos ? 'film-full' : 'camera');
-    } catch {
-      // Keep on name-entry, user can retry
     } finally {
       setNameLoading(false);
     }

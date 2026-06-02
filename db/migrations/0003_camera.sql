@@ -1,4 +1,4 @@
-CREATE TABLE `camera_sessions` (
+CREATE TABLE IF NOT EXISTS `camera_sessions` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`token` text NOT NULL UNIQUE,
 	`guest_name` text NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE `camera_sessions` (
 	`created_at` text DEFAULT (datetime('now')) NOT NULL
 );
 
-CREATE TABLE `camera_photos` (
+CREATE TABLE IF NOT EXISTS `camera_photos` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`session_id` integer NOT NULL REFERENCES `camera_sessions`(`id`) ON DELETE CASCADE,
 	`url` text NOT NULL,
