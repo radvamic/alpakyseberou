@@ -31,6 +31,8 @@ RUN mkdir -p /app/data \
              /app/public/uploads/guestbook \
              /app/public/uploads/wedding-photos \
              /app/public/uploads/photobooth \
+             /app/public/uploads/camera \
+             /app/public/uploads/table-challenge \
              /app/public/photobooth/couple
 
 EXPOSE 3000

@@ -40,7 +40,9 @@ export const guestbookEntries = sqliteTable('guestbook_entries', {
 // ---------------------------------------------------------------------------
 export const photos = sqliteTable('photos', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  type: text('type', { enum: ['guestbook', 'wedding'] }).notNull(),
+  type: text('type', {
+    enum: ['guestbook', 'wedding', 'table-challenge'],
+  }).notNull(),
   guestbookEntryId: integer('guestbook_entry_id').references(
     () => guestbookEntries.id,
     { onDelete: 'cascade' },

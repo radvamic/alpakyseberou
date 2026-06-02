@@ -1,17 +1,11 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { QRCodeSVG } from 'qrcode.react';
 import { useI18n } from '@/lib/i18n';
 import SectionHeader from '@/components/ui/SectionHeader';
-
-interface PhotoEntry {
-  id: number;
-  name: string;
-  url: string;
-  createdAt: string;
-}
+import UploadedPhotosGallery from '@/components/sections/wedding-photos/UploadedPhotosGallery';
 
 // ============================================================
 // CONFIGURE YOUR SHARED ALBUM LINKS HERE
@@ -23,21 +17,14 @@ const ICLOUD_ALBUM_URL = 'https://www.icloud.com/sharedalbum/REPLACE_WITH_YOUR_L
 
 export default function WeddingPhotos() {
   const { t, locale } = useI18n();
-  const [photos, setPhotos] = useState<PhotoEntry[]>([]);
   const [submitted, setSubmitted] = useState(false);
+  const [galleryRefresh, setGalleryRefresh] = useState(0);
   const [showWebUpload, setShowWebUpload] = useState(false);
   const [name, setName] = useState('');
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    fetch('/api/photos')
-      .then((r) => r.json())
-      .then(setPhotos)
-      .catch(() => {});
-  }, [submitted]);
 
   const addFiles = (newFiles: FileList | File[]) => {
     const all = [...files, ...Array.from(newFiles)].slice(0, 20);
@@ -61,6 +48,7 @@ export default function WeddingPhotos() {
 
     try {
       await fetch('/api/photos', { method: 'POST', body: formData });
+      setGalleryRefresh((k) => k + 1);
     } catch {
       // Continue
     }
@@ -317,26 +305,10 @@ export default function WeddingPhotos() {
                 </motion.div>
               )}
 
-              {/* Uploaded photos grid */}
-              {photos.length > 0 && (
-                <div className="mt-16 columns-2 md:columns-3 gap-4 space-y-4 pb-8">
-                  {photos.slice().reverse().map((photo, i) => (
-                    <motion.div
-                      key={photo.id}
-                      className="break-inside-avoid rounded-xl overflow-hidden border border-[#2A2520] hover:border-[#C9A96E]/20 transition-colors duration-500"
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: (i % 3) * 0.05 }}
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={photo.url} alt={`By ${photo.name}`} className="w-full" />
-                      <div className="p-3 bg-[#111111]">
-                        <p className="text-xs text-[#B8A99A]">{photo.name}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              )}
+              <UploadedPhotosGallery
+                locale={locale}
+                refreshKey={galleryRefresh}
+              />
             </motion.div>
           )}
         </AnimatePresence>
