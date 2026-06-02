@@ -61,7 +61,26 @@ interface CameraSession {
   photos: CameraPhoto[];
 }
 
-type Tab = 'rsvp' | 'guestbook' | 'photobooth' | 'camera';
+interface TableChallengePhoto {
+  id: number;
+  name: string;
+  url: string;
+  createdAt: string;
+}
+
+interface TableChallengeGuest {
+  name: string;
+  photos: TableChallengePhoto[];
+}
+
+interface TableChallengeStats {
+  totalPhotos: number;
+  uniqueParticipants: number;
+  withProof: number;
+  avgPhotosPerGuest: number;
+}
+
+type Tab = 'rsvp' | 'guestbook' | 'photobooth' | 'camera' | 'table-challenge';
 type GuestbookFilter = 'all' | 'public' | 'private';
 
 const STAY_LABELS: Record<string, string> = {
@@ -110,23 +129,34 @@ export default function AdminPage() {
   const [guestbook, setGuestbook] = useState<GuestbookEntry[]>([]);
   const [photobooth, setPhotobooth] = useState<PhotoboothPhoto[]>([]);
   const [cameraSessions, setCameraSessions] = useState<CameraSession[]>([]);
+  const [tableChallengeGuests, setTableChallengeGuests] = useState<TableChallengeGuest[]>([]);
+  const [tableChallengeStats, setTableChallengeStats] = useState<TableChallengeStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [guestbookFilter, setGuestbookFilter] = useState<GuestbookFilter>('all');
   const [expandedSession, setExpandedSession] = useState<number | null>(null);
+  const [expandedTableGuest, setExpandedTableGuest] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [r, g, p, c] = await Promise.all([
+      const [r, g, p, c, tc] = await Promise.all([
         fetch('/api/rsvp').then((x) => x.json()),
         fetch('/api/guestbook').then((x) => x.json()),
         fetch('/api/admin/photobooth').then((x) => x.json()),
         fetch('/api/admin/camera').then((x) => x.json()),
+        fetch('/api/admin/table-challenge').then((x) => x.json()),
       ]);
       setRsvps(Array.isArray(r) ? r : []);
       setGuestbook(Array.isArray(g) ? g : []);
       setPhotobooth(Array.isArray(p) ? p : []);
       setCameraSessions(Array.isArray(c) ? c : []);
+      if (tc && !tc.error) {
+        setTableChallengeGuests(Array.isArray(tc.guests) ? tc.guests : []);
+        setTableChallengeStats(tc.stats ?? null);
+      } else {
+        setTableChallengeGuests([]);
+        setTableChallengeStats(null);
+      }
     } catch {
       // ignore
     } finally {
@@ -181,13 +211,18 @@ export default function AdminPage() {
       : guestbook.filter((g) => !g.isPublic);
 
   const totalCameraPhotos = cameraSessions.reduce((acc, s) => acc + s.photosTaken, 0);
+  const totalTablePhotos = tableChallengeStats?.totalPhotos ?? 0;
 
   const tabs: { id: Tab; label: string; count: number }[] = [
     { id: 'rsvp', label: 'Účast', count: rsvps.length },
     { id: 'guestbook', label: 'Nástěnka', count: guestbook.length },
     { id: 'photobooth', label: 'Fotokoutek', count: photobooth.length },
     { id: 'camera', label: 'Kamera', count: totalCameraPhotos },
+    { id: 'table-challenge', label: 'Úkoly', count: totalTablePhotos },
   ];
+
+  const siteBase = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://alpakyseberou.cz';
+  const ukolyUrl = `${siteBase}/ukoly`;
 
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-8 py-10">
@@ -637,6 +672,177 @@ export default function AdminPage() {
                       )}
                     </div>
                   ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ================================================================
+              TABLE CHALLENGE TAB
+          ================================================================ */}
+          {tab === 'table-challenge' && (
+            <div className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="relative border border-[#C9A96E]/15 p-6">
+                  <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#C9A96E]/40" />
+                  <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#C9A96E]/40" />
+                  <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#C9A96E]/40" />
+                  <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#C9A96E]/40" />
+                  <p className="text-xs tracking-[0.15em] uppercase text-[#7a6e65] mb-4">
+                    QR kód pro stoly
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center gap-6">
+                    <div className="p-3 bg-[#F5F0E8] rounded">
+                      <QRCodeSVG
+                        value={ukolyUrl}
+                        size={140}
+                        level="M"
+                        bgColor="#F5F0E8"
+                        fgColor="#0A0A0A"
+                      />
+                    </div>
+                    <div className="text-center sm:text-left">
+                      <p className="font-[family-name:var(--font-playfair)] text-[#F5F0E8] mb-1">
+                        /ukoly
+                      </p>
+                      <p className="text-xs text-[#5a5248]">
+                        Hosté losují úkoly a mohou nahrát fotodůkaz.
+                      </p>
+                      <a
+                        href="/ukoly"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-block mt-3 text-xs text-[#C9A96E] underline underline-offset-2"
+                      >
+                        Otevřít stránku →
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 content-start">
+                  <StatCard
+                    label="Fotodůkazů"
+                    value={tableChallengeStats?.totalPhotos ?? 0}
+                  />
+                  <StatCard
+                    label="Účastníků"
+                    value={tableChallengeStats?.uniqueParticipants ?? 0}
+                    sub="unikátní jména u fotek"
+                  />
+                  <StatCard
+                    label="Průměr fotek"
+                    value={tableChallengeStats?.avgPhotosPerGuest ?? 0}
+                    sub="na účastníka"
+                  />
+                  <StatCard
+                    label="S alespoň 1 fotkou"
+                    value={tableChallengeStats?.withProof ?? 0}
+                  />
+                </div>
+              </div>
+
+              <p className="text-xs text-[#5a5248] font-[family-name:var(--font-cormorant)] italic">
+                Počet účastníků = kolik různých jmen nahrálo fotodůkaz. Samotné losování úkolů se neukládá.
+              </p>
+
+              {tableChallengeGuests.length === 0 ? (
+                <p className="text-center py-16 font-[family-name:var(--font-cormorant)] text-[#5a5248] italic">
+                  Zatím žádné fotodůkazy z table challenge.
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  <h3 className="text-xs tracking-[0.2em] uppercase text-[#C9A96E]">
+                    Fotodůkazy podle hosta
+                  </h3>
+                  {tableChallengeGuests.map((g) => (
+                    <div
+                      key={g.name}
+                      className="relative border border-[#C9A96E]/10 hover:border-[#C9A96E]/25 transition-colors"
+                    >
+                      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#C9A96E]/30" />
+                      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#C9A96E]/30" />
+                      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#C9A96E]/30" />
+                      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#C9A96E]/30" />
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedTableGuest(
+                            expandedTableGuest === g.name ? null : g.name,
+                          )
+                        }
+                        className="w-full flex items-center justify-between px-5 py-4 text-left"
+                      >
+                        <span className="font-[family-name:var(--font-playfair)] text-[#F5F0E8]">
+                          {g.name}
+                        </span>
+                        <div className="flex items-center gap-3 shrink-0">
+                          <span className="text-xs px-2 py-1 text-emerald-400 bg-emerald-400/10">
+                            {g.photos.length}{' '}
+                            {g.photos.length === 1 ? 'fotka' : g.photos.length < 5 ? 'fotky' : 'fotek'}
+                          </span>
+                          <span className="text-[#5a5248] text-xs">
+                            {expandedTableGuest === g.name ? '▲' : '▼'}
+                          </span>
+                        </div>
+                      </button>
+
+                      {expandedTableGuest === g.name && (
+                        <div className="px-5 pb-5">
+                          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">
+                            {g.photos.map((photo) => (
+                              <a
+                                key={photo.id}
+                                href={photo.url}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={photo.url}
+                                  alt=""
+                                  className="w-full aspect-square object-cover border border-[#2A2520] hover:border-[#C9A96E]/50 transition-colors"
+                                />
+                              </a>
+                            ))}
+                          </div>
+                          <p className="mt-2 text-xs text-[#5a5248]">
+                            Poslední: {formatDate(g.photos[0].createdAt)}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {tableChallengeGuests.length > 0 && (
+                <div>
+                  <h3 className="text-xs tracking-[0.2em] uppercase text-[#C9A96E] mb-4">
+                    Všechny fotky (nejnovější)
+                  </h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+                    {tableChallengeGuests.flatMap((g) => g.photos).map((photo) => (
+                      <a
+                        key={photo.id}
+                        href={photo.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="group"
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={photo.url}
+                          alt=""
+                          className="w-full aspect-square object-cover border border-[#2A2520] group-hover:border-[#C9A96E]/50 transition-colors"
+                        />
+                        <p className="text-[10px] text-[#5a5248] mt-1 truncate">
+                          {photo.name}
+                        </p>
+                      </a>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
