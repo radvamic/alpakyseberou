@@ -58,6 +58,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     deletePhotoFile(row.url);
+    if (row.thumbnailUrl) deletePhotoFile(row.thumbnailUrl);
     await db.delete(photos).where(and(eq(photos.id, id)));
 
     return NextResponse.json({ success: true });

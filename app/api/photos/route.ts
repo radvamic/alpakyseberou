@@ -4,14 +4,14 @@ import { photos } from '@/db/schema';
 import { eq, desc } from 'drizzle-orm';
 import { ensureUploadDirs } from '@/lib/data';
 import { PHOTO_SOURCES, resolvePhotoSource } from '@/lib/upload-sources';
-import fs from 'fs';
-import path from 'path';
+import { processUploadedImage } from '@/lib/image-utils';
 
 export async function POST(request: NextRequest) {
   try {
     ensureUploadDirs();
     const formData = await request.formData();
     const name = (formData.get('name') as string) || 'Anonym';
+    const challengeText = (formData.get('challenge_text') as string) || '';
     const photoFiles = formData.getAll('photos');
     const source = resolvePhotoSource(formData.get('source') as string | null);
     const config = PHOTO_SOURCES[source];
@@ -26,6 +26,8 @@ export async function POST(request: NextRequest) {
     const entries: {
       name: string;
       url: string;
+      thumbnailUrl: string;
+      challengeText: string;
       type: typeof config.type;
       createdAt: string;
     }[] = [];
@@ -34,20 +36,20 @@ export async function POST(request: NextRequest) {
       if (file instanceof File && file.size > 0) {
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
-        const ext = path.extname(file.name) || '.jpg';
-        const filename = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
-        const filepath = path.join(
-          process.cwd(),
-          'public/uploads',
+        const basename = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+
+        const { displayUrl, thumbnailUrl } = await processUploadedImage(
+          buffer,
           config.folder,
-          filename,
+          basename,
         );
-        fs.writeFileSync(filepath, buffer);
 
         entries.push({
           type: config.type,
           name,
-          url: `${config.urlPrefix}/${filename}`,
+          url: displayUrl,
+          thumbnailUrl,
+          challengeText,
           createdAt: new Date().toISOString(),
         });
       }

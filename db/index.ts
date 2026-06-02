@@ -44,11 +44,29 @@ if (!existingTables.includes('camera_photos')) {
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       session_id INTEGER NOT NULL REFERENCES camera_sessions(id) ON DELETE CASCADE,
       url TEXT NOT NULL,
+      thumbnail_url TEXT NOT NULL DEFAULT '',
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
     )
   `);
   console.log('[db] Created missing camera_photos table.');
 }
+
+// Safety-net: add new columns if they don't exist yet
+function safeAddColumn(table: string, column: string, definition: string) {
+  const cols = sqlite.pragma(`table_info(${table})`) as { name: string }[];
+  if (cols.length === 0) return; // table doesn't exist yet
+  if (cols.some((c) => c.name === column)) return; // already present
+  try {
+    sqlite.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
+    console.log(`[db] Added ${column} to ${table}.`);
+  } catch {
+    // Column may have been added by a concurrent process (rolling deploy)
+  }
+}
+
+safeAddColumn('camera_photos', 'thumbnail_url', "TEXT NOT NULL DEFAULT ''");
+safeAddColumn('photos', 'thumbnail_url', "TEXT NOT NULL DEFAULT ''");
+safeAddColumn('photos', 'challenge_text', "TEXT NOT NULL DEFAULT ''");
 
 export const db = drizzle(sqlite, { schema });
 export type DB = typeof db;

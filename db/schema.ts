@@ -49,6 +49,8 @@ export const photos = sqliteTable('photos', {
   ),
   name: text('name').default('Anonym'),
   url: text('url').notNull(),
+  thumbnailUrl: text('thumbnail_url').default(''),
+  challengeText: text('challenge_text').default(''),
   createdAt: text('created_at')
     .notNull()
     .default(sql`(datetime('now'))`),
@@ -153,6 +155,7 @@ export const cameraPhotos = sqliteTable('camera_photos', {
     .references(() => cameraSessions.id, { onDelete: 'cascade' })
     .notNull(),
   url: text('url').notNull(),
+  thumbnailUrl: text('thumbnail_url').default(''),
   createdAt: text('created_at')
     .notNull()
     .default(sql`(datetime('now'))`),

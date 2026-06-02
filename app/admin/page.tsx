@@ -48,6 +48,7 @@ interface CameraPhoto {
   id: number;
   sessionId: number;
   url: string;
+  thumbnailUrl?: string;
   createdAt: string;
 }
 
@@ -65,6 +66,8 @@ interface TableChallengePhoto {
   id: number;
   name: string;
   url: string;
+  thumbnailUrl?: string;
+  challengeText?: string;
   createdAt: string;
 }
 
@@ -138,6 +141,8 @@ export default function AdminPage() {
   const [guestPhotos, setGuestPhotos] = useState<TableChallengePhoto[]>([]);
   const [deletingPhotoId, setDeletingPhotoId] = useState<number | null>(null);
   const [deletingGuestbookId, setDeletingGuestbookId] = useState<number | null>(null);
+  const [deletingCameraPhotoId, setDeletingCameraPhotoId] = useState<number | null>(null);
+  const [deletingTablePhotoId, setDeletingTablePhotoId] = useState<number | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -196,6 +201,48 @@ export default function AdminPage() {
       alert('Smazání se nepovedlo.');
     } finally {
       setDeletingPhotoId(null);
+    }
+  };
+
+  const deleteCameraPhoto = async (photoId: number, sessionId: number) => {
+    if (!confirm('Opravdu smazat tuto fotku z kamery?')) return;
+    setDeletingCameraPhotoId(photoId);
+    try {
+      const res = await fetch(`/api/admin/camera?id=${photoId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('delete failed');
+      setCameraSessions((prev) =>
+        prev.map((s) =>
+          s.id === sessionId
+            ? { ...s, photos: s.photos.filter((p) => p.id !== photoId), photosTaken: Math.max(0, s.photosTaken - 1) }
+            : s,
+        ),
+      );
+    } catch {
+      alert('Smazání se nepovedlo.');
+    } finally {
+      setDeletingCameraPhotoId(null);
+    }
+  };
+
+  const deleteTableChallengePhoto = async (photoId: number, guestName: string) => {
+    if (!confirm('Opravdu smazat tuto fotku?')) return;
+    setDeletingTablePhotoId(photoId);
+    try {
+      const res = await fetch(`/api/admin/photos?id=${photoId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('delete failed');
+      setTableChallengeGuests((prev) =>
+        prev
+          .map((g) =>
+            g.name === guestName
+              ? { ...g, photos: g.photos.filter((p) => p.id !== photoId) }
+              : g,
+          )
+          .filter((g) => g.photos.length > 0),
+      );
+    } catch {
+      alert('Smazání se nepovedlo.');
+    } finally {
+      setDeletingTablePhotoId(null);
     }
   };
 
@@ -695,17 +742,28 @@ export default function AdminPage() {
                       {/* Photos grid */}
                       {expandedSession === s.id && s.photos.length > 0 && (
                         <div className="px-5 pb-5">
-                          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">
+                          <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-9 gap-2">
                             {s.photos.map((photo) => (
-                              <a key={photo.id} href={photo.url} target="_blank" rel="noreferrer">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                  src={photo.url}
-                                  alt=""
-                                  className="w-full aspect-square object-cover border border-[#2A2520] hover:border-[#C9A96E]/50 transition-colors"
-                                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                                />
-                              </a>
+                              <div key={photo.id} className="relative group">
+                                <a href={photo.url} target="_blank" rel="noreferrer">
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img
+                                    src={photo.thumbnailUrl || photo.url}
+                                    alt=""
+                                    className="w-full aspect-square object-cover border border-[#2A2520] hover:border-[#C9A96E]/50 transition-colors"
+                                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                                  />
+                                </a>
+                                <button
+                                  type="button"
+                                  onClick={() => deleteCameraPhoto(photo.id, s.id)}
+                                  disabled={deletingCameraPhotoId === photo.id}
+                                  className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-red-900/80 text-red-300 text-[9px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-40"
+                                  title="Smazat fotku"
+                                >
+                                  ✕
+                                </button>
+                              </div>
                             ))}
                           </div>
                         </div>
@@ -887,27 +945,33 @@ export default function AdminPage() {
                       </button>
 
                       {expandedTableGuest === g.name && (
-                        <div className="px-5 pb-5">
-                          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">
-                            {g.photos.map((photo) => (
-                              <a
-                                key={photo.id}
-                                href={photo.url}
-                                target="_blank"
-                                rel="noreferrer"
-                              >
+                        <div className="px-5 pb-5 space-y-3">
+                          {g.photos.map((photo) => (
+                            <div key={photo.id} className="flex gap-3 items-start border border-[#2A2520] p-2 rounded">
+                              <a href={photo.url} target="_blank" rel="noreferrer" className="shrink-0">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
-                                  src={photo.url}
+                                  src={photo.thumbnailUrl || photo.url}
                                   alt=""
-                                  className="w-full aspect-square object-cover border border-[#2A2520] hover:border-[#C9A96E]/50 transition-colors"
+                                  className="w-16 h-16 object-cover border border-[#2A2520] hover:border-[#C9A96E]/50 transition-colors rounded"
                                 />
                               </a>
-                            ))}
-                          </div>
-                          <p className="mt-2 text-xs text-[#5a5248]">
-                            Poslední: {formatDate(g.photos[0].createdAt)}
-                          </p>
+                              <div className="flex-1 min-w-0">
+                                {photo.challengeText && (
+                                  <p className="text-xs text-[#C9A96E] mb-1 line-clamp-2 italic">„{photo.challengeText}"</p>
+                                )}
+                                <p className="text-[10px] text-[#5a5248]">{formatDate(photo.createdAt)}</p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => deleteTableChallengePhoto(photo.id, g.name)}
+                                disabled={deletingTablePhotoId === photo.id}
+                                className="shrink-0 text-xs px-2 py-1 border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-40"
+                              >
+                                {deletingTablePhotoId === photo.id ? '…' : 'Smazat'}
+                              </button>
+                            </div>
+                          ))}
                         </div>
                       )}
                     </div>
@@ -920,25 +984,31 @@ export default function AdminPage() {
                   <h3 className="text-xs tracking-[0.2em] uppercase text-[#C9A96E] mb-4">
                     Všechny fotky (nejnovější)
                   </h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                     {tableChallengeGuests.flatMap((g) => g.photos).map((photo) => (
-                      <a
-                        key={photo.id}
-                        href={photo.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="group"
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={photo.url}
-                          alt=""
-                          className="w-full aspect-square object-cover border border-[#2A2520] group-hover:border-[#C9A96E]/50 transition-colors"
-                        />
-                        <p className="text-[10px] text-[#5a5248] mt-1 truncate">
-                          {photo.name}
-                        </p>
-                      </a>
+                      <div key={photo.id} className="relative border border-[#2A2520] p-2 space-y-1">
+                        <a href={photo.url} target="_blank" rel="noreferrer" className="block">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={photo.thumbnailUrl || photo.url}
+                            alt=""
+                            className="w-full aspect-square object-cover border border-[#2A2520] hover:border-[#C9A96E]/50 transition-colors"
+                          />
+                        </a>
+                        <p className="text-[10px] text-[#B8A99A] font-semibold truncate">{photo.name}</p>
+                        {photo.challengeText && (
+                          <p className="text-[10px] text-[#C9A96E] italic line-clamp-2">„{photo.challengeText}"</p>
+                        )}
+                        <p className="text-[10px] text-[#5a5248]">{formatDate(photo.createdAt)}</p>
+                        <button
+                          type="button"
+                          onClick={() => deleteTableChallengePhoto(photo.id, photo.name)}
+                          disabled={deletingTablePhotoId === photo.id}
+                          className="w-full text-xs py-1 border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-40"
+                        >
+                          {deletingTablePhotoId === photo.id ? 'Mažu…' : 'Smazat'}
+                        </button>
+                      </div>
                     ))}
                   </div>
                 </div>

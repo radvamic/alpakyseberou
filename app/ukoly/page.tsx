@@ -136,6 +136,9 @@ export default function UkolyPage() {
         formData.append('name', guestName.trim() || t.namePlaceholder);
         formData.append('source', 'table-challenge');
         formData.append('photos', file);
+        if (current) {
+          formData.append('challenge_text', current[lang]);
+        }
         const res = await fetch('/api/photos', { method: 'POST', body: formData });
         if (!res.ok) throw new Error('upload failed');
         setUploadStatus('done');

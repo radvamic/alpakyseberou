@@ -1,18 +1,20 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface PhotoEntry {
   id: number;
   name: string;
   url: string;
+  thumbnailUrl?: string;
   createdAt: string;
 }
 
 interface CameraPhoto {
   id: number;
   url: string;
+  thumbnailUrl?: string;
   createdAt: string;
 }
 
@@ -44,8 +46,6 @@ const LABELS = {
     },
     empty: 'Zatím tu nic není.',
     photoCount: (n: number) => (n === 1 ? '1 fotka' : n < 5 ? `${n} fotky` : `${n} fotek`),
-    expand: 'Zobrazit vše',
-    collapse: 'Sbalit',
   },
   en: {
     toggleShow: 'Uploaded photos',
@@ -57,113 +57,275 @@ const LABELS = {
     },
     empty: 'Nothing here yet.',
     photoCount: (n: number) => (n === 1 ? '1 photo' : `${n} photos`),
-    expand: 'Show all',
-    collapse: 'Collapse',
   },
 } as const;
 
-type GalleryLabels = (typeof LABELS)[keyof typeof LABELS];
+// ─── Lightbox ────────────────────────────────────────────────────────────────
 
-function PhotoGrid({ items }: { items: PhotoEntry[] }) {
-  if (items.length === 0) return null;
+interface LightboxProps {
+  photos: { url: string; caption?: string }[];
+  initialIndex: number;
+  onClose: () => void;
+}
+
+function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
+  const [idx, setIdx] = useState(initialIndex);
+  const total = photos.length;
+  const prev = () => setIdx((i) => (i - 1 + total) % total);
+  const next = () => setIdx((i) => (i + 1) % total);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'ArrowRight') next();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  });
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
+  const current = photos[idx];
 
   return (
-    <div className="columns-2 md:columns-3 gap-4 space-y-4">
-      {items.map((photo, i) => (
+    <motion.div
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-sm"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      {/* Close */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-[#1A1A1A]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#C9A96E] hover:border-[#C9A96E]/50 transition-all"
+        aria-label="Zavřít"
+      >
+        ✕
+      </button>
+
+      {/* Counter */}
+      {total > 1 && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 text-xs text-[#B8A99A] bg-[#1A1A1A]/80 px-3 py-1 rounded-full">
+          {idx + 1} / {total}
+        </div>
+      )}
+
+      {/* Prev */}
+      {total > 1 && (
+        <button
+          onClick={(e) => { e.stopPropagation(); prev(); }}
+          className="absolute left-3 sm:left-6 w-10 h-10 rounded-full bg-[#1A1A1A]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#C9A96E] hover:border-[#C9A96E]/50 transition-all text-lg"
+          aria-label="Předchozí"
+        >
+          ‹
+        </button>
+      )}
+
+      {/* Image */}
+      <AnimatePresence mode="wait">
         <motion.div
-          key={photo.id}
-          className="break-inside-avoid rounded-xl overflow-hidden border border-[#2A2520] hover:border-[#C9A96E]/20 transition-colors duration-500"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: (i % 4) * 0.04 }}
+          key={idx}
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.96 }}
+          transition={{ duration: 0.2 }}
+          className="relative max-w-[90vw] max-h-[88vh] flex flex-col items-center"
+          onClick={(e) => e.stopPropagation()}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={photo.url} alt="" className="w-full" />
-          <div className="p-3 bg-[#111111]">
-            <p className="text-xs text-[#B8A99A]">{photo.name}</p>
-          </div>
+          <img
+            src={current.url}
+            alt={current.caption ?? ''}
+            className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
+          />
+          {current.caption && (
+            <p className="mt-3 text-sm text-[#B8A99A] font-[family-name:var(--font-cormorant)]">
+              {current.caption}
+            </p>
+          )}
         </motion.div>
-      ))}
-    </div>
+      </AnimatePresence>
+
+      {/* Next */}
+      {total > 1 && (
+        <button
+          onClick={(e) => { e.stopPropagation(); next(); }}
+          className="absolute right-3 sm:right-6 w-10 h-10 rounded-full bg-[#1A1A1A]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#C9A96E] hover:border-[#C9A96E]/50 transition-all text-lg"
+          aria-label="Další"
+        >
+          ›
+        </button>
+      )}
+    </motion.div>
   );
 }
+
+// ─── Photo grid (guests / table-challenge) ───────────────────────────────────
+
+function PhotoGrid({ items }: { items: PhotoEntry[] }) {
+  const [lightbox, setLightbox] = useState<{ photos: { url: string; caption?: string }[]; index: number } | null>(null);
+
+  if (items.length === 0) return null;
+
+  const lbPhotos = items.map((p) => ({ url: p.url, caption: p.name }));
+
+  return (
+    <>
+      <div className="columns-2 md:columns-3 gap-3 space-y-3">
+        {items.map((photo, i) => (
+          <motion.button
+            key={photo.id}
+            type="button"
+            onClick={() => setLightbox({ photos: lbPhotos, index: i })}
+            className="break-inside-avoid w-full rounded-xl overflow-hidden border border-[#2A2520] hover:border-[#C9A96E]/30 transition-colors duration-300 text-left group"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: (i % 4) * 0.04 }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={photo.thumbnailUrl || photo.url}
+              alt=""
+              className="w-full group-hover:scale-[1.02] transition-transform duration-500"
+              loading="lazy"
+            />
+            <div className="p-2.5 bg-[#111111]">
+              <p className="text-xs text-[#B8A99A] truncate">{photo.name}</p>
+            </div>
+          </motion.button>
+        ))}
+      </div>
+
+      <AnimatePresence>
+        {lightbox && (
+          <Lightbox
+            photos={lightbox.photos}
+            initialIndex={lightbox.index}
+            onClose={() => setLightbox(null)}
+          />
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+// ─── Camera session card ─────────────────────────────────────────────────────
 
 function CameraSessionCard({
   session,
   labels,
+  onOpenLightbox,
 }: {
   session: CameraSession;
-  labels: GalleryLabels;
+  labels: (typeof LABELS)[keyof typeof LABELS];
+  onOpenLightbox: (index: number) => void;
 }) {
-  const [open, setOpen] = useState(false);
   const cover = session.photos[0];
   if (!cover) return null;
 
   return (
     <div className="rounded-xl border border-[#2A2520] bg-[#111111] overflow-hidden">
+      {/* Cover — click opens lightbox at index 0 */}
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A96E]/50"
-        aria-expanded={open}
+        onClick={() => onOpenLightbox(0)}
+        className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A96E]/50 group"
       >
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#1A1A1A]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={cover.url}
+            src={cover.thumbnailUrl || cover.url}
             alt=""
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+            loading="lazy"
           />
-          <span className="absolute top-3 right-3 rounded-full bg-[#0A0A0A]/80 px-2.5 py-1 text-[10px] tracking-wider uppercase text-[#C9A96E]">
+          <span className="absolute top-2 right-2 rounded-full bg-[#0A0A0A]/80 px-2.5 py-1 text-[10px] tracking-wider uppercase text-[#C9A96E]">
             {labels.photoCount(session.photos.length)}
           </span>
+          <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span className="w-10 h-10 rounded-full bg-[#0A0A0A]/70 border border-[#C9A96E]/60 flex items-center justify-center text-[#C9A96E] text-xl">
+              ⊕
+            </span>
+          </span>
         </div>
-        <div className="flex items-center justify-between gap-3 px-4 py-3 border-t border-[#2A2520]">
+        <div className="px-4 py-3 border-t border-[#2A2520]">
           <p className="font-[family-name:var(--font-cormorant)] text-base text-[#F5F0E8]">
             {session.guestName}
           </p>
-          <span className="text-xs text-[#C9A96E] shrink-0">
-            {open ? labels.collapse : labels.expand}
-          </span>
         </div>
       </button>
 
-      <AnimatePresence>
-        {open && session.photos.length > 1 && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="overflow-hidden border-t border-[#2A2520]"
-          >
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 p-3">
-              {session.photos.map((photo) => (
-                <div
-                  key={photo.id}
-                  className="rounded-lg overflow-hidden border border-[#2A2520] aspect-square"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={photo.url}
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {open && session.photos.length === 1 && (
-        <p className="px-4 pb-3 text-xs text-[#4A4540] text-center">
-          {labels.photoCount(1)}
-        </p>
+      {/* Strip of remaining thumbnails */}
+      {session.photos.length > 1 && (
+        <div className="flex gap-1 px-3 pb-3 overflow-x-auto scrollbar-thin">
+          {session.photos.slice(1, 7).map((photo, i) => (
+            <button
+              key={photo.id}
+              type="button"
+              onClick={() => onOpenLightbox(i + 1)}
+              className="shrink-0 w-14 h-14 rounded overflow-hidden border border-[#2A2520] hover:border-[#C9A96E]/40 transition-colors focus:outline-none"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={photo.thumbnailUrl || photo.url}
+                alt=""
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </button>
+          ))}
+          {session.photos.length > 7 && (
+            <button
+              type="button"
+              onClick={() => onOpenLightbox(7)}
+              className="shrink-0 w-14 h-14 rounded border border-[#2A2520] bg-[#1A1A1A] flex items-center justify-center text-[10px] text-[#C9A96E] font-semibold hover:border-[#C9A96E]/40 transition-colors"
+            >
+              +{session.photos.length - 7}
+            </button>
+          )}
+        </div>
       )}
     </div>
   );
 }
+
+// ─── Camera tab ──────────────────────────────────────────────────────────────
+
+function CameraTab({ sessions, labels }: { sessions: CameraSession[]; labels: (typeof LABELS)[keyof typeof LABELS] }) {
+  const [lightbox, setLightbox] = useState<{ session: CameraSession; index: number } | null>(null);
+
+  return (
+    <>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {sessions.map((session) => (
+          <CameraSessionCard
+            key={session.id}
+            session={session}
+            labels={labels}
+            onOpenLightbox={(index) => setLightbox({ session, index })}
+          />
+        ))}
+      </div>
+
+      <AnimatePresence>
+        {lightbox && (
+          <Lightbox
+            photos={lightbox.session.photos.map((p) => ({ url: p.url }))}
+            initialIndex={lightbox.index}
+            onClose={() => setLightbox(null)}
+          />
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+// ─── Main export ─────────────────────────────────────────────────────────────
 
 export default function UploadedPhotosGallery({
   locale,
@@ -234,6 +396,7 @@ export default function UploadedPhotosGallery({
             transition={{ duration: 0.45, ease: [0.25, 0.4, 0.25, 1] }}
             style={{ overflow: 'hidden' }}
           >
+            {/* Tabs */}
             <div className="flex flex-wrap gap-2 justify-center mb-8">
               {tabs.map(({ id, count }) => (
                 <button
@@ -247,43 +410,23 @@ export default function UploadedPhotosGallery({
                   }`}
                 >
                   {labels.tabs[id]}
-                  {count > 0 && (
-                    <span className="ml-1.5 opacity-70">({count})</span>
-                  )}
+                  {count > 0 && <span className="ml-1.5 opacity-70">({count})</span>}
                 </button>
               ))}
             </div>
 
             {loading && (
-              <p className="text-center text-sm text-[#B8A99A] py-8">
-                …
-              </p>
+              <p className="text-center text-sm text-[#B8A99A] py-8">…</p>
             )}
 
             {!loading && empty && (
-              <p className="text-center text-sm text-[#4A4540] py-8">
-                {labels.empty}
-              </p>
+              <p className="text-center text-sm text-[#4A4540] py-8">{labels.empty}</p>
             )}
 
-            {!loading && data && tab === 'guests' && (
-              <PhotoGrid items={data.guests} />
-            )}
-
-            {!loading && data && tab === 'table' && (
-              <PhotoGrid items={data.tableChallenge} />
-            )}
-
+            {!loading && data && tab === 'guests' && <PhotoGrid items={data.guests} />}
+            {!loading && data && tab === 'table' && <PhotoGrid items={data.tableChallenge} />}
             {!loading && data && tab === 'camera' && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                {data.camera.map((session) => (
-                  <CameraSessionCard
-                    key={session.id}
-                    session={session}
-                    labels={labels}
-                  />
-                ))}
-              </div>
+              <CameraTab sessions={data.camera} labels={labels} />
             )}
           </motion.div>
         )}

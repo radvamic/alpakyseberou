@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useVisualViewportBottomInset } from '@/hooks/useVisualViewportBottomInset';
 
 interface CameraShutterProps {
   guestName: string;
@@ -27,6 +28,7 @@ export default function CameraShutter({
   const [cameraError, setCameraError] = useState<string | null>(null);
 
   const remaining = maxPhotos - photosTaken;
+  const browserBottomInset = useVisualViewportBottomInset();
 
   const stopCamera = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -106,8 +108,13 @@ export default function CameraShutter({
     await onPhotoTaken(file);
   };
 
+  const bottomPad =
+    browserBottomInset > 0
+      ? `calc(max(1rem, env(safe-area-inset-bottom, 0px)) + ${browserBottomInset}px)`
+      : 'max(1rem, env(safe-area-inset-bottom, 0px))';
+
   return (
-    <div className="min-h-screen bg-[#0A0A0A] flex flex-col items-center justify-between py-8 px-4">
+    <div className="h-dvh max-h-dvh bg-[#0A0A0A] flex flex-col items-center overflow-hidden overscroll-none pt-[max(0.75rem,env(safe-area-inset-top,0px))] px-4">
       <AnimatePresence>
         {flash && (
           <motion.div
@@ -131,7 +138,8 @@ export default function CameraShutter({
       </div>
 
       {/* Live viewfinder — no iOS "Retake" sheet */}
-      <div className="relative w-full max-w-sm aspect-[3/4] my-4 overflow-hidden border border-[#C9A96E]/20 bg-[#111]">
+      <div className="relative flex-1 min-h-0 w-full max-w-sm my-2 flex items-center justify-center">
+        <div className="relative h-full max-h-full w-full aspect-[3/4] max-w-sm overflow-hidden border border-[#C9A96E]/20 bg-[#111]">
         <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#C9A96E]/40 z-10" />
         <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#C9A96E]/40 z-10" />
         <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#C9A96E]/40 z-10" />
@@ -164,9 +172,10 @@ export default function CameraShutter({
             )}
           </>
         )}
+        </div>
       </div>
 
-      <div className="flex flex-col items-center gap-3 w-full max-w-xs shrink-0">
+      <div className="flex flex-col items-center gap-2 w-full max-w-xs shrink-0">
         <div className="text-center">
           <span className="font-[family-name:var(--font-playfair)] text-5xl font-light text-[#F5F0E8]">
             {remaining}
@@ -190,7 +199,10 @@ export default function CameraShutter({
         </div>
       </div>
 
-      <div className="flex flex-col items-center gap-4 shrink-0 pb-2">
+      <div
+        className="flex flex-col items-center gap-3 shrink-0 w-full"
+        style={{ paddingBottom: bottomPad }}
+      >
         <motion.button
           type="button"
           onClick={capturePhoto}

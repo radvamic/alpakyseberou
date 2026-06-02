@@ -3,8 +3,7 @@ import { db } from '@/db';
 import { cameraSessions, cameraPhotos } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';
 import { ensureUploadDirs } from '@/lib/data';
-import fs from 'fs';
-import path from 'path';
+import { processUploadedImage } from '@/lib/image-utils';
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,16 +39,14 @@ export async function POST(request: NextRequest) {
 
     const bytes = await photoFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const ext = path.extname(photoFile.name) || '.jpg';
-    const filename = `cam-${session.id}-${Date.now()}-${Math.round(Math.random() * 1e6)}${ext}`;
-    const filepath = path.join(process.cwd(), 'public/uploads/camera', filename);
-    fs.writeFileSync(filepath, buffer);
+    const basename = `cam-${session.id}-${Date.now()}-${Math.round(Math.random() * 1e6)}`;
 
-    const photoUrl = `/uploads/camera/${filename}`;
+    const { displayUrl, thumbnailUrl } = await processUploadedImage(buffer, 'camera', basename);
 
     await db.insert(cameraPhotos).values({
       sessionId: session.id,
-      url: photoUrl,
+      url: displayUrl,
+      thumbnailUrl,
     });
 
     await db
@@ -60,7 +57,8 @@ export async function POST(request: NextRequest) {
     const newCount = session.photosTaken + 1;
 
     return NextResponse.json({
-      url: photoUrl,
+      url: displayUrl,
+      thumbnailUrl,
       photosTaken: newCount,
       maxPhotos: session.maxPhotos,
       remaining: session.maxPhotos - newCount,

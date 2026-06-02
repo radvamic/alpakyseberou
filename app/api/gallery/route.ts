@@ -42,6 +42,7 @@ export async function GET() {
           photos: sessionPhotos.map((p) => ({
             id: p.id,
             url: p.url,
+            thumbnailUrl: p.thumbnailUrl || p.url,
             createdAt: p.createdAt,
           })),
         };
