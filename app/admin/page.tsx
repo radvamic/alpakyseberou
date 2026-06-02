@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { QRCodeSVG } from 'qrcode.react';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -43,7 +44,24 @@ interface PhotoboothPhoto {
   createdAt: string;
 }
 
-type Tab = 'rsvp' | 'guestbook' | 'photobooth';
+interface CameraPhoto {
+  id: number;
+  sessionId: number;
+  url: string;
+  createdAt: string;
+}
+
+interface CameraSession {
+  id: number;
+  token: string;
+  guestName: string;
+  photosTaken: number;
+  maxPhotos: number;
+  createdAt: string;
+  photos: CameraPhoto[];
+}
+
+type Tab = 'rsvp' | 'guestbook' | 'photobooth' | 'camera';
 type GuestbookFilter = 'all' | 'public' | 'private';
 
 const STAY_LABELS: Record<string, string> = {
@@ -91,20 +109,24 @@ export default function AdminPage() {
   const [rsvps, setRsvps] = useState<Rsvp[]>([]);
   const [guestbook, setGuestbook] = useState<GuestbookEntry[]>([]);
   const [photobooth, setPhotobooth] = useState<PhotoboothPhoto[]>([]);
+  const [cameraSessions, setCameraSessions] = useState<CameraSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [guestbookFilter, setGuestbookFilter] = useState<GuestbookFilter>('all');
+  const [expandedSession, setExpandedSession] = useState<number | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [r, g, p] = await Promise.all([
+      const [r, g, p, c] = await Promise.all([
         fetch('/api/rsvp').then((x) => x.json()),
         fetch('/api/guestbook').then((x) => x.json()),
         fetch('/api/admin/photobooth').then((x) => x.json()),
+        fetch('/api/admin/camera').then((x) => x.json()),
       ]);
       setRsvps(Array.isArray(r) ? r : []);
       setGuestbook(Array.isArray(g) ? g : []);
       setPhotobooth(Array.isArray(p) ? p : []);
+      setCameraSessions(Array.isArray(c) ? c : []);
     } catch {
       // ignore
     } finally {
@@ -158,10 +180,13 @@ export default function AdminPage() {
       ? guestbook.filter((g) => g.isPublic)
       : guestbook.filter((g) => !g.isPublic);
 
+  const totalCameraPhotos = cameraSessions.reduce((acc, s) => acc + s.photosTaken, 0);
+
   const tabs: { id: Tab; label: string; count: number }[] = [
     { id: 'rsvp', label: 'Účast', count: rsvps.length },
     { id: 'guestbook', label: 'Nástěnka', count: guestbook.length },
     { id: 'photobooth', label: 'Fotokoutek', count: photobooth.length },
+    { id: 'camera', label: 'Kamera', count: totalCameraPhotos },
   ];
 
   return (
@@ -479,6 +504,136 @@ export default function AdminPage() {
                             />
                           </a>
                         </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+          {/* ================================================================
+              CAMERA TAB
+          ================================================================ */}
+          {tab === 'camera' && (
+            <div className="space-y-8">
+              {/* QR + stats */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* QR code */}
+                <div className="relative border border-[#C9A96E]/15 p-6">
+                  <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#C9A96E]/40" />
+                  <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#C9A96E]/40" />
+                  <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#C9A96E]/40" />
+                  <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#C9A96E]/40" />
+                  <p className="text-xs tracking-[0.15em] uppercase text-[#7a6e65] mb-4">QR kód pro hosty</p>
+                  <div className="flex flex-col sm:flex-row items-center gap-6">
+                    <div className="p-3 bg-[#F5F0E8] rounded">
+                      <QRCodeSVG
+                        value={`${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://alpakyseberou.cz'}/kamera`}
+                        size={140}
+                        level="M"
+                        bgColor="#F5F0E8"
+                        fgColor="#0A0A0A"
+                      />
+                    </div>
+                    <div className="text-center sm:text-left">
+                      <p className="font-[family-name:var(--font-playfair)] text-[#F5F0E8] mb-1">
+                        alpakyseberou.cz/kamera
+                      </p>
+                      <p className="text-xs text-[#5a5248]">
+                        Hosté naskenují kód a fotí přímo ze svého telefonu.
+                      </p>
+                      <a
+                        href="/kamera"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-block mt-3 text-xs text-[#C9A96E] underline underline-offset-2"
+                      >
+                        Otevřít stránku →
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Stats */}
+                <div className="grid grid-cols-2 gap-4 content-start">
+                  <StatCard label="Hosté s kamerou" value={cameraSessions.length} />
+                  <StatCard label="Celkem fotek" value={totalCameraPhotos} />
+                  <StatCard
+                    label="Průměr / host"
+                    value={cameraSessions.length > 0 ? (totalCameraPhotos / cameraSessions.length).toFixed(1) : '0'}
+                  />
+                  <StatCard
+                    label="Plné filmy"
+                    value={cameraSessions.filter((s) => s.photosTaken >= s.maxPhotos).length}
+                  />
+                </div>
+              </div>
+
+              {cameraSessions.length === 0 ? (
+                <p className="text-center py-16 font-[family-name:var(--font-cormorant)] text-[#5a5248] italic">
+                  Zatím nikdo nevyfotil žádnou fotku.
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  <h3 className="text-xs tracking-[0.2em] uppercase text-[#C9A96E]">Hosté</h3>
+                  {cameraSessions.map((s) => (
+                    <div key={s.id} className="relative border border-[#C9A96E]/10 hover:border-[#C9A96E]/25 transition-colors">
+                      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#C9A96E]/30" />
+                      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#C9A96E]/30" />
+                      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#C9A96E]/30" />
+                      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#C9A96E]/30" />
+
+                      {/* Session header */}
+                      <button
+                        onClick={() => setExpandedSession(expandedSession === s.id ? null : s.id)}
+                        className="w-full flex items-center justify-between px-5 py-4 text-left"
+                      >
+                        <div className="flex items-center gap-4">
+                          <span className="font-[family-name:var(--font-playfair)] text-[#F5F0E8]">
+                            {s.guestName}
+                          </span>
+                          <span className="text-xs text-[#5a5248]">{formatDate(s.createdAt)}</span>
+                        </div>
+                        <div className="flex items-center gap-3 shrink-0">
+                          {/* Film strip mini */}
+                          <div className="hidden sm:flex gap-[2px]">
+                            {Array.from({ length: s.maxPhotos }).map((_, i) => (
+                              <div
+                                key={i}
+                                className="w-2 h-2 rounded-sm"
+                                style={{ backgroundColor: i < s.photosTaken ? '#C9A96E' : '#2A2520' }}
+                              />
+                            ))}
+                          </div>
+                          <span className={`text-xs px-2 py-1 ${s.photosTaken >= s.maxPhotos ? 'text-amber-400 bg-amber-400/10' : 'text-emerald-400 bg-emerald-400/10'}`}>
+                            {s.photosTaken} / {s.maxPhotos}
+                          </span>
+                          <span className="text-[#5a5248] text-xs ml-1">
+                            {expandedSession === s.id ? '▲' : '▼'}
+                          </span>
+                        </div>
+                      </button>
+
+                      {/* Photos grid */}
+                      {expandedSession === s.id && s.photos.length > 0 && (
+                        <div className="px-5 pb-5">
+                          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">
+                            {s.photos.map((photo) => (
+                              <a key={photo.id} href={photo.url} target="_blank" rel="noreferrer">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={photo.url}
+                                  alt=""
+                                  className="w-full aspect-square object-cover border border-[#2A2520] hover:border-[#C9A96E]/50 transition-colors"
+                                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                                />
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {expandedSession === s.id && s.photos.length === 0 && (
+                        <p className="px-5 pb-5 text-xs text-[#5a5248] italic">Žádné fotky.</p>
                       )}
                     </div>
                   ))}

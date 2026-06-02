@@ -132,6 +132,31 @@ export const questionnaireResponses = sqliteTable('questionnaire_responses', {
 });
 
 // ---------------------------------------------------------------------------
+// Disposable Camera
+// ---------------------------------------------------------------------------
+export const cameraSessions = sqliteTable('camera_sessions', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  token: text('token').notNull().unique(),
+  guestName: text('guest_name').notNull(),
+  photosTaken: integer('photos_taken').notNull().default(0),
+  maxPhotos: integer('max_photos').notNull().default(25),
+  createdAt: text('created_at')
+    .notNull()
+    .default(sql`(datetime('now'))`),
+});
+
+export const cameraPhotos = sqliteTable('camera_photos', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  sessionId: integer('session_id')
+    .references(() => cameraSessions.id, { onDelete: 'cascade' })
+    .notNull(),
+  url: text('url').notNull(),
+  createdAt: text('created_at')
+    .notNull()
+    .default(sql`(datetime('now'))`),
+});
+
+// ---------------------------------------------------------------------------
 // AI Photo Booth
 // ---------------------------------------------------------------------------
 export const photoboothPhotos = sqliteTable('photobooth_photos', {
