@@ -9,6 +9,8 @@ const sqlite = new Database(DB_PATH);
 
 sqlite.pragma('journal_mode = WAL');
 sqlite.pragma('foreign_keys = ON');
+// Wait up to 10s if another container holds the DB during rolling deploy
+sqlite.pragma('busy_timeout = 10000');
 
 // Safety net: ensure stay_duration column exists in case migration didn't run
 const rsvpCols = sqlite.pragma('table_info(rsvps)') as { name: string }[];
