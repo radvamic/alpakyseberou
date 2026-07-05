@@ -27,7 +27,7 @@ export default function FilmFull({ guestName, photosTaken }: FilmFullProps) {
           🎞️
         </motion.div>
 
-        <span className="block font-[family-name:var(--font-great-vibes)] text-2xl text-[#C9A96E] mb-3">
+        <span className="block font-[family-name:var(--font-great-vibes)] text-2xl text-[#B8A17E] mb-3">
           Film je plný
         </span>
 
@@ -41,7 +41,7 @@ export default function FilmFull({ guestName, photosTaken }: FilmFullProps) {
           Až je vyvoláme, uvidíš výsledek.
         </p>
 
-        <div className="h-[1px] bg-gradient-to-r from-transparent via-[#C9A96E] to-transparent mb-8" />
+        <div className="h-[1px] bg-gradient-to-r from-transparent via-[#B8A17E] to-transparent mb-8" />
 
         <p className="text-[#4A4540] text-xs">
           26. září 2026 · Hotel Všetice

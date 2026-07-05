@@ -137,7 +137,7 @@ export default function PhotoBoothWizard() {
               if (i < currentProgressIndex) goTo(s as WizardStep);
             }}
             className={`h-1 rounded-full transition-all duration-500 ${
-              i <= currentProgressIndex ? 'w-10 bg-[#C9A96E]' : 'w-5 bg-[#2A2520]'
+              i <= currentProgressIndex ? 'w-10 bg-[#B8A17E]' : 'w-5 bg-[#2A2520]'
             } ${i < currentProgressIndex ? 'cursor-pointer hover:bg-[#B8935A]' : 'cursor-default'}`}
           />
                     ))}

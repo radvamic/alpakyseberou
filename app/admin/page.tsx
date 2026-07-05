@@ -109,13 +109,13 @@ function formatDate(iso: string) {
 
 function StatCard({ label, value, sub }: { label: string; value: string | number; sub?: string }) {
   return (
-    <div className="relative border border-[#C9A96E]/15 px-6 py-5">
-      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#C9A96E]/40" />
-      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#C9A96E]/40" />
-      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#C9A96E]/40" />
-      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#C9A96E]/40" />
+    <div className="relative border border-[#B8A17E]/15 px-6 py-5">
+      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#B8A17E]/40" />
+      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#B8A17E]/40" />
+      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#B8A17E]/40" />
+      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#B8A17E]/40" />
       <p className="text-xs tracking-[0.15em] uppercase text-[#7a6e65] mb-1">{label}</p>
-      <p className="font-[family-name:var(--font-playfair)] text-3xl text-[#C9A96E]">{value}</p>
+      <p className="font-[family-name:var(--font-playfair)] text-3xl text-[#B8A17E]">{value}</p>
       {sub && <p className="text-xs text-[#5a5248] mt-1">{sub}</p>}
     </div>
   );
@@ -310,7 +310,7 @@ export default function AdminPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-10">
         <div>
-          <div className="h-[1px] w-10 bg-gradient-to-r from-[#C9A96E] to-transparent mb-3" />
+          <div className="h-[1px] w-10 bg-gradient-to-r from-[#B8A17E] to-transparent mb-3" />
           <h1 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl font-light text-[#F5F0E8]">
             Administrace
           </h1>
@@ -322,13 +322,13 @@ export default function AdminPage() {
           <button
             onClick={testEmail}
             disabled={emailTesting}
-            className="text-xs tracking-[0.15em] uppercase text-[#7a6e65] hover:text-[#C9A96E] transition-colors disabled:opacity-40"
+            className="text-xs tracking-[0.15em] uppercase text-[#7a6e65] hover:text-[#B8A17E] transition-colors disabled:opacity-40"
           >
             {emailTesting ? '⏳ Testuji…' : '✉ Test emailu'}
           </button>
           <button
             onClick={load}
-            className="text-xs tracking-[0.15em] uppercase text-[#7a6e65] hover:text-[#C9A96E] transition-colors"
+            className="text-xs tracking-[0.15em] uppercase text-[#7a6e65] hover:text-[#B8A17E] transition-colors"
           >
             ↺ Obnovit
           </button>
@@ -369,12 +369,12 @@ export default function AdminPage() {
             onClick={() => setTab(t.id)}
             className={`px-5 py-3 text-sm tracking-[0.1em] uppercase transition-all duration-300 border-b-2 -mb-px ${
               tab === t.id
-                ? 'border-[#C9A96E] text-[#C9A96E]'
+                ? 'border-[#B8A17E] text-[#B8A17E]'
                 : 'border-transparent text-[#7a6e65] hover:text-[#B8A99A]'
             }`}
           >
             {t.label}
-            <span className={`ml-2 text-xs px-1.5 py-0.5 rounded-sm ${tab === t.id ? 'bg-[#C9A96E]/20 text-[#C9A96E]' : 'bg-[#1a1a1a] text-[#5a5248]'}`}>
+            <span className={`ml-2 text-xs px-1.5 py-0.5 rounded-sm ${tab === t.id ? 'bg-[#B8A17E]/20 text-[#B8A17E]' : 'bg-[#1a1a1a] text-[#5a5248]'}`}>
               {t.count}
             </span>
           </button>
@@ -405,11 +405,11 @@ export default function AdminPage() {
               {/* Menu breakdown */}
               {Object.keys(menuCounts).length > 0 && (
                 <div>
-                  <h3 className="text-xs tracking-[0.2em] uppercase text-[#C9A96E] mb-3">Preference menu</h3>
+                  <h3 className="text-xs tracking-[0.2em] uppercase text-[#B8A17E] mb-3">Preference menu</h3>
                   <div className="flex flex-wrap gap-2">
                     {Object.entries(menuCounts).map(([key, count]) => (
                       <span key={key} className="text-xs px-3 py-1.5 border border-[#2A2520] text-[#B8A99A]">
-                        {key} <span className="text-[#C9A96E] ml-1">{count}×</span>
+                        {key} <span className="text-[#B8A17E] ml-1">{count}×</span>
                       </span>
                     ))}
                   </div>
@@ -419,11 +419,11 @@ export default function AdminPage() {
               {/* Stay breakdown */}
               {Object.keys(stayCounts).length > 0 && (
                 <div>
-                  <h3 className="text-xs tracking-[0.2em] uppercase text-[#C9A96E] mb-3">Délka pobytu</h3>
+                  <h3 className="text-xs tracking-[0.2em] uppercase text-[#B8A17E] mb-3">Délka pobytu</h3>
                   <div className="flex flex-wrap gap-2">
                     {Object.entries(stayCounts).map(([key, count]) => (
                       <span key={key} className="text-xs px-3 py-1.5 border border-[#2A2520] text-[#B8A99A]">
-                        {STAY_LABELS[key] || key} <span className="text-[#C9A96E] ml-1">{count}×</span>
+                        {STAY_LABELS[key] || key} <span className="text-[#B8A17E] ml-1">{count}×</span>
                       </span>
                     ))}
                   </div>
@@ -491,12 +491,12 @@ export default function AdminPage() {
                     onClick={() => setGuestbookFilter(f)}
                     className={`text-xs px-4 py-2 tracking-[0.15em] uppercase transition-all duration-300 border-b-2 ${
                       guestbookFilter === f
-                        ? 'border-[#C9A96E] text-[#C9A96E]'
+                        ? 'border-[#B8A17E] text-[#B8A17E]'
                         : 'border-transparent text-[#7a6e65] hover:text-[#B8A99A]'
                     }`}
                   >
                     {f === 'all' ? 'Vše' : f === 'public' ? 'Veřejné' : 'Soukromé'}
-                    <span className={`ml-2 text-xs ${guestbookFilter === f ? 'text-[#C9A96E]' : 'text-[#5a5248]'}`}>
+                    <span className={`ml-2 text-xs ${guestbookFilter === f ? 'text-[#B8A17E]' : 'text-[#5a5248]'}`}>
                       ({f === 'all' ? guestbook.length : f === 'public' ? guestbook.filter(g => g.isPublic).length : guestbook.filter(g => !g.isPublic).length})
                     </span>
                   </button>
@@ -510,11 +510,11 @@ export default function AdminPage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                   {filteredGuestbook.map((g) => (
-                    <div key={g.id} className="relative border border-[#C9A96E]/10 p-6 hover:border-[#C9A96E]/25 transition-colors">
-                      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#C9A96E]/30" />
-                      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#C9A96E]/30" />
-                      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#C9A96E]/30" />
-                      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#C9A96E]/30" />
+                    <div key={g.id} className="relative border border-[#B8A17E]/10 p-6 hover:border-[#B8A17E]/25 transition-colors">
+                      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#B8A17E]/30" />
+                      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#B8A17E]/30" />
+                      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#B8A17E]/30" />
+                      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#B8A17E]/30" />
 
                       <div className="flex items-start justify-between mb-3">
                         <div>
@@ -538,7 +538,7 @@ export default function AdminPage() {
                               <img
                                 src={url}
                                 alt=""
-                                className="w-16 h-16 object-cover border border-[#2A2520] hover:border-[#C9A96E]/50 transition-colors"
+                                className="w-16 h-16 object-cover border border-[#2A2520] hover:border-[#B8A17E]/50 transition-colors"
                               />
                             </a>
                           ))}
@@ -568,13 +568,13 @@ export default function AdminPage() {
               {/* Stats row */}
               <div className="flex gap-4 flex-wrap">
                 <span className="text-xs px-3 py-1.5 border border-[#2A2520] text-[#B8A99A]">
-                  Celkem <span className="text-[#C9A96E] ml-1">{photobooth.length}</span>
+                  Celkem <span className="text-[#B8A17E] ml-1">{photobooth.length}</span>
                 </span>
                 <span className="text-xs px-3 py-1.5 border border-[#2A2520] text-[#B8A99A]">
-                  Veřejné <span className="text-[#C9A96E] ml-1">{photobooth.filter(p => p.isPublic).length}</span>
+                  Veřejné <span className="text-[#B8A17E] ml-1">{photobooth.filter(p => p.isPublic).length}</span>
                 </span>
                 <span className="text-xs px-3 py-1.5 border border-[#2A2520] text-[#B8A99A]">
-                  Soukromé <span className="text-[#C9A96E] ml-1">{photobooth.filter(p => !p.isPublic).length}</span>
+                  Soukromé <span className="text-[#B8A17E] ml-1">{photobooth.filter(p => !p.isPublic).length}</span>
                 </span>
               </div>
 
@@ -585,11 +585,11 @@ export default function AdminPage() {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {photobooth.map((p) => (
-                    <div key={p.id} className="relative border border-[#C9A96E]/10 p-4 hover:border-[#C9A96E]/25 transition-colors">
-                      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#C9A96E]/30" />
-                      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#C9A96E]/30" />
-                      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#C9A96E]/30" />
-                      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#C9A96E]/30" />
+                    <div key={p.id} className="relative border border-[#B8A17E]/10 p-4 hover:border-[#B8A17E]/25 transition-colors">
+                      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#B8A17E]/30" />
+                      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#B8A17E]/30" />
+                      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#B8A17E]/30" />
+                      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#B8A17E]/30" />
 
                       {/* Generated photo */}
                       <a href={p.generatedPhotoUrl} target="_blank" rel="noreferrer" className="block mb-3">
@@ -624,7 +624,7 @@ export default function AdminPage() {
                             <img
                               src={p.originalPhotoUrl}
                               alt="originál"
-                              className="w-8 h-8 object-cover border border-[#2A2520] hover:border-[#C9A96E]/50 transition-colors"
+                              className="w-8 h-8 object-cover border border-[#2A2520] hover:border-[#B8A17E]/50 transition-colors"
                               onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                             />
                           </a>
@@ -644,11 +644,11 @@ export default function AdminPage() {
               {/* QR + stats */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* QR code */}
-                <div className="relative border border-[#C9A96E]/15 p-6">
-                  <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#C9A96E]/40" />
-                  <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#C9A96E]/40" />
-                  <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#C9A96E]/40" />
-                  <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#C9A96E]/40" />
+                <div className="relative border border-[#B8A17E]/15 p-6">
+                  <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#B8A17E]/40" />
+                  <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#B8A17E]/40" />
+                  <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#B8A17E]/40" />
+                  <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#B8A17E]/40" />
                   <p className="text-xs tracking-[0.15em] uppercase text-[#7a6e65] mb-4">QR kód pro hosty</p>
                   <div className="flex flex-col sm:flex-row items-center gap-6">
                     <div className="p-3 bg-[#F5F0E8] rounded">
@@ -671,7 +671,7 @@ export default function AdminPage() {
                         href="/kamera"
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-block mt-3 text-xs text-[#C9A96E] underline underline-offset-2"
+                        className="inline-block mt-3 text-xs text-[#B8A17E] underline underline-offset-2"
                       >
                         Otevřít stránku →
                       </a>
@@ -700,13 +700,13 @@ export default function AdminPage() {
                 </p>
               ) : (
                 <div className="space-y-3">
-                  <h3 className="text-xs tracking-[0.2em] uppercase text-[#C9A96E]">Hosté</h3>
+                  <h3 className="text-xs tracking-[0.2em] uppercase text-[#B8A17E]">Hosté</h3>
                   {cameraSessions.map((s) => (
-                    <div key={s.id} className="relative border border-[#C9A96E]/10 hover:border-[#C9A96E]/25 transition-colors">
-                      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#C9A96E]/30" />
-                      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#C9A96E]/30" />
-                      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#C9A96E]/30" />
-                      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#C9A96E]/30" />
+                    <div key={s.id} className="relative border border-[#B8A17E]/10 hover:border-[#B8A17E]/25 transition-colors">
+                      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#B8A17E]/30" />
+                      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#B8A17E]/30" />
+                      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#B8A17E]/30" />
+                      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#B8A17E]/30" />
 
                       {/* Session header */}
                       <button
@@ -726,7 +726,7 @@ export default function AdminPage() {
                               <div
                                 key={i}
                                 className="w-2 h-2 rounded-sm"
-                                style={{ backgroundColor: i < s.photosTaken ? '#C9A96E' : '#2A2520' }}
+                                style={{ backgroundColor: i < s.photosTaken ? '#B8A17E' : '#2A2520' }}
                               />
                             ))}
                           </div>
@@ -750,7 +750,7 @@ export default function AdminPage() {
                                   <img
                                     src={photo.thumbnailUrl || photo.url}
                                     alt=""
-                                    className="w-full aspect-square object-cover border border-[#2A2520] hover:border-[#C9A96E]/50 transition-colors"
+                                    className="w-full aspect-square object-cover border border-[#2A2520] hover:border-[#B8A17E]/50 transition-colors"
                                     onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                                   />
                                 </a>
@@ -796,12 +796,12 @@ export default function AdminPage() {
                   {guestPhotos.map((photo) => (
                     <div
                       key={photo.id}
-                      className="relative border border-[#C9A96E]/10 p-4 hover:border-[#C9A96E]/25 transition-colors"
+                      className="relative border border-[#B8A17E]/10 p-4 hover:border-[#B8A17E]/25 transition-colors"
                     >
-                      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#C9A96E]/30" />
-                      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#C9A96E]/30" />
-                      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#C9A96E]/30" />
-                      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#C9A96E]/30" />
+                      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#B8A17E]/30" />
+                      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#B8A17E]/30" />
+                      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#B8A17E]/30" />
+                      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#B8A17E]/30" />
 
                       <a href={photo.url} target="_blank" rel="noreferrer" className="block mb-3">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -839,11 +839,11 @@ export default function AdminPage() {
           {tab === 'table-challenge' && (
             <div className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="relative border border-[#C9A96E]/15 p-6">
-                  <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#C9A96E]/40" />
-                  <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#C9A96E]/40" />
-                  <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#C9A96E]/40" />
-                  <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#C9A96E]/40" />
+                <div className="relative border border-[#B8A17E]/15 p-6">
+                  <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#B8A17E]/40" />
+                  <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#B8A17E]/40" />
+                  <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#B8A17E]/40" />
+                  <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#B8A17E]/40" />
                   <p className="text-xs tracking-[0.15em] uppercase text-[#7a6e65] mb-4">
                     QR kód pro stoly
                   </p>
@@ -868,7 +868,7 @@ export default function AdminPage() {
                         href="/ukoly"
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-block mt-3 text-xs text-[#C9A96E] underline underline-offset-2"
+                        className="inline-block mt-3 text-xs text-[#B8A17E] underline underline-offset-2"
                       >
                         Otevřít stránku →
                       </a>
@@ -908,18 +908,18 @@ export default function AdminPage() {
                 </p>
               ) : (
                 <div className="space-y-3">
-                  <h3 className="text-xs tracking-[0.2em] uppercase text-[#C9A96E]">
+                  <h3 className="text-xs tracking-[0.2em] uppercase text-[#B8A17E]">
                     Fotodůkazy podle hosta
                   </h3>
                   {tableChallengeGuests.map((g) => (
                     <div
                       key={g.name}
-                      className="relative border border-[#C9A96E]/10 hover:border-[#C9A96E]/25 transition-colors"
+                      className="relative border border-[#B8A17E]/10 hover:border-[#B8A17E]/25 transition-colors"
                     >
-                      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#C9A96E]/30" />
-                      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#C9A96E]/30" />
-                      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#C9A96E]/30" />
-                      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#C9A96E]/30" />
+                      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#B8A17E]/30" />
+                      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#B8A17E]/30" />
+                      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#B8A17E]/30" />
+                      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#B8A17E]/30" />
 
                       <button
                         type="button"
@@ -953,12 +953,12 @@ export default function AdminPage() {
                                 <img
                                   src={photo.thumbnailUrl || photo.url}
                                   alt=""
-                                  className="w-16 h-16 object-cover border border-[#2A2520] hover:border-[#C9A96E]/50 transition-colors rounded"
+                                  className="w-16 h-16 object-cover border border-[#2A2520] hover:border-[#B8A17E]/50 transition-colors rounded"
                                 />
                               </a>
                               <div className="flex-1 min-w-0">
                                 {photo.challengeText && (
-                                  <p className="text-xs text-[#C9A96E] mb-1 line-clamp-2 italic">„{photo.challengeText}"</p>
+                                  <p className="text-xs text-[#B8A17E] mb-1 line-clamp-2 italic">„{photo.challengeText}"</p>
                                 )}
                                 <p className="text-[10px] text-[#5a5248]">{formatDate(photo.createdAt)}</p>
                               </div>
@@ -981,7 +981,7 @@ export default function AdminPage() {
 
               {tableChallengeGuests.length > 0 && (
                 <div>
-                  <h3 className="text-xs tracking-[0.2em] uppercase text-[#C9A96E] mb-4">
+                  <h3 className="text-xs tracking-[0.2em] uppercase text-[#B8A17E] mb-4">
                     Všechny fotky (nejnovější)
                   </h3>
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -992,12 +992,12 @@ export default function AdminPage() {
                           <img
                             src={photo.thumbnailUrl || photo.url}
                             alt=""
-                            className="w-full aspect-square object-cover border border-[#2A2520] hover:border-[#C9A96E]/50 transition-colors"
+                            className="w-full aspect-square object-cover border border-[#2A2520] hover:border-[#B8A17E]/50 transition-colors"
                           />
                         </a>
                         <p className="text-[10px] text-[#B8A99A] font-semibold truncate">{photo.name}</p>
                         {photo.challengeText && (
-                          <p className="text-[10px] text-[#C9A96E] italic line-clamp-2">„{photo.challengeText}"</p>
+                          <p className="text-[10px] text-[#B8A17E] italic line-clamp-2">„{photo.challengeText}"</p>
                         )}
                         <p className="text-[10px] text-[#5a5248]">{formatDate(photo.createdAt)}</p>
                         <button

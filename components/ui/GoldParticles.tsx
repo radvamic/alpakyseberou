@@ -64,8 +64,8 @@ export default function GoldParticles() {
         ctx.save();
         ctx.globalAlpha = p.opacity;
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
-        gradient.addColorStop(0, '#D4AF37');
-        gradient.addColorStop(0.5, '#C9A96E');
+        gradient.addColorStop(0, '#C8AF93');
+        gradient.addColorStop(0.5, '#B8A17E');
         gradient.addColorStop(1, 'transparent');
         ctx.fillStyle = gradient;
         ctx.beginPath();

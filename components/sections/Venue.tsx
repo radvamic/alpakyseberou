@@ -81,16 +81,16 @@ export default function Venue() {
     <div className="flex justify-center mb-8">
       <button
         onClick={() => setExpanded(!expanded)}
-        className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#C9A96E] transition-colors duration-300"
+        className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#B8A17E] transition-colors duration-300"
       >
-        <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
+        <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
         {expanded ? (locale === 'cs' ? 'Skrýt' : 'Hide') : (locale === 'cs' ? labelCs : labelEn)}
         <motion.span
           animate={{ rotate: expanded ? 180 : 0 }}
           transition={{ duration: 0.3 }}
-          className="text-[#C9A96E]"
+          className="text-[#B8A17E]"
         >↓</motion.span>
-        <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
+        <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
       </button>
     </div>
   );
@@ -176,7 +176,7 @@ export default function Venue() {
                     href="https://www.google.com/maps/place/Statek+V%C5%A1etice/@49.789348,14.5138085,17z/data=!4m9!3m8!1s0x470b823ef333efd1:0x8703bf635045cf0!5m2!4m1!1i2!8m2!3d49.7893257!4d14.5138721!16s%2Fg%2F1pp2vg5bp?entry=ttu&g_ep=EgoyMDI2MDQwOC4wIKXMDSoASAFQAw%3D%3D"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-[#C9A96E]/30 px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:border-[#C9A96E] hover:bg-[#C9A96E]/10"
+                    className="inline-flex items-center gap-2 rounded-full border border-[#B8A17E]/30 px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#B8A17E] transition-all duration-500 hover:border-[#B8A17E] hover:bg-[#B8A17E]/10"
                   >
                     {t('venue.navigate') as string}
                   </a>
@@ -184,7 +184,7 @@ export default function Venue() {
                     href="https://www.hotel-vsetice.cz/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-[#2A2520] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#B8A99A] transition-all duration-500 hover:border-[#C9A96E]/30 hover:text-[#E8D5B5]"
+                    className="inline-flex items-center gap-2 rounded-full border border-[#2A2520] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#B8A99A] transition-all duration-500 hover:border-[#B8A17E]/30 hover:text-[#E5D5CA]"
                   >
                     hotel-vsetice.cz
                   </a>
@@ -215,7 +215,7 @@ export default function Venue() {
                   : 'If you\'d like to contribute, there will be a collection box on-site.'}
               </p>
 
-              <p className="text-center text-xs tracking-[0.25em] uppercase text-[#C9A96E]/60 mb-5 font-[family-name:var(--font-cormorant)]">
+              <p className="text-center text-xs tracking-[0.25em] uppercase text-[#B8A17E]/60 mb-5 font-[family-name:var(--font-cormorant)]">
                 {locale === 'cs' ? 'Ukázka pokojů' : 'Room preview'}
               </p>
 
@@ -226,8 +226,8 @@ export default function Venue() {
                     onClick={() => setActiveBuilding(i)}
                     className={`rounded-full px-5 py-2 text-xs tracking-[0.15em] uppercase transition-all duration-300 ${
                       activeBuilding === i
-                        ? 'border border-[#C9A96E] bg-[#C9A96E]/10 text-[#C9A96E]'
-                        : 'border border-[#2A2520] text-[#B8A99A] hover:border-[#C9A96E]/30'
+                        ? 'border border-[#B8A17E] bg-[#B8A17E]/10 text-[#B8A17E]'
+                        : 'border border-[#2A2520] text-[#B8A99A] hover:border-[#B8A17E]/30'
                     }`}
                   >
                     {building.name}
@@ -257,11 +257,11 @@ export default function Venue() {
                         <h4 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-white font-light" style={{textShadow: '0 2px 8px rgba(0,0,0,0.8)'}}>
                           {buildings[activeBuilding].name}
                         </h4>
-                        <span className="rounded-full border border-[#C9A96E]/50 bg-black/40 px-3 py-1 text-xs text-[#C9A96E]">
+                        <span className="rounded-full border border-[#B8A17E]/50 bg-black/40 px-3 py-1 text-xs text-[#B8A17E]">
                           {buildings[activeBuilding].rooms}
                         </span>
                       </div>
-                      <p className="text-xs uppercase tracking-[0.15em] text-[#C9A96E] mb-3 font-[family-name:var(--font-cormorant)] font-semibold" style={{textShadow: '0 1px 4px rgba(0,0,0,0.9)'}}>
+                      <p className="text-xs uppercase tracking-[0.15em] text-[#B8A17E] mb-3 font-[family-name:var(--font-cormorant)] font-semibold" style={{textShadow: '0 1px 4px rgba(0,0,0,0.9)'}}>
                         {buildings[activeBuilding].subtitle}
                       </p>
                       <p className="text-sm md:text-base text-white/90 max-w-xl leading-relaxed mb-4" style={{textShadow: '0 1px 6px rgba(0,0,0,0.9)'}}>
@@ -271,7 +271,7 @@ export default function Venue() {
                         href={buildings[activeBuilding].url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-[#C9A96E] hover:text-[#D4AF37] transition-colors"
+                        className="inline-flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-[#B8A17E] hover:text-[#C8AF93] transition-colors"
                       >
                         {locale === 'cs' ? 'Více informací' : 'More info'} &rarr;
                       </a>

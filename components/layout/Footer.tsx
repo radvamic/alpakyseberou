@@ -48,13 +48,13 @@ export default function Footer() {
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.3 }}
         >
-          <span className="font-[family-name:var(--font-great-vibes)] text-3xl text-[#C9A96E]">
+          <span className="font-[family-name:var(--font-great-vibes)] text-3xl text-[#B8A17E]">
             K & M
           </span>
         </motion.div>
 
         {/* Divider */}
-        <div className="mx-auto mb-8 h-[1px] w-32 bg-gradient-to-r from-transparent via-[#C9A96E]/30 to-transparent" />
+        <div className="mx-auto mb-8 h-[1px] w-32 bg-gradient-to-r from-transparent via-[#B8A17E]/30 to-transparent" />
 
         {/* Copyright */}
         <p className="text-xs text-[#5a5248] mb-2">
@@ -67,7 +67,7 @@ export default function Footer() {
         {/* Back to top */}
         <motion.button
           onClick={scrollToTop}
-          className="mt-10 inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#C9A96E] transition-colors"
+          className="mt-10 inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#B8A17E] transition-colors"
           whileHover={{ y: -2 }}
         >
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="rotate-180">

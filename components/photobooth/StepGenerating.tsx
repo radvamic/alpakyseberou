@@ -72,7 +72,7 @@ export default function StepGenerating({ locale }: StepGeneratingProps) {
         {[0, 1, 2].map((i) => (
           <motion.div
             key={i}
-            className="w-2 h-2 rounded-full bg-[#C9A96E]"
+            className="w-2 h-2 rounded-full bg-[#B8A17E]"
             animate={{ scale: [1, 1.5, 1], opacity: [0.3, 1, 0.3] }}
             transition={{
               duration: 1.2,
@@ -87,7 +87,7 @@ export default function StepGenerating({ locale }: StepGeneratingProps) {
       {/* Status message */}
       <motion.p
         key={msgIndex}
-        className="text-sm text-[#C9A96E]/80 text-center font-[family-name:var(--font-cormorant)] text-lg"
+        className="text-sm text-[#B8A17E]/80 text-center font-[family-name:var(--font-cormorant)] text-lg"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}

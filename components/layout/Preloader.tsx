@@ -51,7 +51,7 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
                   cy="80"
                   r="75"
                   fill="none"
-                  stroke="#C9A96E"
+                  stroke="#B8A17E"
                   strokeWidth="0.5"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
@@ -62,7 +62,7 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
                   cy="80"
                   r="68"
                   fill="none"
-                  stroke="#C9A96E"
+                  stroke="#B8A17E"
                   strokeWidth="0.3"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
@@ -75,9 +75,9 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.6, ease: [0.76, 0, 0.24, 1] }}
               >
-                <span className="absolute top-[10px] left-[12px] font-[family-name:var(--font-great-vibes)] text-6xl leading-none text-[#C9A96E]">K</span>
-                <span className="absolute top-[65px] left-[77px] font-[family-name:var(--font-great-vibes)] text-4xl leading-none text-[#C9A96E]">&</span>
-                <span className="absolute top-[106px] left-[68px] font-[family-name:var(--font-great-vibes)] text-6xl leading-none text-[#C9A96E]">M</span>
+                <span className="absolute top-[10px] left-[12px] font-[family-name:var(--font-great-vibes)] text-6xl leading-none text-[#B8A17E]">K</span>
+                <span className="absolute top-[65px] left-[77px] font-[family-name:var(--font-great-vibes)] text-4xl leading-none text-[#B8A17E]">&</span>
+                <span className="absolute top-[106px] left-[68px] font-[family-name:var(--font-great-vibes)] text-6xl leading-none text-[#B8A17E]">M</span>
               </motion.div>
             </motion.div>
 
@@ -93,7 +93,7 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
 
             {/* Loading line */}
             <motion.div
-              className="h-[1px] bg-gradient-to-r from-transparent via-[#C9A96E] to-transparent"
+              className="h-[1px] bg-gradient-to-r from-transparent via-[#B8A17E] to-transparent"
               initial={{ width: 0 }}
               animate={{ width: 200 }}
               transition={{ duration: 1.8, ease: [0.76, 0, 0.24, 1], delay: 0.4 }}

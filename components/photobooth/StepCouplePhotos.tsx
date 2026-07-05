@@ -34,7 +34,7 @@ export default function StepCouplePhotos({
     <div className="flex flex-col gap-6">
       {/* User photo small preview */}
       <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-xl overflow-hidden border border-[#C9A96E]/30 shrink-0">
+        <div className="w-14 h-14 rounded-xl overflow-hidden border border-[#B8A17E]/30 shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={userPhotoPreview} alt="" className="w-full h-full object-cover" />
         </div>
@@ -53,14 +53,14 @@ export default function StepCouplePhotos({
         onClick={() => { setWantCouple(!wantCouple); if (wantCouple) setSelected([]); }}
         className={`w-full rounded-xl border px-4 py-3 text-sm text-left transition-all duration-300 flex items-center justify-between ${
           wantCouple
-            ? 'border-[#C9A96E] bg-[#C9A96E]/10 text-[#C9A96E]'
-            : 'border-[#2A2520] text-[#B8A99A] hover:border-[#C9A96E]/30'
+            ? 'border-[#B8A17E] bg-[#B8A17E]/10 text-[#B8A17E]'
+            : 'border-[#2A2520] text-[#B8A99A] hover:border-[#B8A17E]/30'
         }`}
       >
         <span>{t('photobooth.addCouple') as string}</span>
         <motion.div
           className={`w-10 h-6 rounded-full p-0.5 transition-colors ${
-            wantCouple ? 'bg-[#C9A96E]' : 'bg-[#2A2520]'
+            wantCouple ? 'bg-[#B8A17E]' : 'bg-[#2A2520]'
           }`}
         >
           <motion.div
@@ -91,8 +91,8 @@ export default function StepCouplePhotos({
                   onClick={() => togglePhoto(photo.src)}
                   className={`relative shrink-0 w-28 h-36 sm:w-32 sm:h-40 rounded-xl overflow-hidden border-2 transition-all duration-300 snap-start ${
                     isSelected
-                      ? 'border-[#C9A96E] shadow-[0_0_15px_rgba(201,169,110,0.3)]'
-                      : 'border-[#2A2520] hover:border-[#C9A96E]/30'
+                      ? 'border-[#B8A17E] shadow-[0_0_15px_rgba(201,169,110,0.3)]'
+                      : 'border-[#2A2520] hover:border-[#B8A17E]/30'
                   }`}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -112,7 +112,7 @@ export default function StepCouplePhotos({
                   </div>
                   {isSelected && (
                     <motion.div
-                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#C9A96E] flex items-center justify-center"
+                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#B8A17E] flex items-center justify-center"
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                     >
@@ -132,13 +132,13 @@ export default function StepCouplePhotos({
       <div className="flex justify-between pt-2">
         <button
           onClick={onBack}
-          className="text-sm text-[#B8A99A] hover:text-[#C9A96E] transition-colors py-3"
+          className="text-sm text-[#B8A99A] hover:text-[#B8A17E] transition-colors py-3"
         >
           {t('photobooth.back') as string}
         </button>
         <button
           onClick={() => onNext(wantCouple ? selected : [])}
-          className="rounded-full border border-[#C9A96E] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:bg-[#C9A96E]/10"
+          className="rounded-full border border-[#B8A17E] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#B8A17E] transition-all duration-500 hover:bg-[#B8A17E]/10"
         >
           {t('photobooth.next') as string}
         </button>

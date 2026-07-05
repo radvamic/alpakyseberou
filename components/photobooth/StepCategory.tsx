@@ -28,7 +28,7 @@ export default function StepCategory({ onSelect, onBack }: StepCategoryProps) {
           <motion.button
             key={cat.id}
             onClick={() => onSelect(cat.id)}
-            className="w-full rounded-xl border border-[#2A2520] bg-[#1A1A1A] p-4 sm:p-5 text-left transition-all duration-300 hover:border-[#C9A96E]/40 hover:bg-[#C9A96E]/5 group"
+            className="w-full rounded-xl border border-[#2A2520] bg-[#1A1A1A] p-4 sm:p-5 text-left transition-all duration-300 hover:border-[#B8A17E]/40 hover:bg-[#B8A17E]/5 group"
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: i * 0.08 }}
@@ -37,14 +37,14 @@ export default function StepCategory({ onSelect, onBack }: StepCategoryProps) {
             <div className="flex items-center gap-4">
               <span className="text-3xl sm:text-4xl">{cat.emoji}</span>
               <div className="flex-1 min-w-0">
-                <h4 className="font-[family-name:var(--font-cormorant)] text-lg sm:text-xl text-[#F5F0E8] group-hover:text-[#C9A96E] transition-colors">
+                <h4 className="font-[family-name:var(--font-cormorant)] text-lg sm:text-xl text-[#F5F0E8] group-hover:text-[#B8A17E] transition-colors">
                   {locale === 'cs' ? cat.nameCs : cat.nameEn}
                 </h4>
                 <p className="text-xs text-[#B8A99A] mt-0.5">
                   {locale === 'cs' ? cat.descCs : cat.descEn}
                 </p>
               </div>
-              <svg className="w-5 h-5 text-[#2A2520] group-hover:text-[#C9A96E] transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <svg className="w-5 h-5 text-[#2A2520] group-hover:text-[#B8A17E] transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
               </svg>
             </div>
@@ -55,7 +55,7 @@ export default function StepCategory({ onSelect, onBack }: StepCategoryProps) {
       <div className="pt-2">
         <button
           onClick={onBack}
-          className="text-sm text-[#B8A99A] hover:text-[#C9A96E] transition-colors py-3"
+          className="text-sm text-[#B8A99A] hover:text-[#B8A17E] transition-colors py-3"
         >
           {t('photobooth.back') as string}
         </button>

@@ -120,7 +120,7 @@ export default function UkolyPage() {
       particleCount: 60,
       spread: 80,
       origin: { y: 0.5 },
-      colors: ['#C9A96E', '#D6C9A5', '#9E6B6B', '#3B5249', '#F5F0E8'],
+      colors: ['#B8A17E', '#E5D5CA', '#B06F72', '#687760', '#F5F0E8'],
     });
   }, [pool, level]);
 
@@ -146,7 +146,7 @@ export default function UkolyPage() {
           particleCount: 120,
           spread: 120,
           origin: { y: 0.4 },
-          colors: ['#C9A96E', '#D6C9A5', '#9E6B6B', '#3B5249'],
+          colors: ['#B8A17E', '#E5D5CA', '#B06F72', '#687760'],
         });
       } catch {
         setUploadStatus('error');
@@ -166,7 +166,7 @@ export default function UkolyPage() {
       <header className="w-full max-w-md flex items-start justify-between mb-8">
         <div>
           <h1
-            className="font-[family-name:var(--font-great-vibes)] text-4xl text-[#C9A96E] leading-none"
+            className="font-[family-name:var(--font-great-vibes)] text-4xl text-[#B8A17E] leading-none"
           >
             {t.title}
           </h1>
@@ -176,7 +176,7 @@ export default function UkolyPage() {
         </div>
         <button
           onClick={() => setLang((l) => (l === 'cs' ? 'en' : 'cs'))}
-          className="mt-1 text-xs tracking-[0.18em] uppercase text-[#C9A96E] border border-[#C9A96E]/30 rounded-full px-3 py-1 hover:bg-[#C9A96E]/10 transition-colors"
+          className="mt-1 text-xs tracking-[0.18em] uppercase text-[#B8A17E] border border-[#B8A17E]/30 rounded-full px-3 py-1 hover:bg-[#B8A17E]/10 transition-colors"
         >
           {t.lang}
         </button>
@@ -190,8 +190,8 @@ export default function UkolyPage() {
             onClick={() => handleLevelChange(lvl)}
             className={`flex-1 py-2.5 rounded-full text-sm tracking-[0.15em] uppercase transition-all duration-300 ${
               level === lvl
-                ? 'bg-[#C9A96E] text-[#0A0A0A] font-semibold shadow-lg shadow-[#C9A96E]/20'
-                : 'border border-[#2A2520] text-[#B8A99A] hover:border-[#C9A96E]/40 hover:text-[#C9A96E]'
+                ? 'bg-[#B8A17E] text-[#0A0A0A] font-semibold shadow-lg shadow-[#B8A17E]/20'
+                : 'border border-[#2A2520] text-[#B8A99A] hover:border-[#B8A17E]/40 hover:text-[#B8A17E]'
             }`}
           >
             {lvl === 'mild' ? t.mild : t.wild}
@@ -214,8 +214,8 @@ export default function UkolyPage() {
               <span
                 className={`self-start text-[10px] tracking-[0.2em] uppercase font-semibold px-3 py-1 rounded-full mb-4 ${
                   current.level === 'mild'
-                    ? 'bg-[#3B5249]/30 text-[#7DAE93] border border-[#3B5249]/40'
-                    : 'bg-[#9E6B6B]/20 text-[#C9908A] border border-[#9E6B6B]/30'
+                    ? 'bg-[#687760]/30 text-[#A8B8A0] border border-[#687760]/40'
+                    : 'bg-[#B06F72]/20 text-[#D4A0A3] border border-[#B06F72]/30'
                 }`}
               >
                 {current.level === 'mild' ? t.mildBadge : t.wildBadge}
@@ -253,7 +253,7 @@ export default function UkolyPage() {
       {/* ── draw / next button ── */}
       <button
         onClick={draw}
-        className="w-full max-w-md mb-10 rounded-full border border-[#C9A96E] py-3.5 text-sm tracking-[0.18em] uppercase text-[#C9A96E] transition-all duration-300 hover:bg-[#C9A96E]/10 active:scale-[0.98]"
+        className="w-full max-w-md mb-10 rounded-full border border-[#B8A17E] py-3.5 text-sm tracking-[0.18em] uppercase text-[#B8A17E] transition-all duration-300 hover:bg-[#B8A17E]/10 active:scale-[0.98]"
       >
         {current ? t.next : t.draw}
       </button>
@@ -261,7 +261,7 @@ export default function UkolyPage() {
       {/* ── photo proof ── */}
       {current && (
       <section className="w-full max-w-md rounded-2xl border border-[#2A2520] bg-[#111111] p-6 mb-8">
-        <h2 className="font-[family-name:var(--font-cormorant)] text-[#C9A96E] text-lg font-semibold tracking-[0.12em] uppercase mb-1">
+        <h2 className="font-[family-name:var(--font-cormorant)] text-[#B8A17E] text-lg font-semibold tracking-[0.12em] uppercase mb-1">
           {t.proofTitle}
         </h2>
         <p className="text-xs text-[#B8A99A] mb-4 leading-relaxed">{t.proofDesc}</p>
@@ -274,7 +274,7 @@ export default function UkolyPage() {
           placeholder={t.namePlaceholder}
           aria-label={t.nameLabel}
           disabled={uploading}
-          className="w-full mb-3 rounded-xl border border-[#2A2520] bg-[#1A1A1A] px-4 py-2.5 text-sm text-[#F5F0E8] placeholder-[#3A3530] focus:border-[#C9A96E]/50 focus:outline-none transition-colors disabled:opacity-40"
+          className="w-full mb-3 rounded-xl border border-[#2A2520] bg-[#1A1A1A] px-4 py-2.5 text-sm text-[#F5F0E8] placeholder-[#3A3530] focus:border-[#B8A17E]/50 focus:outline-none transition-colors disabled:opacity-40"
         />
 
         {/* hidden file input — triggers camera on mobile */}
@@ -291,11 +291,11 @@ export default function UkolyPage() {
           onClick={() => fileRef.current?.click()}
           disabled={uploading}
           aria-busy={uploading}
-          className="w-full rounded-full border border-[#C9A96E]/60 py-3 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-300 hover:bg-[#C9A96E]/10 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full rounded-full border border-[#B8A17E]/60 py-3 text-sm tracking-[0.15em] uppercase text-[#B8A17E] transition-all duration-300 hover:bg-[#B8A17E]/10 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {uploading && (
             <span
-              className="h-4 w-4 shrink-0 rounded-full border-2 border-[#C9A96E]/30 border-t-[#C9A96E] animate-spin"
+              className="h-4 w-4 shrink-0 rounded-full border-2 border-[#B8A17E]/30 border-t-[#B8A17E] animate-spin"
               aria-hidden
             />
           )}
@@ -314,13 +314,13 @@ export default function UkolyPage() {
               role="status"
               aria-live="polite"
             >
-              <div className="rounded-xl border border-[#C9A96E]/20 bg-[#C9A96E]/5 px-4 py-4 flex items-center gap-4">
+              <div className="rounded-xl border border-[#B8A17E]/20 bg-[#B8A17E]/5 px-4 py-4 flex items-center gap-4">
                 <span
-                  className="h-10 w-10 shrink-0 rounded-full border-2 border-[#C9A96E]/25 border-t-[#C9A96E] animate-spin"
+                  className="h-10 w-10 shrink-0 rounded-full border-2 border-[#B8A17E]/25 border-t-[#B8A17E] animate-spin"
                   aria-hidden
                 />
                 <div className="text-left min-w-0">
-                  <p className="text-sm text-[#C9A96E] font-medium tracking-wide">
+                  <p className="text-sm text-[#B8A17E] font-medium tracking-wide">
                     {t.proofUploading}
                   </p>
                   <p className="text-xs text-[#B8A99A] mt-1 leading-relaxed">
@@ -330,7 +330,7 @@ export default function UkolyPage() {
               </div>
               <div className="mt-3 h-0.5 w-full overflow-hidden rounded-full bg-[#2A2520]">
                 <motion.div
-                  className="h-full bg-[#C9A96E]"
+                  className="h-full bg-[#B8A17E]"
                   initial={{ width: '0%' }}
                   animate={{ width: '92%' }}
                   transition={{ duration: 8, ease: 'easeOut' }}
@@ -370,7 +370,7 @@ export default function UkolyPage() {
           <motion.span
             animate={{ rotate: showQr ? 180 : 0 }}
             transition={{ duration: 0.25 }}
-            className="text-[#C9A96E] text-sm"
+            className="text-[#B8A17E] text-sm"
           >
             ↓
           </motion.span>

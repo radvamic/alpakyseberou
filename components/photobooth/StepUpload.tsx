@@ -86,7 +86,7 @@ export default function StepUpload({ onPhotoSelected }: StepUploadProps) {
         <h3 className="font-[family-name:var(--font-cormorant)] text-xl sm:text-2xl text-[#F5F0E8] text-center">
           {t('photobooth.previewTitle') as string}
         </h3>
-        <div className="relative w-48 h-48 sm:w-64 sm:h-64 rounded-2xl overflow-hidden border-2 border-[#C9A96E]/30">
+        <div className="relative w-48 h-48 sm:w-64 sm:h-64 rounded-2xl overflow-hidden border-2 border-[#B8A17E]/30">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={preview} alt="" className="w-full h-full object-cover" />
         </div>
@@ -99,7 +99,7 @@ export default function StepUpload({ onPhotoSelected }: StepUploadProps) {
           </button>
           <button
             onClick={handleConfirm}
-            className="rounded-full border border-[#C9A96E] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:bg-[#C9A96E]/10"
+            className="rounded-full border border-[#B8A17E] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#B8A17E] transition-all duration-500 hover:bg-[#B8A17E]/10"
           >
             {t('photobooth.next') as string}
           </button>
@@ -120,7 +120,7 @@ export default function StepUpload({ onPhotoSelected }: StepUploadProps) {
       {/* Camera button - primary on mobile */}
       <motion.button
         onClick={() => cameraInputRef.current?.click()}
-        className="w-full sm:w-auto flex items-center justify-center gap-3 rounded-full bg-[#C9A96E]/10 border border-[#C9A96E] px-8 py-4 text-[#C9A96E] text-sm tracking-[0.1em] uppercase transition-all hover:bg-[#C9A96E]/20 sm:hidden"
+        className="w-full sm:w-auto flex items-center justify-center gap-3 rounded-full bg-[#B8A17E]/10 border border-[#B8A17E] px-8 py-4 text-[#B8A17E] text-sm tracking-[0.1em] uppercase transition-all hover:bg-[#B8A17E]/20 sm:hidden"
         whileTap={{ scale: 0.97 }}
       >
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -149,14 +149,14 @@ export default function StepUpload({ onPhotoSelected }: StepUploadProps) {
         onClick={() => fileInputRef.current?.click()}
         className={`w-full cursor-pointer rounded-2xl border-2 border-dashed p-8 sm:p-12 text-center transition-all duration-300 ${
           isDragging
-            ? 'border-[#C9A96E] bg-[#C9A96E]/10'
-            : 'border-[#2A2520] hover:border-[#C9A96E]/30 hover:bg-[#1A1A1A]'
+            ? 'border-[#B8A17E] bg-[#B8A17E]/10'
+            : 'border-[#2A2520] hover:border-[#B8A17E]/30 hover:bg-[#1A1A1A]'
         }`}
       >
         <div className="flex flex-col items-center gap-4">
           <div className="text-4xl sm:text-5xl opacity-50">🦙</div>
           <div>
-            <p className="text-sm text-[#C9A96E]/80 mb-1">
+            <p className="text-sm text-[#B8A17E]/80 mb-1">
               {t('photobooth.dragDrop') as string}
             </p>
             <p className="text-xs text-[#B8A99A]/60">
@@ -179,7 +179,7 @@ export default function StepUpload({ onPhotoSelected }: StepUploadProps) {
       {/* Camera button for desktop */}
       <button
         onClick={() => cameraInputRef.current?.click()}
-        className="hidden sm:flex items-center gap-2 text-sm text-[#B8A99A] hover:text-[#C9A96E] transition-colors"
+        className="hidden sm:flex items-center gap-2 text-sm text-[#B8A99A] hover:text-[#B8A17E] transition-colors"
       >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />

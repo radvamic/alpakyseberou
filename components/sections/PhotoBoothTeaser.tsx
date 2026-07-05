@@ -11,7 +11,7 @@ export default function PhotoBoothTeaser() {
     <section className="relative py-20 md:py-28 bg-[#0A0A0A] overflow-hidden">
       {/* Subtle background glow */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#C9A96E]/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#B8A17E]/5 rounded-full blur-3xl" />
       </div>
 
       <div className="mx-auto max-w-3xl px-6 text-center relative z-10">
@@ -28,7 +28,7 @@ export default function PhotoBoothTeaser() {
         </motion.div>
 
         <motion.span
-          className="block font-[family-name:var(--font-great-vibes)] text-xl sm:text-2xl text-[#C9A96E] mb-2"
+          className="block font-[family-name:var(--font-great-vibes)] text-xl sm:text-2xl text-[#B8A17E] mb-2"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -65,7 +65,7 @@ export default function PhotoBoothTeaser() {
         >
           <Link
             href="/fotokoutek"
-            className="inline-flex items-center gap-3 rounded-full border border-[#C9A96E] bg-[#C9A96E]/10 px-8 py-4 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:bg-[#C9A96E]/20 hover:shadow-[0_0_30px_rgba(201,169,110,0.15)]"
+            className="inline-flex items-center gap-3 rounded-full border border-[#B8A17E] bg-[#B8A17E]/10 px-8 py-4 text-sm tracking-[0.15em] uppercase text-[#B8A17E] transition-all duration-500 hover:bg-[#B8A17E]/20 hover:shadow-[0_0_30px_rgba(201,169,110,0.15)]"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />

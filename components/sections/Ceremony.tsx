@@ -51,13 +51,13 @@ export default function Ceremony() {
               {/* Day header — clickable */}
               <button
                 onClick={() => toggle(dayIndex)}
-                className="w-full flex items-center justify-between gap-4 border border-[#2A2520] bg-[#0A0A0A]/60 px-6 py-5 hover:border-[#C9A96E]/30 transition-all duration-300 group"
+                className="w-full flex items-center justify-between gap-4 border border-[#2A2520] bg-[#0A0A0A]/60 px-6 py-5 hover:border-[#B8A17E]/30 transition-all duration-300 group"
               >
                 <div className="flex items-center gap-4 text-left">
-                  <span className="font-[family-name:var(--font-cormorant)] text-xs tracking-[0.2em] uppercase text-[#C9A96E]">
+                  <span className="font-[family-name:var(--font-cormorant)] text-xs tracking-[0.2em] uppercase text-[#B8A17E]">
                     {day.label}
                   </span>
-                  <span className="hidden sm:block h-px w-6 bg-[#2A2520] group-hover:bg-[#C9A96E]/30 transition-colors" />
+                  <span className="hidden sm:block h-px w-6 bg-[#2A2520] group-hover:bg-[#B8A17E]/30 transition-colors" />
                   <span className="font-[family-name:var(--font-playfair)] text-lg md:text-xl text-[#F5F0E8] font-light">
                     {day.subtitle}
                   </span>
@@ -65,7 +65,7 @@ export default function Ceremony() {
                 <motion.span
                   animate={{ rotate: openDay === dayIndex ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
-                  className="text-[#C9A96E] text-sm flex-shrink-0"
+                  className="text-[#B8A17E] text-sm flex-shrink-0"
                 >
                   ↓
                 </motion.span>
@@ -104,12 +104,12 @@ export default function Ceremony() {
                               key={i}
                               className="relative flex items-start gap-5 pl-2"
                             >
-                              <div className="relative z-10 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-[#C9A96E]/30 bg-[#141414] text-lg">
+                              <div className="relative z-10 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-[#B8A17E]/30 bg-[#141414] text-lg">
                                 {item.icon}
                               </div>
                               <div className="flex-1 py-1">
                                 <div className="flex items-baseline gap-3 mb-1 flex-wrap">
-                                  <span className="font-[family-name:var(--font-playfair)] text-base text-[#C9A96E] font-medium whitespace-nowrap">
+                                  <span className="font-[family-name:var(--font-playfair)] text-base text-[#B8A17E] font-medium whitespace-nowrap">
                                     {item.time}
                                   </span>
                                   <span className="font-[family-name:var(--font-cormorant)] text-lg text-[#F5F0E8] font-semibold">
@@ -140,7 +140,7 @@ export default function Ceremony() {
         >
           <button
             onClick={handleAddToCalendar}
-            className="rounded-full border border-[#C9A96E]/30 bg-transparent px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#C9A96E] transition-all duration-500 hover:border-[#C9A96E] hover:bg-[#C9A96E]/10"
+            className="rounded-full border border-[#B8A17E]/30 bg-transparent px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#B8A17E] transition-all duration-500 hover:border-[#B8A17E] hover:bg-[#B8A17E]/10"
           >
             {t('ceremony.addToCalendar') as string}
           </button>
