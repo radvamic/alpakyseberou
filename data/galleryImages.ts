@@ -1,21 +1,59 @@
 /**
  * Seznam fotek zobrazených v sekci Galerie.
- * Fotky nahrajte do: public/assets/images/gallery/
- * a přidejte sem jejich cesty.
+ * - full: optimalizovaný originál (max 1600px, ~200–500 KB) — používá se v lightboxu
+ * - thumb: miniatura (max 600px, ~20–80 KB) — používá se v mřížce náhledů
+ *
+ * Vygenerováno scriptem: scripts/process-gallery.mjs
  */
-export const galleryImages: string[] = [
-  '/assets/images/gallery/IMG_0057.jpeg',
-  '/assets/images/gallery/IMG_0349.JPG',
-  '/assets/images/gallery/IMG_0506.JPG',
-  '/assets/images/gallery/IMG_0635.JPG',
-  '/assets/images/gallery/IMG_0981.jpeg',
-  '/assets/images/gallery/IMG_1246.jpeg',
-  '/assets/images/gallery/IMG_1379.jpeg',
-  '/assets/images/gallery/IMG_2081.jpeg',
-  '/assets/images/gallery/IMG_2778.jpeg',
-  '/assets/images/gallery/IMG_8214.jpeg',
-  '/assets/images/gallery/IMG_8658.jpeg',
-  '/assets/images/gallery/IMG_9683.jpeg',
-  '/assets/images/gallery/IMG_9803.jpeg',
-  '/assets/images/gallery/IMG_9935.jpeg',
-];
+export interface GalleryImage {
+  full: string;
+  thumb: string;
+}
+
+const BASE = '/assets/images/gallery';
+
+export const galleryImages: GalleryImage[] = [
+  '02EC3E85-BFBB-469B-987F-A4013BB563A5.JPG',
+  '03979E51-BE58-4CD8-8AC6-72ADD5950FB8.JPG',
+  '07B2BF7D-4ECD-40F1-9FE9-DC3DD02B103C.JPG',
+  '16AF34A7-1A41-4F3A-8826-C727DE748620.JPG',
+  '26E7A24B-7E71-43A0-A2B2-66F24E917428.JPG',
+  '31E32293-B442-402D-8535-076C9C480AC7.JPG',
+  '3276CDC7-65C8-482B-AA6D-D17F66C67982.JPG',
+  '356CCD36-6EA6-43BF-86EC-255D6007EC9A.JPG',
+  '42A9F0B2-0D5D-4650-B14E-046F3D47844B.JPG',
+  '42EFF84A-CCCA-4294-8268-B1E32479D969.JPG',
+  '4CDFD091-EAA4-45A1-A1C7-B31EE3EE4DCD.JPG',
+  '53594D37-8C66-4CF4-B7BD-24FC43B713E8.JPG',
+  '61BE9D4B-D086-4A66-89C4-F47C2C8C53D8.JPG',
+  '6A1AC8C2-B24D-4BE9-8127-43F30B125AE1.JPG',
+  '76FC7D48-FDD2-4ADA-80BD-C94B191BB15B.JPG',
+  '82DEABE8-B332-4199-84A4-C80D475247D0.JPG',
+  '83677A17-5C0D-4C70-B36F-A28210688C78.JPG',
+  '87E1CF68-81E4-4F94-9E6E-1A7DA4852720.JPG',
+  '8841083D-0E27-4ADA-A136-F3B699455721.JPG',
+  '88D5D66B-75B0-4A0C-9A4F-60AB17AB4BC1.JPG',
+  '898F8164-12D7-492D-B764-E7788BFCC235.JPG',
+  '8E5845C7-2392-44F9-A8CA-FF4E4A006500.JPG',
+  '9178B4E9-4A86-4573-974E-EC4EECAE44C6.JPG',
+  '96091952-4FEF-466F-9051-57C8747E9CBB.JPG',
+  'AA40724A-D324-4D70-BD54-5FDDD0E6CB10.JPG',
+  'B30D31D4-7A30-4D12-9E60-AAA676BDF91C.JPG',
+  'B4740D22-DF7B-408E-8508-BD3B9DB35324.JPG',
+  'BCDED44A-FC4D-466F-BA07-017326B9C5C7.JPG',
+  'C5CBDE4B-9543-48A4-9F3B-B234B98270AA.JPG',
+  'C8CEDF90-B38D-4ACF-A4FD-D448AAFECC03.JPG',
+  'D9F1B327-0A62-4BE7-9C08-5E4198355EC0.JPG',
+  'DC5CAADE-10FC-4E8A-8B40-6CDE3358E0B0.JPG',
+  'E3ACF273-7E06-42B6-89FE-38436DF4C97D.JPG',
+  'EDFB9FC9-93A9-409E-8BFD-702607068478.JPG',
+  'EEBA5AAB-EDB1-4D41-A274-42EA2E90EDB6.JPG',
+  'EF469283-C027-4196-8926-D0DB7A23B539.JPG',
+  'F08C3CD3-1783-4981-B1CE-F259C1CF78FE.JPG',
+  'F29C623C-0472-4BDB-BB29-C6548C2329F4.JPG',
+  'F7C608D0-3258-4806-8533-EC5B15F24B11.JPG',
+  'FA6ABFF8-2B61-49EB-BD3A-6F9DCC16DA50.JPG',
+].map(filename => ({
+  full: `${BASE}/${filename}`,
+  thumb: `${BASE}/thumbs/${filename.replace(/\.[^.]+$/, '.jpg')}`,
+}));

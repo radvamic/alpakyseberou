@@ -24,6 +24,7 @@ export default function Gallery() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [expanded, setExpanded] = useState(false);
   const hasImages = galleryImages.length > 0;
+  const count = hasImages ? galleryImages.length : galleryPlaceholders.length;
 
   return (
     <section id="gallery" className="relative pt-0 pb-8 bg-[#141414]">
@@ -37,20 +38,20 @@ export default function Gallery() {
         <div className="flex justify-center mb-8">
           <button
             onClick={() => setExpanded(!expanded)}
-            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#C9A96E] transition-colors duration-300"
+            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#B8A17E] transition-colors duration-300"
           >
-            <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
             {expanded
               ? (locale === 'cs' ? 'Skrýt' : 'Hide')
               : (locale === 'cs' ? 'Zobrazit galerii' : 'Show gallery')}
             <motion.span
               animate={{ rotate: expanded ? 180 : 0 }}
               transition={{ duration: 0.3 }}
-              className="text-[#C9A96E]"
+              className="text-[#B8A17E]"
             >
               ↓
             </motion.span>
-            <span className="h-px w-10 bg-[#C9A96E]/30 group-hover:bg-[#C9A96E]/60 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
           </button>
         </div>
 
@@ -66,32 +67,32 @@ export default function Gallery() {
               {/* Masonry Grid */}
               <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4 pb-8">
                 {hasImages
-                  ? galleryImages.map((src, i) => {
+                  ? galleryImages.map((img, i) => {
                       const layout = galleryPlaceholders[i % galleryPlaceholders.length];
                       return (
                         <motion.div
-                          key={src + i}
-                          className={`group relative break-inside-avoid overflow-hidden rounded-xl border border-[#2A2520] bg-[#1A1A1A] w-full ${layout.h} cursor-pointer hover:border-[#C9A96E]/30 transition-all duration-500`}
+                          key={img.thumb}
+                          className={`group relative break-inside-avoid overflow-hidden rounded-xl border border-[#2A2520] bg-[#1A1A1A] w-full ${layout.h} cursor-pointer hover:border-[#B8A17E]/30 transition-all duration-500`}
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: (i % 3) * 0.1 }}
                           onClick={() => setLightboxIndex(i)}
                         >
                           <Image
-                            src={src}
+                            src={img.thumb}
                             alt=""
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-500"
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           />
-                          <div className="absolute inset-0 bg-[#C9A96E]/0 group-hover:bg-[#C9A96E]/5 transition-colors duration-500" />
+                          <div className="absolute inset-0 bg-[#B8A17E]/0 group-hover:bg-[#B8A17E]/5 transition-colors duration-500" />
                         </motion.div>
                       );
                     })
                   : galleryPlaceholders.map((item, i) => (
                       <motion.div
                         key={i}
-                        className={`group relative break-inside-avoid overflow-hidden rounded-xl border border-[#2A2520] bg-[#1A1A1A] ${item.h} cursor-pointer hover:border-[#C9A96E]/30 transition-all duration-500`}
+                        className={`group relative break-inside-avoid overflow-hidden rounded-xl border border-[#2A2520] bg-[#1A1A1A] ${item.h} cursor-pointer hover:border-[#B8A17E]/30 transition-all duration-500`}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: (i % 3) * 0.1 }}
@@ -102,7 +103,7 @@ export default function Gallery() {
                             📷
                           </span>
                         </div>
-                        <div className="absolute inset-0 bg-[#C9A96E]/0 group-hover:bg-[#C9A96E]/5 transition-colors duration-500" />
+                        <div className="absolute inset-0 bg-[#B8A17E]/0 group-hover:bg-[#B8A17E]/5 transition-colors duration-500" />
                       </motion.div>
                     ))}
               </div>
@@ -131,7 +132,7 @@ export default function Gallery() {
             >
               {hasImages ? (
                 <Image
-                  src={galleryImages[lightboxIndex]}
+                  src={galleryImages[lightboxIndex].full}
                   alt=""
                   width={1200}
                   height={900}
@@ -149,7 +150,7 @@ export default function Gallery() {
 
             <button
               onClick={() => setLightboxIndex(null)}
-              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#C9A96E] hover:border-[#C9A96E]/50 transition-all duration-300 text-xl"
+              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#B8A17E] hover:border-[#B8A17E]/50 transition-all duration-300 text-xl"
             >
               ×
             </button>
@@ -160,7 +161,7 @@ export default function Gallery() {
                   e.stopPropagation();
                   setLightboxIndex(lightboxIndex - 1);
                 }}
-                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#C9A96E] hover:border-[#C9A96E]/50 transition-all duration-300"
+                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#B8A17E] hover:border-[#B8A17E]/50 transition-all duration-300"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="15 18 9 12 15 6" />
@@ -173,7 +174,7 @@ export default function Gallery() {
                   e.stopPropagation();
                   setLightboxIndex(lightboxIndex + 1);
                 }}
-                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#C9A96E] hover:border-[#C9A96E]/50 transition-all duration-300"
+                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#B8A17E] hover:border-[#B8A17E]/50 transition-all duration-300"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="9 18 15 12 9 6" />
