@@ -16,7 +16,7 @@ export default function AlpacaSectionDivider({
   return (
     <div className="flex flex-col items-center justify-center py-8 md:py-10" aria-hidden>
       <div className="flex items-center justify-center gap-4 w-full">
-        <div className="h-px flex-1 max-w-[120px] bg-gradient-to-r from-transparent to-[#B8A17E]/40" />
+        <div className="h-px flex-1 max-w-[120px] bg-gradient-to-r from-transparent to-[#d8b28c]/40" />
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -34,7 +34,7 @@ export default function AlpacaSectionDivider({
               className="opacity-70 block"
             />
           ) : (
-            <div className="flex items-center gap-1 text-[#B8A17E]/50">
+            <div className="flex items-center gap-1 text-[#d8b28c]/50">
               <svg viewBox="0 0 24 4" className="w-6 h-1">
                 <circle cx="2" cy="2" r="1.5" fill="currentColor" />
                 <circle cx="12" cy="2" r="1.5" fill="currentColor" />
@@ -43,7 +43,7 @@ export default function AlpacaSectionDivider({
             </div>
           )}
         </motion.div>
-        <div className="h-px flex-1 max-w-[120px] bg-gradient-to-l from-transparent to-[#B8A17E]/40" />
+        <div className="h-px flex-1 max-w-[120px] bg-gradient-to-l from-transparent to-[#d8b28c]/40" />
       </div>
     </div>
   );

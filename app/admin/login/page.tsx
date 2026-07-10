@@ -38,26 +38,26 @@ export default function AdminLoginPage() {
     <div className="flex min-h-screen items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="mb-10 text-center">
-          <div className="mb-4 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#B8A17E] to-transparent" />
+          <div className="mb-4 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#d8b28c] to-transparent" />
           <h1 className="font-[family-name:var(--font-playfair)] text-3xl font-light text-[#F5F0E8] mb-2">
             Administrace
           </h1>
           <p className="font-[family-name:var(--font-cormorant)] text-[#7a6e65] text-sm tracking-widest uppercase">
             Klára & Michal 2026
           </p>
-          <div className="mt-4 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#B8A17E] to-transparent" />
+          <div className="mt-4 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#d8b28c] to-transparent" />
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="relative border border-[#B8A17E]/15 px-8 py-10">
-            <span className="absolute top-0 left-0 w-4 h-4 border-t border-l border-[#B8A17E]/50" />
-            <span className="absolute top-0 right-0 w-4 h-4 border-t border-r border-[#B8A17E]/50" />
-            <span className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-[#B8A17E]/50" />
-            <span className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-[#B8A17E]/50" />
+          <div className="relative border border-[#d8b28c]/15 px-8 py-10">
+            <span className="absolute top-0 left-0 w-4 h-4 border-t border-l border-[#d8b28c]/50" />
+            <span className="absolute top-0 right-0 w-4 h-4 border-t border-r border-[#d8b28c]/50" />
+            <span className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-[#d8b28c]/50" />
+            <span className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-[#d8b28c]/50" />
 
             <div className="space-y-6">
               <div>
-                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#B8A17E]">
+                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#d8b28c]">
                   Heslo
                 </label>
                 <input

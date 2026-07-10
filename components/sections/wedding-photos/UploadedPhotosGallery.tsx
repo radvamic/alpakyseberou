@@ -102,7 +102,7 @@ function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
       {/* Close */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-[#1A1A1A]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#B8A17E] hover:border-[#B8A17E]/50 transition-all"
+        className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-[#1A1A1A]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#d8b28c] hover:border-[#d8b28c]/50 transition-all"
         aria-label="Zavřít"
       >
         ✕
@@ -119,7 +119,7 @@ function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
       {total > 1 && (
         <button
           onClick={(e) => { e.stopPropagation(); prev(); }}
-          className="absolute left-3 sm:left-6 w-10 h-10 rounded-full bg-[#1A1A1A]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#B8A17E] hover:border-[#B8A17E]/50 transition-all text-lg"
+          className="absolute left-3 sm:left-6 w-10 h-10 rounded-full bg-[#1A1A1A]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#d8b28c] hover:border-[#d8b28c]/50 transition-all text-lg"
           aria-label="Předchozí"
         >
           ‹
@@ -155,7 +155,7 @@ function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
       {total > 1 && (
         <button
           onClick={(e) => { e.stopPropagation(); next(); }}
-          className="absolute right-3 sm:right-6 w-10 h-10 rounded-full bg-[#1A1A1A]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#B8A17E] hover:border-[#B8A17E]/50 transition-all text-lg"
+          className="absolute right-3 sm:right-6 w-10 h-10 rounded-full bg-[#1A1A1A]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#d8b28c] hover:border-[#d8b28c]/50 transition-all text-lg"
           aria-label="Další"
         >
           ›
@@ -182,7 +182,7 @@ function PhotoGrid({ items }: { items: PhotoEntry[] }) {
             key={photo.id}
             type="button"
             onClick={() => setLightbox({ photos: lbPhotos, index: i })}
-            className="break-inside-avoid w-full rounded-xl overflow-hidden border border-[#2A2520] hover:border-[#B8A17E]/30 transition-colors duration-300 text-left group"
+            className="break-inside-avoid w-full rounded-xl overflow-hidden border border-[#2A2520] hover:border-[#d8b28c]/30 transition-colors duration-300 text-left group"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: (i % 4) * 0.04 }}
@@ -234,7 +234,7 @@ function CameraSessionCard({
       <button
         type="button"
         onClick={() => onOpenLightbox(0)}
-        className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B8A17E]/50 group"
+        className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d8b28c]/50 group"
       >
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#1A1A1A]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -244,11 +244,11 @@ function CameraSessionCard({
             className="h-full w-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
             loading="lazy"
           />
-          <span className="absolute top-2 right-2 rounded-full bg-[#0A0A0A]/80 px-2.5 py-1 text-[10px] tracking-wider uppercase text-[#B8A17E]">
+          <span className="absolute top-2 right-2 rounded-full bg-[#0A0A0A]/80 px-2.5 py-1 text-[10px] tracking-wider uppercase text-[#d8b28c]">
             {labels.photoCount(session.photos.length)}
           </span>
           <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <span className="w-10 h-10 rounded-full bg-[#0A0A0A]/70 border border-[#B8A17E]/60 flex items-center justify-center text-[#B8A17E] text-xl">
+            <span className="w-10 h-10 rounded-full bg-[#0A0A0A]/70 border border-[#d8b28c]/60 flex items-center justify-center text-[#d8b28c] text-xl">
               ⊕
             </span>
           </span>
@@ -268,7 +268,7 @@ function CameraSessionCard({
               key={photo.id}
               type="button"
               onClick={() => onOpenLightbox(i + 1)}
-              className="shrink-0 w-14 h-14 rounded overflow-hidden border border-[#2A2520] hover:border-[#B8A17E]/40 transition-colors focus:outline-none"
+              className="shrink-0 w-14 h-14 rounded overflow-hidden border border-[#2A2520] hover:border-[#d8b28c]/40 transition-colors focus:outline-none"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -283,7 +283,7 @@ function CameraSessionCard({
             <button
               type="button"
               onClick={() => onOpenLightbox(7)}
-              className="shrink-0 w-14 h-14 rounded border border-[#2A2520] bg-[#1A1A1A] flex items-center justify-center text-[10px] text-[#B8A17E] font-semibold hover:border-[#B8A17E]/40 transition-colors"
+              className="shrink-0 w-14 h-14 rounded border border-[#2A2520] bg-[#1A1A1A] flex items-center justify-center text-[10px] text-[#d8b28c] font-semibold hover:border-[#d8b28c]/40 transition-colors"
             >
               +{session.photos.length - 7}
             </button>
@@ -372,18 +372,18 @@ export default function UploadedPhotosGallery({
         <button
           type="button"
           onClick={() => setShowGallery((v) => !v)}
-          className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#B8A17E] transition-colors duration-300"
+          className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#d8b28c] transition-colors duration-300"
         >
-          <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+          <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
           {showGallery ? labels.toggleHide : labels.toggleShow}
           <motion.span
             animate={{ rotate: showGallery ? 180 : 0 }}
             transition={{ duration: 0.3 }}
-            className="text-[#B8A17E]"
+            className="text-[#d8b28c]"
           >
             ↓
           </motion.span>
-          <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+          <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
         </button>
       </div>
 
@@ -405,8 +405,8 @@ export default function UploadedPhotosGallery({
                   onClick={() => setTab(id)}
                   className={`rounded-full px-4 py-2 text-xs tracking-[0.12em] uppercase transition-all duration-300 ${
                     tab === id
-                      ? 'bg-[#B8A17E] text-[#0A0A0A] font-semibold'
-                      : 'border border-[#2A2520] text-[#B8A99A] hover:border-[#B8A17E]/40'
+                      ? 'bg-[#d8b28c] text-[#0A0A0A] font-semibold'
+                      : 'border border-[#2A2520] text-[#B8A99A] hover:border-[#d8b28c]/40'
                   }`}
                 >
                   {labels.tabs[id]}

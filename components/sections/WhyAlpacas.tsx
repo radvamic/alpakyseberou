@@ -10,7 +10,7 @@ function AlpacaIllustration() {
   return (
     <motion.svg
       viewBox="0 0 80 60"
-      className="mx-auto h-24 w-32 text-[#B8A17E]/90"
+      className="mx-auto h-24 w-32 text-[#d8b28c]/90"
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -61,20 +61,20 @@ export default function WhyAlpacas() {
         <div className="flex justify-center mb-8">
           <button
             onClick={() => setExpanded(!expanded)}
-            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#B8A17E] transition-colors duration-300"
+            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#d8b28c] transition-colors duration-300"
           >
-            <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
             {expanded
               ? (locale === 'cs' ? 'Skrýt' : 'Hide')
               : (locale === 'cs' ? 'Číst více' : 'Read more')}
             <motion.span
               animate={{ rotate: expanded ? 180 : 0 }}
               transition={{ duration: 0.3 }}
-              className="text-[#B8A17E]"
+              className="text-[#d8b28c]"
             >
               ↓
             </motion.span>
-            <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
           </button>
         </div>
 

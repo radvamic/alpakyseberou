@@ -27,16 +27,16 @@ export default function FAQ() {
         <div className="flex justify-center mb-8">
           <button
             onClick={() => setExpanded(!expanded)}
-            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#B8A17E] transition-colors duration-300"
+            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#d8b28c] transition-colors duration-300"
           >
-            <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
             {expanded ? (locale === 'cs' ? 'Skrýt' : 'Hide') : (locale === 'cs' ? 'Zobrazit' : 'Show')}
             <motion.span
               animate={{ rotate: expanded ? 180 : 0 }}
               transition={{ duration: 0.3 }}
-              className="text-[#B8A17E]"
+              className="text-[#d8b28c]"
             >↓</motion.span>
-            <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
           </button>
         </div>
 
@@ -53,7 +53,7 @@ export default function FAQ() {
           {questions.map((item, i) => (
             <motion.div
               key={i}
-              className="overflow-hidden rounded-xl border border-[#2A2520] bg-[#111111] hover:border-[#B8A17E]/20 transition-colors duration-500"
+              className="overflow-hidden rounded-xl border border-[#2A2520] bg-[#111111] hover:border-[#d8b28c]/20 transition-colors duration-500"
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -67,7 +67,7 @@ export default function FAQ() {
                   {item.q}
                 </span>
                 <motion.span
-                  className="text-[#B8A17E] text-xl flex-shrink-0"
+                  className="text-[#d8b28c] text-xl flex-shrink-0"
                   animate={{ rotate: openIndex === i ? 45 : 0 }}
                   transition={{ duration: 0.3 }}
                 >

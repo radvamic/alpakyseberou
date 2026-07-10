@@ -3,16 +3,21 @@
 @theme inline {
   --color-background: #0A0A0A;
   --color-foreground: #F5F0E8;
-  --color-gold: #B8A17E;
-  --color-gold-bright: #C8AF93;
-  --color-gold-light: #E5D5CA;
+  --color-green: #4d5a46;
+  --color-rose: #c6706d;
+  --color-pink-light: #f1d5c4;
+  --color-beige: #d8b28c;
+  --color-gold: #d8b28c;
+  --color-gold-bright: #e8c9a0;
+  --color-gold-light: #f1d5c4;
   --color-cream: #F5F0E8;
   --color-cream-muted: #B8A99A;
   --color-dark: #0A0A0A;
   --color-dark-card: #141414;
   --color-dark-warm: #1E1B18;
   --color-dark-border: #2A2520;
-  --color-champagne: #E5D5CA;
+  --color-champagne: #f1d5c4;
+  --gold-gradient: linear-gradient(135deg, #f8ecd4 0%, #e8d4a8 22%, #c9a86c 42%, #b8945a 55%, #e8d4a8 72%, #f8ecd4 100%);
 
   --font-heading: var(--font-cormorant);
   --font-body: var(--font-inter);
@@ -28,13 +33,13 @@
   background: #0A0A0A;
 }
 ::-webkit-scrollbar-thumb {
-  background: #B8A17E;
+  background: #d8b28c;
   border-radius: 3px;
 }
 
 /* Selection */
 ::selection {
-  background: rgba(184, 161, 126, 0.3);
+  background: rgba(216, 178, 140, 0.3);
   color: #F5F0E8;
 }
 
@@ -67,9 +72,13 @@ html.lenis body {
   overflow: hidden;
 }
 
-/* Gold gradient text utility */
+/* Gold gradient utilities */
+.gold-gradient-bg {
+  background: url('/assets/images/gold-gradient.png') center / cover no-repeat;
+}
+
 .gold-gradient-text {
-  background: linear-gradient(135deg, #B8A17E, #C8AF93, #E5D5CA, #B8A17E);
+  background: url('/assets/images/gold-gradient.png') center / cover no-repeat;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -82,7 +91,7 @@ html.lenis body {
 }
 
 .gold-shimmer {
-  background: linear-gradient(90deg, #B8A17E, #C8AF93, #E5D5CA, #C8AF93, #B8A17E);
+  background: linear-gradient(90deg, #d8b28c, #f1d5c4, #e8c9a0, #f1d5c4, #d8b28c);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -122,7 +131,7 @@ html.lenis body {
 /* Section divider */
 .section-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, #B8A17E, transparent);
+  background: linear-gradient(90deg, transparent, #d8b28c, transparent);
   margin: 0;
 }
 
@@ -142,7 +151,7 @@ input, textarea, select {
 
 input:focus, textarea:focus, select:focus {
   outline: none !important;
-  border-bottom-color: #B8A17E !important;
+  border-bottom-color: #d8b28c !important;
   box-shadow: none !important;
 }
 
@@ -166,23 +175,23 @@ input::placeholder, textarea::placeholder {
 
 .rsvp-input:focus {
   outline: none !important;
-  border-bottom-color: #B8A17E !important;
+  border-bottom-color: #d8b28c !important;
 }
 
 .rsvp-btn {
-  border: 1px solid rgba(184, 161, 126, 0.4);
+  border: 1px solid rgba(216, 178, 140, 0.4);
   padding: 12px 32px;
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #B8A17E;
+  color: #d8b28c;
   transition: all 0.4s ease;
   background: transparent;
 }
 
 .rsvp-btn:hover {
-  border-color: #B8A17E;
-  background: rgba(184, 161, 126, 0.08);
+  border-color: #d8b28c;
+  background: rgba(216, 178, 140, 0.08);
 }
 
 .rsvp-btn:disabled {
@@ -202,7 +211,7 @@ input::placeholder, textarea::placeholder {
 }
 
 .rsvp-back:hover {
-  color: #B8A17E;
+  color: #d8b28c;
 }
 
 /* Map dark theme */
@@ -216,7 +225,7 @@ input::placeholder, textarea::placeholder {
   .custom-cursor {
     width: 20px;
     height: 20px;
-    border: 1.5px solid #B8A17E;
+    border: 1.5px solid #d8b28c;
     border-radius: 50%;
     position: fixed;
     pointer-events: none;
@@ -226,6 +235,6 @@ input::placeholder, textarea::placeholder {
   }
   .custom-cursor.hovering {
     transform: scale(2);
-    background: rgba(184, 161, 126, 0.1);
+    background: rgba(216, 178, 140, 0.1);
   }
 }

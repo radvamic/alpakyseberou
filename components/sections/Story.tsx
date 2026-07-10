@@ -102,20 +102,20 @@ export default function Story() {
         <div className="flex justify-center mb-8">
           <button
             onClick={() => setExpanded(!expanded)}
-            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#B8A17E] transition-colors duration-300"
+            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#d8b28c] transition-colors duration-300"
           >
-            <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
             {expanded
               ? (locale === 'cs' ? 'Skrýt' : 'Hide')
               : (locale === 'cs' ? 'Zobrazit příběh' : 'Show story')}
             <motion.span
               animate={{ rotate: expanded ? 180 : 0 }}
               transition={{ duration: 0.3 }}
-              className="text-[#B8A17E]"
+              className="text-[#d8b28c]"
             >
               ↓
             </motion.span>
-            <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
           </button>
         </div>
 
@@ -133,7 +133,7 @@ export default function Story() {
           {/* Animated gold timeline line */}
           <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[1px] bg-[#2A2520] md:-translate-x-[0.5px]">
             <motion.div
-              className="w-full bg-gradient-to-b from-[#B8A17E] to-[#C8AF93]"
+              className="w-full bg-gradient-to-b from-[#d8b28c] to-[#e8c9a0]"
               style={{ height: lineHeight }}
             />
           </div>
@@ -153,7 +153,7 @@ export default function Story() {
                 >
                   {/* Timeline dot */}
                   <motion.div
-                    className="absolute left-4 md:left-1/2 w-3 h-3 rounded-full border-2 border-[#B8A17E] bg-[#0A0A0A] -translate-x-[5px] md:-translate-x-[6px] mt-2 z-10"
+                    className="absolute left-4 md:left-1/2 w-3 h-3 rounded-full border-2 border-[#d8b28c] bg-[#0A0A0A] -translate-x-[5px] md:-translate-x-[6px] mt-2 z-10"
                     initial={{ scale: 0 }}
                     whileInView={{ scale: 1 }}
                     viewport={{ once: true, margin: '-50px' }}
@@ -170,7 +170,7 @@ export default function Story() {
                     viewport={{ once: true, margin: '-50px' }}
                     transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
                   >
-                    <div className="group relative overflow-hidden rounded-2xl border border-[#2A2520] bg-[#141414]/80 backdrop-blur-sm hover:border-[#B8A17E]/30 transition-colors duration-500">
+                    <div className="group relative overflow-hidden rounded-2xl border border-[#2A2520] bg-[#141414]/80 backdrop-blur-sm hover:border-[#d8b28c]/30 transition-colors duration-500">
                       {/* Photo */}
                       {photoSrc && (
                         <div
@@ -187,8 +187,8 @@ export default function Story() {
                           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#141414]/90" />
                           {/* Zoom hint on hover */}
                           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            <div className="w-10 h-10 rounded-full bg-black/50 border border-[#B8A17E]/50 flex items-center justify-center backdrop-blur-sm">
-                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B8A17E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <div className="w-10 h-10 rounded-full bg-black/50 border border-[#d8b28c]/50 flex items-center justify-center backdrop-blur-sm">
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d8b28c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <circle cx="11" cy="11" r="8" />
                                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
                                 <line x1="11" y1="8" x2="11" y2="14" />
@@ -202,7 +202,7 @@ export default function Story() {
                       {/* Text content */}
                       <div className="p-6 md:p-8">
                         {/* Date badge */}
-                        <span className="inline-block mb-3 text-xs tracking-[0.2em] uppercase text-[#B8A17E] font-[family-name:var(--font-cormorant)] font-semibold">
+                        <span className="inline-block mb-3 text-xs tracking-[0.2em] uppercase text-[#d8b28c] font-[family-name:var(--font-cormorant)] font-semibold">
                           {chapter.date}
                         </span>
 
@@ -259,7 +259,7 @@ export default function Story() {
 
               {/* Caption */}
               <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent rounded-b-lg">
-                <span className="block text-xs tracking-[0.2em] uppercase text-[#B8A17E] font-[family-name:var(--font-cormorant)] font-semibold mb-1">
+                <span className="block text-xs tracking-[0.2em] uppercase text-[#d8b28c] font-[family-name:var(--font-cormorant)] font-semibold mb-1">
                   {chapters[lightboxIndex]?.date}
                 </span>
                 <h3 className="font-[family-name:var(--font-playfair)] text-lg md:text-xl text-[#F5F0E8] font-light">
@@ -271,7 +271,7 @@ export default function Story() {
             {/* Close button */}
             <button
               onClick={closeLightbox}
-              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#B8A17E] hover:border-[#B8A17E]/50 transition-all duration-300"
+              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#d8b28c] hover:border-[#d8b28c]/50 transition-all duration-300"
               aria-label="Close"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -284,7 +284,7 @@ export default function Story() {
             {currentLightboxPos > 0 && (
               <button
                 onClick={(e) => { e.stopPropagation(); goPrev(); }}
-                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#B8A17E] hover:border-[#B8A17E]/50 transition-all duration-300"
+                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#d8b28c] hover:border-[#d8b28c]/50 transition-all duration-300"
                 aria-label="Previous photo"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -297,7 +297,7 @@ export default function Story() {
             {currentLightboxPos < photosWithIndex.length - 1 && (
               <button
                 onClick={(e) => { e.stopPropagation(); goNext(); }}
-                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#B8A17E] hover:border-[#B8A17E]/50 transition-all duration-300"
+                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#d8b28c] hover:border-[#d8b28c]/50 transition-all duration-300"
                 aria-label="Next photo"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -51,7 +51,7 @@ export default function PhotoWall() {
           {[0, 1, 2].map((i) => (
             <motion.div
               key={i}
-              className="w-2 h-2 rounded-full bg-[#B8A17E]"
+              className="w-2 h-2 rounded-full bg-[#d8b28c]"
               animate={{ opacity: [0.3, 1, 0.3] }}
               transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
             />
@@ -75,7 +75,7 @@ export default function PhotoWall() {
           {t('photobooth.wallTitle') as string}
         </motion.h3>
         <motion.div
-          className="mx-auto mt-4 h-[1px] bg-gradient-to-r from-transparent via-[#B8A17E] to-transparent"
+          className="mx-auto mt-4 h-[1px] bg-gradient-to-r from-transparent via-[#d8b28c] to-transparent"
           initial={{ width: 0 }}
           whileInView={{ width: 80 }}
           viewport={{ once: true }}
@@ -89,7 +89,7 @@ export default function PhotoWall() {
           return (
             <motion.div
               key={entry.id}
-              className="break-inside-avoid rounded-xl border border-[#2A2520] bg-[#111111] overflow-hidden hover:border-[#B8A17E]/20 transition-colors duration-500 cursor-pointer"
+              className="break-inside-avoid rounded-xl border border-[#2A2520] bg-[#111111] overflow-hidden hover:border-[#d8b28c]/20 transition-colors duration-500 cursor-pointer"
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -107,7 +107,7 @@ export default function PhotoWall() {
                 />
               </div>
               <div className="p-3 flex items-center gap-3">
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#B8A17E]/30 to-[#B8A17E]/10 flex items-center justify-center text-xs text-[#B8A17E] font-semibold shrink-0">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#d8b28c]/30 to-[#d8b28c]/10 flex items-center justify-center text-xs text-[#d8b28c] font-semibold shrink-0">
                   {entry.userName.charAt(0).toUpperCase()}
                 </div>
                 <div className="min-w-0 flex-1">
@@ -150,7 +150,7 @@ export default function PhotoWall() {
             </motion.div>
             <button
               onClick={() => setLightboxUrl(null)}
-              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#B8A17E] hover:border-[#B8A17E]/50 transition-all duration-300"
+              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#d8b28c] hover:border-[#d8b28c]/50 transition-all duration-300"
             >
               ✕
             </button>

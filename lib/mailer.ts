@@ -63,8 +63,8 @@ export async function sendRsvpNotification(data: {
 
   const html = `
     <div style="background:#0A0A0A;padding:40px 20px;font-family:Georgia,serif;max-width:560px;margin:0 auto">
-      <div style="border-top:1px solid #B8A17E33;border-bottom:1px solid #B8A17E33;padding:32px;margin-bottom:24px">
-        <p style="color:#B8A17E;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 8px">Klára & Michal 2026</p>
+      <div style="border-top:1px solid #d8b28c33;border-bottom:1px solid #d8b28c33;padding:32px;margin-bottom:24px">
+        <p style="color:#d8b28c;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 8px">Klára & Michal 2026</p>
         <h1 style="color:#F5F0E8;font-size:22px;font-weight:400;margin:0">${subject}</h1>
       </div>
       <table style="width:100%;border-collapse:collapse">
@@ -79,7 +79,7 @@ export async function sendRsvpNotification(data: {
         ${rows}
       </table>
       <p style="color:#5a5248;font-size:11px;margin-top:24px;text-align:center">
-        Přehled všech odpovědí: <a href="${process.env.SITE_URL || 'https://alpakyseberou.cz'}/admin" style="color:#B8A17E">administrace</a>
+        Přehled všech odpovědí: <a href="${process.env.SITE_URL || 'https://alpakyseberou.cz'}/admin" style="color:#d8b28c">administrace</a>
       </p>
     </div>
   `;
@@ -119,8 +119,8 @@ export async function sendTestEmail(): Promise<{ ok: boolean; error?: string; co
       subject: '✅ Test emailu — Klára & Michal 2026',
       html: `
         <div style="background:#0A0A0A;padding:40px 20px;font-family:Georgia,serif;max-width:560px;margin:0 auto">
-          <div style="border-top:1px solid #B8A17E33;border-bottom:1px solid #B8A17E33;padding:32px">
-            <p style="color:#B8A17E;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 8px">Klára & Michal 2026</p>
+          <div style="border-top:1px solid #d8b28c33;border-bottom:1px solid #d8b28c33;padding:32px">
+            <p style="color:#d8b28c;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 8px">Klára & Michal 2026</p>
             <h1 style="color:#F5F0E8;font-size:22px;font-weight:400;margin:0">Email funguje! 🎉</h1>
             <p style="color:#B8A99A;margin-top:12px">Notifikace ze svatebního webu jsou správně nakonfigurovány.</p>
           </div>
@@ -154,8 +154,8 @@ export async function sendGuestbookNotification(data: {
 
   const html = `
     <div style="background:#0A0A0A;padding:40px 20px;font-family:Georgia,serif;max-width:560px;margin:0 auto">
-      <div style="border-top:1px solid #B8A17E33;border-bottom:1px solid #B8A17E33;padding:32px;margin-bottom:24px">
-        <p style="color:#B8A17E;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 8px">Klára & Michal 2026</p>
+      <div style="border-top:1px solid #d8b28c33;border-bottom:1px solid #d8b28c33;padding:32px;margin-bottom:24px">
+        <p style="color:#d8b28c;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 8px">Klára & Michal 2026</p>
         <h1 style="color:#F5F0E8;font-size:22px;font-weight:400;margin:0">${subject}</h1>
       </div>
       <table style="width:100%;border-collapse:collapse">
@@ -173,7 +173,7 @@ export async function sendGuestbookNotification(data: {
         ${photosHtml}
       </div>
       <p style="color:#5a5248;font-size:11px;margin-top:24px;text-align:center">
-        Přehled nástěnky: <a href="${process.env.SITE_URL || 'https://alpakyseberou.cz'}/admin" style="color:#B8A17E">administrace</a>
+        Přehled nástěnky: <a href="${process.env.SITE_URL || 'https://alpakyseberou.cz'}/admin" style="color:#d8b28c">administrace</a>
       </p>
     </div>
   `;

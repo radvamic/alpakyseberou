@@ -8,10 +8,11 @@ interface Swatch {
   name: string;
   hex: string;
   brideOnly?: boolean;
+  isGradient?: boolean;
 }
 
 function ColorSwatch({ swatch, index, brideOnlyLabel }: { swatch: Swatch; index: number; brideOnlyLabel: string }) {
-  const isLight = isLightColor(swatch.hex);
+  const isLight = swatch.isGradient || isLightColor(swatch.hex);
 
   return (
     <motion.div
@@ -27,14 +28,17 @@ function ColorSwatch({ swatch, index, brideOnlyLabel }: { swatch: Swatch; index:
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       >
         <div
-          className="w-28 h-28 sm:w-36 sm:h-36 rounded-full shadow-lg"
-          style={{ backgroundColor: swatch.hex, border: swatch.brideOnly ? '1px solid rgba(255,255,255,0.25)' : undefined }}
+          className={`w-28 h-28 sm:w-36 sm:h-36 rounded-full shadow-lg ${swatch.isGradient ? 'gold-gradient-bg' : ''}`}
+          style={{
+            backgroundColor: swatch.isGradient ? undefined : swatch.hex,
+            border: swatch.brideOnly ? '1px solid rgba(255,255,255,0.25)' : undefined,
+          }}
         />
         <motion.div
-          className="absolute inset-0 rounded-full"
-          style={{ backgroundColor: swatch.hex }}
-          initial={{ boxShadow: `0 0 0px 0px ${swatch.hex}00` }}
-          whileHover={{ boxShadow: `0 0 32px 8px ${swatch.hex}55` }}
+          className={`absolute inset-0 rounded-full ${swatch.isGradient ? 'gold-gradient-bg' : ''}`}
+          style={{ backgroundColor: swatch.isGradient ? undefined : swatch.hex }}
+          initial={{ boxShadow: swatch.isGradient ? '0 0 0px 0px transparent' : `0 0 0px 0px ${swatch.hex}00` }}
+          whileHover={{ boxShadow: swatch.isGradient ? '0 0 32px 8px rgba(216,178,140,0.35)' : `0 0 32px 8px ${swatch.hex}55` }}
           transition={{ duration: 0.3 }}
         />
         {/* subtle inner ring */}
@@ -45,8 +49,8 @@ function ColorSwatch({ swatch, index, brideOnlyLabel }: { swatch: Swatch; index:
         {swatch.brideOnly && (
           <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
             <svg viewBox="0 0 100 100" className="w-full h-full">
-              <line x1="15" y1="15" x2="85" y2="85" stroke="#B06F72" strokeWidth="3.5" strokeLinecap="round" />
-              <line x1="85" y1="15" x2="15" y2="85" stroke="#B06F72" strokeWidth="3.5" strokeLinecap="round" />
+              <line x1="15" y1="15" x2="85" y2="85" stroke="#c6706d" strokeWidth="3.5" strokeLinecap="round" />
+              <line x1="85" y1="15" x2="15" y2="85" stroke="#c6706d" strokeWidth="3.5" strokeLinecap="round" />
             </svg>
           </div>
         )}
@@ -55,18 +59,20 @@ function ColorSwatch({ swatch, index, brideOnlyLabel }: { swatch: Swatch; index:
       <div className="text-center">
         <p
           className="font-[family-name:var(--font-cormorant)] text-sm sm:text-base tracking-[0.18em] uppercase text-[#B8A99A]"
-          style={swatch.brideOnly ? { textDecoration: 'line-through', textDecorationColor: '#B06F72', textDecorationThickness: '2px' } : undefined}
+          style={swatch.brideOnly ? { textDecoration: 'line-through', textDecorationColor: '#c6706d', textDecorationThickness: '2px' } : undefined}
         >
           {swatch.name}
         </p>
+        {!swatch.isGradient && (
         <p
           className="mt-1 font-[family-name:var(--font-inter)] text-xs tracking-widest uppercase"
           style={{ color: isLight ? '#B8A99A' : swatch.hex }}
         >
           {swatch.hex}
         </p>
+        )}
         {swatch.brideOnly && (
-          <p className="mt-2 font-[family-name:var(--font-cormorant)] text-xs italic text-[#B06F72]/80 max-w-[120px]">
+          <p className="mt-2 font-[family-name:var(--font-cormorant)] text-xs italic text-[#c6706d]/80 max-w-[120px]">
             {brideOnlyLabel}
           </p>
         )}
@@ -93,7 +99,7 @@ export default function WeddingColors() {
       <div
         className="absolute inset-0 opacity-[0.025]"
         style={{
-          backgroundImage: `radial-gradient(circle, #B8A17E 1px, transparent 1px)`,
+          backgroundImage: `radial-gradient(circle, #d8b28c 1px, transparent 1px)`,
           backgroundSize: '48px 48px',
         }}
       />
@@ -113,7 +119,7 @@ export default function WeddingColors() {
 
         {/* Divider */}
         <motion.div
-          className="mx-auto mb-10 h-[1px] bg-gradient-to-r from-transparent via-[#B8A17E]/40 to-transparent"
+          className="mx-auto mb-10 h-[1px] bg-gradient-to-r from-transparent via-[#d8b28c]/40 to-transparent"
           initial={{ width: 0 }}
           whileInView={{ width: '100%' }}
           viewport={{ once: true }}
@@ -132,7 +138,7 @@ export default function WeddingColors() {
         </motion.p>
 
         <motion.p
-          className="font-[family-name:var(--font-inter)] text-xs tracking-[0.2em] uppercase text-[#B8A17E]/70"
+          className="font-[family-name:var(--font-inter)] text-xs tracking-[0.2em] uppercase text-[#d8b28c]/70"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}

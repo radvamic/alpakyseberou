@@ -36,7 +36,7 @@ export default function RSVP() {
   };
 
   const fireConfetti = () => {
-    const colors = ['#B8A17E', '#E5D5CA', '#C8AF93', '#F5F0E8'];
+    const colors = ['#d8b28c', '#f1d5c4', '#e8c9a0', '#F5F0E8'];
     confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors });
     setTimeout(() => {
       confetti({ particleCount: 50, angle: 60, spread: 55, origin: { x: 0 }, colors });
@@ -84,22 +84,22 @@ export default function RSVP() {
           >
             {attending ? (
               <>
-                <div className="mb-6 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#B8A17E] to-transparent" />
+                <div className="mb-6 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#d8b28c] to-transparent" />
                 <h3 className="font-[family-name:var(--font-playfair)] text-3xl md:text-4xl text-[#F5F0E8] font-light mb-4">
                   {t('rsvp.successYes') as string}
                 </h3>
                 <p className="text-[#B8A99A] font-[family-name:var(--font-cormorant)] text-lg">
                   {t('rsvp.successAlpacaSay') as string}
                 </p>
-                <div className="mt-8 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#B8A17E] to-transparent" />
+                <div className="mt-8 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#d8b28c] to-transparent" />
               </>
             ) : (
               <>
-                <div className="mb-6 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#B8A17E] to-transparent" />
+                <div className="mb-6 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#d8b28c] to-transparent" />
                 <h3 className="font-[family-name:var(--font-playfair)] text-3xl text-[#F5F0E8] font-light">
                   {t('rsvp.successNo') as string}
                 </h3>
-                <div className="mt-8 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#B8A17E] to-transparent" />
+                <div className="mt-8 h-[1px] w-16 mx-auto bg-gradient-to-r from-transparent via-[#d8b28c] to-transparent" />
               </>
             )}
           </motion.div>
@@ -128,12 +128,12 @@ export default function RSVP() {
                 setExpanded(true);
                 setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
               }}
-              className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#B8A17E] transition-colors duration-300"
+              className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#d8b28c] transition-colors duration-300"
             >
-              <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+              <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
               {t('rsvp.title') as string}
-              <motion.span className="text-[#B8A17E]">↓</motion.span>
-              <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+              <motion.span className="text-[#d8b28c]">↓</motion.span>
+              <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
             </button>
           </motion.div>
         )}
@@ -160,15 +160,15 @@ export default function RSVP() {
               <div key={i} className="flex items-center gap-3">
                 <div className={`flex h-7 w-7 items-center justify-center rounded-full border text-xs transition-all duration-500 ${
                   i + 1 < step
-                    ? 'border-[#B8A17E] bg-[#B8A17E] text-[#0A0A0A]'
+                    ? 'border-[#d8b28c] bg-[#d8b28c] text-[#0A0A0A]'
                     : i + 1 === step
-                      ? 'border-[#B8A17E] text-[#B8A17E]'
+                      ? 'border-[#d8b28c] text-[#d8b28c]'
                       : 'border-[#2A2520] text-[#2A2520]'
                 }`}>
                   {i + 1 < step ? '✓' : i + 1}
                 </div>
                 {i < totalSteps - 1 && (
-                  <div className={`h-[1px] w-12 transition-all duration-500 ${i + 1 < step ? 'bg-[#B8A17E]' : 'bg-[#2A2520]'}`} />
+                  <div className={`h-[1px] w-12 transition-all duration-500 ${i + 1 < step ? 'bg-[#d8b28c]' : 'bg-[#2A2520]'}`} />
                 )}
               </div>
             ))}
@@ -178,20 +178,20 @@ export default function RSVP() {
         <div className="flex justify-center mb-6">
           <button
             onClick={() => setExpanded(false)}
-            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#5a5248] hover:text-[#B8A17E] transition-colors duration-300"
+            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#5a5248] hover:text-[#d8b28c] transition-colors duration-300"
           >
-            <span className="h-px w-10 bg-[#B8A17E]/20 group-hover:bg-[#B8A17E]/50 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#d8b28c]/20 group-hover:bg-[#d8b28c]/50 transition-colors duration-300" />
             {t('rsvp.name') as string === 'Vaše jméno' ? 'Skrýt' : 'Hide'} ↑
-            <span className="h-px w-10 bg-[#B8A17E]/20 group-hover:bg-[#B8A17E]/50 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#d8b28c]/20 group-hover:bg-[#d8b28c]/50 transition-colors duration-300" />
           </button>
         </div>
 
-        <div className="relative border border-[#B8A17E]/15 px-8 py-10 md:px-12 md:py-14">
+        <div className="relative border border-[#d8b28c]/15 px-8 py-10 md:px-12 md:py-14">
           {/* Corner accents */}
-          <span className="absolute top-0 left-0 w-4 h-4 border-t border-l border-[#B8A17E]/50" />
-          <span className="absolute top-0 right-0 w-4 h-4 border-t border-r border-[#B8A17E]/50" />
-          <span className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-[#B8A17E]/50" />
-          <span className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-[#B8A17E]/50" />
+          <span className="absolute top-0 left-0 w-4 h-4 border-t border-l border-[#d8b28c]/50" />
+          <span className="absolute top-0 right-0 w-4 h-4 border-t border-r border-[#d8b28c]/50" />
+          <span className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-[#d8b28c]/50" />
+          <span className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-[#d8b28c]/50" />
 
         <AnimatePresence mode="wait" custom={direction}>
           {step === 1 && (
@@ -207,7 +207,7 @@ export default function RSVP() {
             >
               {/* Name */}
               <div className="group">
-                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#B8A17E]">
+                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#d8b28c]">
                   {t('rsvp.name') as string}
                 </label>
                 <input
@@ -221,7 +221,7 @@ export default function RSVP() {
 
               {/* Email */}
               <div className="group">
-                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#B8A17E]">
+                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#d8b28c]">
                   {t('rsvp.email') as string}
                 </label>
                 <input
@@ -235,7 +235,7 @@ export default function RSVP() {
 
               {/* Attendance — clicking directly triggers action */}
               <div>
-                <label className="block mb-4 text-xs tracking-[0.2em] uppercase text-[#B8A17E]">
+                <label className="block mb-4 text-xs tracking-[0.2em] uppercase text-[#d8b28c]">
                   {t('rsvp.attendance') as string}
                 </label>
                 <div className="flex flex-col sm:flex-row gap-4">
@@ -243,7 +243,7 @@ export default function RSVP() {
                     type="button"
                     disabled={!formData.name}
                     onClick={() => { setAttending(true); setDirection(1); setStep(2); }}
-                    className="flex-1 py-4 text-sm tracking-[0.15em] uppercase transition-all duration-500 border-b-2 border-[#2A2520] text-[#B8A99A] hover:border-[#B8A17E]/40 hover:text-[#E5D5CA] disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="flex-1 py-4 text-sm tracking-[0.15em] uppercase transition-all duration-500 border-b-2 border-[#2A2520] text-[#B8A99A] hover:border-[#d8b28c]/40 hover:text-[#f1d5c4] disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     {t('rsvp.attending') as string}
                   </button>
@@ -251,7 +251,7 @@ export default function RSVP() {
                     type="button"
                     disabled={!formData.name}
                     onClick={() => { setAttending(false); handleSubmit(false); }}
-                    className="flex-1 py-4 text-sm tracking-[0.15em] uppercase transition-all duration-500 border-b-2 border-[#2A2520] text-[#B8A99A] hover:border-[#B8A17E]/40 hover:text-[#E5D5CA] disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="flex-1 py-4 text-sm tracking-[0.15em] uppercase transition-all duration-500 border-b-2 border-[#2A2520] text-[#B8A99A] hover:border-[#d8b28c]/40 hover:text-[#f1d5c4] disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     {t('rsvp.notAttending') as string}
                   </button>
@@ -278,7 +278,7 @@ export default function RSVP() {
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
                 <div>
-                  <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#B8A17E]">
+                  <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#d8b28c]">
                     {t('rsvp.guestCount') as string}
                   </label>
                   <select
@@ -292,7 +292,7 @@ export default function RSVP() {
                   </select>
                 </div>
                 <div>
-                  <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#B8A17E]">
+                  <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#d8b28c]">
                     {t('rsvp.menu') as string}
                   </label>
                   <select
@@ -309,7 +309,7 @@ export default function RSVP() {
               </div>
 
               <div>
-                <label className="block mb-4 text-xs tracking-[0.2em] uppercase text-[#B8A17E]">
+                <label className="block mb-4 text-xs tracking-[0.2em] uppercase text-[#d8b28c]">
                   {t('rsvp.children') as string}
                 </label>
                 <div className="flex gap-4">
@@ -320,8 +320,8 @@ export default function RSVP() {
                       onClick={() => updateField('children', val)}
                       className={`px-8 py-3 text-sm tracking-[0.15em] uppercase transition-all duration-500 border-b-2 ${
                         formData.children === val
-                          ? 'border-[#B8A17E] text-[#B8A17E]'
-                          : 'border-[#2A2520] text-[#B8A99A] hover:border-[#B8A17E]/40'
+                          ? 'border-[#d8b28c] text-[#d8b28c]'
+                          : 'border-[#2A2520] text-[#B8A99A] hover:border-[#d8b28c]/40'
                       }`}
                     >
                       {val ? t('rsvp.yes') as string : t('rsvp.no') as string}
@@ -338,7 +338,7 @@ export default function RSVP() {
                   className="grid grid-cols-2 gap-10"
                 >
                   <div>
-                    <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#B8A17E]">
+                    <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#d8b28c]">
                       {t('rsvp.childrenUnder6') as string}
                     </label>
                     <select
@@ -352,7 +352,7 @@ export default function RSVP() {
                     </select>
                   </div>
                   <div>
-                    <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#B8A17E]">
+                    <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#d8b28c]">
                       {t('rsvp.childrenOver6') as string}
                     </label>
                     <select
@@ -369,10 +369,10 @@ export default function RSVP() {
               )}
 
               <div>
-                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#B8A17E]">
+                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#d8b28c]">
                   {t('rsvp.stayDuration') as string}
                 </label>
-                <div className="mb-6 border-l-2 border-[#B8A17E]/30 pl-5 space-y-2">
+                <div className="mb-6 border-l-2 border-[#d8b28c]/30 pl-5 space-y-2">
                   {(t('rsvp.stayDurationDesc') as string).split('. ').filter(Boolean).map((sentence, i, arr) => (
                     <p key={i} className="text-base text-[#B8A99A] font-[family-name:var(--font-cormorant)] leading-relaxed">
                       {sentence}{i < arr.length - 1 ? '.' : ''}
@@ -387,8 +387,8 @@ export default function RSVP() {
                       onClick={() => updateField('stayDuration', opt.value)}
                       className={`w-full text-left px-5 py-3 text-sm tracking-[0.1em] transition-all duration-500 border-b-2 ${
                         formData.stayDuration === opt.value
-                          ? 'border-[#B8A17E] text-[#B8A17E]'
-                          : 'border-[#2A2520] text-[#B8A99A] hover:border-[#B8A17E]/40 hover:text-[#E5D5CA]'
+                          ? 'border-[#d8b28c] text-[#d8b28c]'
+                          : 'border-[#2A2520] text-[#B8A99A] hover:border-[#d8b28c]/40 hover:text-[#f1d5c4]'
                       }`}
                     >
                       {opt.label}
@@ -420,7 +420,7 @@ export default function RSVP() {
               className="space-y-10"
             >
               <div>
-                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#B8A17E]">
+                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#d8b28c]">
                   {t('rsvp.allergies') as string}
                 </label>
                 <input
@@ -432,7 +432,7 @@ export default function RSVP() {
                 />
               </div>
               <div>
-                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#B8A17E]">
+                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#d8b28c]">
                   {t('rsvp.songRequest') as string}
                 </label>
                 <input
@@ -444,7 +444,7 @@ export default function RSVP() {
                 />
               </div>
               <div>
-                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#B8A17E]">
+                <label className="block mb-2 text-xs tracking-[0.2em] uppercase text-[#d8b28c]">
                   {t('rsvp.songNever') as string}
                 </label>
                 <input

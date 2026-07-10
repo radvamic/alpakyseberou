@@ -90,7 +90,7 @@ export default function Hero() {
             {splitText('Klára')}
           </h1>
           <motion.span
-            className="font-[family-name:var(--font-great-vibes)] text-4xl sm:text-5xl md:text-6xl text-[#B8A17E]"
+            className="font-[family-name:var(--font-great-vibes)] text-4xl sm:text-5xl md:text-6xl text-[#d8b28c]"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 3.6, ease: [0.25, 0.4, 0.25, 1] }}
@@ -104,7 +104,7 @@ export default function Hero() {
 
         {/* Date */}
         <motion.p
-          className="mt-6 sm:mt-8 font-[family-name:var(--font-cormorant)] text-lg sm:text-xl md:text-2xl tracking-[0.3em] text-[#E5D5CA] uppercase"
+          className="mt-6 sm:mt-8 font-[family-name:var(--font-cormorant)] text-lg sm:text-xl md:text-2xl tracking-[0.3em] text-[#f1d5c4] uppercase"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 4.2 }}
@@ -122,7 +122,7 @@ export default function Hero() {
 
         {/* Divider */}
         <motion.div
-          className="mt-6 h-[1px] bg-gradient-to-r from-transparent via-[#B8A17E] to-transparent"
+          className="mt-6 h-[1px] bg-gradient-to-r from-transparent via-[#d8b28c] to-transparent"
           initial={{ width: 0 }}
           animate={{ width: 200 }}
           transition={{ duration: 1, delay: 4.4 }}
@@ -137,7 +137,7 @@ export default function Hero() {
         >
           {countdownItems.map((item, i) => (
             <div key={i} className="flex flex-col items-center">
-              <span className="font-[family-name:var(--font-playfair)] text-3xl sm:text-4xl md:text-5xl font-light text-[#B8A17E]">
+              <span className="font-[family-name:var(--font-playfair)] text-3xl sm:text-4xl md:text-5xl font-light text-[#d8b28c]">
                 {item.label === (t('hero.days') as string)
                   ? String(item.value)
                   : String(item.value).padStart(2, '0')}
@@ -158,7 +158,7 @@ export default function Hero() {
         >
           <a
             href="#story"
-            className="font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#B8A17E] transition-colors"
+            className="font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#d8b28c] transition-colors"
           >
             {t('hero.cta') as string}
           </a>
@@ -174,7 +174,7 @@ export default function Hero() {
       >
         <div className="flex flex-col items-center gap-2">
           <motion.div
-            className="w-[1px] h-8 bg-gradient-to-b from-[#B8A17E] to-transparent"
+            className="w-[1px] h-8 bg-gradient-to-b from-[#d8b28c] to-transparent"
             animate={{ scaleY: [0, 1, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             style={{ transformOrigin: 'top' }}

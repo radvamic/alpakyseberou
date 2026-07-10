@@ -28,20 +28,20 @@ export default function WeddingParty() {
         <div className="flex justify-center mb-8">
           <button
             onClick={() => setExpanded(!expanded)}
-            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#B8A17E] transition-colors duration-300"
+            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#d8b28c] transition-colors duration-300"
           >
-            <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
             {expanded
               ? (locale === 'cs' ? 'Skrýt' : 'Hide')
               : (locale === 'cs' ? 'Zobrazit' : 'Show')}
             <motion.span
               animate={{ rotate: expanded ? 180 : 0 }}
               transition={{ duration: 0.3 }}
-              className="text-[#B8A17E]"
+              className="text-[#d8b28c]"
             >
               ↓
             </motion.span>
-            <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
           </button>
         </div>
 
@@ -58,7 +58,7 @@ export default function WeddingParty() {
                 {members.map((member, i) => (
                   <motion.div
                     key={i}
-                    className="group relative overflow-hidden rounded-2xl border border-[#2A2520] bg-[#1A1A1A] transition-all duration-500 hover:border-[#B8A17E]/30"
+                    className="group relative overflow-hidden rounded-2xl border border-[#2A2520] bg-[#1A1A1A] transition-all duration-500 hover:border-[#d8b28c]/30"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: i * 0.1 }}
@@ -73,7 +73,7 @@ export default function WeddingParty() {
 
                     {/* Info */}
                     <div className="p-6 text-center">
-                      <span className="block text-xs tracking-[0.2em] uppercase text-[#B8A17E] mb-2 font-[family-name:var(--font-cormorant)] font-semibold">
+                      <span className="block text-xs tracking-[0.2em] uppercase text-[#d8b28c] mb-2 font-[family-name:var(--font-cormorant)] font-semibold">
                         {member.role}
                       </span>
                       <h3 className="font-[family-name:var(--font-playfair)] text-xl text-[#F5F0E8] mb-3 font-light">

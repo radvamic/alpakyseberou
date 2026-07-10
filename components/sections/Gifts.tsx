@@ -13,7 +13,7 @@ export default function Gifts() {
       <div
         className="absolute inset-0 opacity-[0.025]"
         style={{
-          backgroundImage: 'radial-gradient(circle, #B8A17E 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(circle, #d8b28c 1px, transparent 1px)',
           backgroundSize: '44px 44px',
         }}
       />
@@ -31,10 +31,10 @@ export default function Gifts() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
         >
-          <div className="mx-auto mb-8 flex w-fit items-center gap-3 font-[family-name:var(--font-cormorant)] text-xs tracking-[0.24em] uppercase text-[#B8A17E]/80">
-            <span className="h-px w-8 bg-[#B8A17E]/40" />
+          <div className="mx-auto mb-8 flex w-fit items-center gap-3 font-[family-name:var(--font-cormorant)] text-xs tracking-[0.24em] uppercase text-[#d8b28c]/80">
+            <span className="h-px w-8 bg-[#d8b28c]/40" />
             {t('gifts.kicker') as string}
-            <span className="h-px w-8 bg-[#B8A17E]/40" />
+            <span className="h-px w-8 bg-[#d8b28c]/40" />
           </div>
 
           <div className="mx-auto max-w-2xl space-y-5">
@@ -48,9 +48,9 @@ export default function Gifts() {
             ))}
           </div>
 
-          <div className="mx-auto my-8 h-[1px] max-w-xs bg-gradient-to-r from-transparent via-[#B8A17E]/40 to-transparent" />
+          <div className="mx-auto my-8 h-[1px] max-w-xs bg-gradient-to-r from-transparent via-[#d8b28c]/40 to-transparent" />
 
-          <p className="font-[family-name:var(--font-inter)] text-xs uppercase tracking-[0.2em] text-[#B8A17E]/70">
+          <p className="font-[family-name:var(--font-inter)] text-xs uppercase tracking-[0.2em] text-[#d8b28c]/70">
             {t('gifts.note') as string}
           </p>
         </motion.div>

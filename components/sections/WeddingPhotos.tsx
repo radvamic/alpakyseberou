@@ -106,20 +106,20 @@ export default function WeddingPhotos() {
         <div className="flex justify-center mb-8">
           <button
             onClick={() => setExpanded(!expanded)}
-            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#B8A17E] transition-colors duration-300"
+            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#d8b28c] transition-colors duration-300"
           >
-            <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
             {expanded
               ? (locale === 'cs' ? 'Skrýt' : 'Hide')
               : (locale === 'cs' ? 'Zobrazit' : 'Show')}
             <motion.span
               animate={{ rotate: expanded ? 180 : 0 }}
               transition={{ duration: 0.3 }}
-              className="text-[#B8A17E]"
+              className="text-[#d8b28c]"
             >
               ↓
             </motion.span>
-            <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
           </button>
         </div>
 
@@ -146,7 +146,7 @@ export default function WeddingPhotos() {
                 {albumCards.map((album, i) => (
                   <motion.div
                     key={i}
-                    className="group rounded-2xl border border-[#2A2520] bg-[#111111] p-8 text-center hover:border-[#B8A17E]/20 transition-all duration-500"
+                    className="group rounded-2xl border border-[#2A2520] bg-[#111111] p-8 text-center hover:border-[#d8b28c]/20 transition-all duration-500"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: i * 0.15 }}
@@ -167,7 +167,7 @@ export default function WeddingPhotos() {
                           size={140}
                           level="M"
                           bgColor="#1A1A1A"
-                          fgColor="#B8A17E"
+                          fgColor="#d8b28c"
                         />
                       </div>
                     </div>
@@ -175,7 +175,7 @@ export default function WeddingPhotos() {
                       href={album.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full border border-[#B8A17E]/30 px-6 py-3 text-sm tracking-[0.15em] uppercase text-[#B8A17E] transition-all duration-500 hover:border-[#B8A17E] hover:bg-[#B8A17E]/10"
+                      className="inline-flex items-center gap-2 rounded-full border border-[#d8b28c]/30 px-6 py-3 text-sm tracking-[0.15em] uppercase text-[#d8b28c] transition-all duration-500 hover:border-[#d8b28c] hover:bg-[#d8b28c]/10"
                     >
                       {locale === 'cs' ? 'Otevřít album' : 'Open album'}
                     </a>
@@ -201,7 +201,7 @@ export default function WeddingPhotos() {
                     key={i}
                     className="flex items-start gap-4 rounded-xl border border-[#2A2520] bg-[#111111] p-5"
                   >
-                    <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-[#B8A17E]/30 text-xs text-[#B8A17E] font-semibold">
+                    <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-[#d8b28c]/30 text-xs text-[#d8b28c] font-semibold">
                       {item.step}
                     </span>
                     <div>
@@ -240,12 +240,12 @@ export default function WeddingPhotos() {
                       animate={{ opacity: 1, scale: 1 }}
                     >
                       <div className="text-4xl mb-4">📸</div>
-                      <p className="text-[#B8A17E]">{t('weddingPhotos.success') as string}</p>
+                      <p className="text-[#d8b28c]">{t('weddingPhotos.success') as string}</p>
                     </motion.div>
                   ) : (
                     <form onSubmit={handleSubmit} className="space-y-6">
                       <div>
-                        <label className="block mb-2 text-sm text-[#B8A17E]">
+                        <label className="block mb-2 text-sm text-[#d8b28c]">
                           {t('weddingPhotos.name') as string}
                         </label>
                         <input
@@ -253,15 +253,15 @@ export default function WeddingPhotos() {
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           placeholder="Jan Novák"
-                          className="w-full rounded-xl border border-[#2A2520] bg-[#1A1A1A] px-4 py-3 text-[#F5F0E8] placeholder-[#4A4540] focus:border-[#B8A17E]/50 focus:outline-none transition-colors"
+                          className="w-full rounded-xl border border-[#2A2520] bg-[#1A1A1A] px-4 py-3 text-[#F5F0E8] placeholder-[#4A4540] focus:border-[#d8b28c]/50 focus:outline-none transition-colors"
                         />
                       </div>
 
                       <div
                         className={`relative rounded-xl border-2 border-dashed p-10 text-center transition-all duration-300 cursor-pointer ${
                           isDragging
-                            ? 'border-[#B8A17E] bg-[#B8A17E]/5'
-                            : 'border-[#2A2520] hover:border-[#B8A17E]/30'
+                            ? 'border-[#d8b28c] bg-[#d8b28c]/5'
+                            : 'border-[#2A2520] hover:border-[#d8b28c]/30'
                         }`}
                         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
                         onDragLeave={() => setIsDragging(false)}
@@ -296,7 +296,7 @@ export default function WeddingPhotos() {
                       <button
                         type="submit"
                         disabled={files.length === 0}
-                        className="rounded-full border border-[#B8A17E] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#B8A17E] transition-all duration-500 hover:bg-[#B8A17E]/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="rounded-full border border-[#d8b28c] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#d8b28c] transition-all duration-500 hover:bg-[#d8b28c]/10 disabled:opacity-30 disabled:cursor-not-allowed"
                       >
                         {t('weddingPhotos.submit') as string}
                       </button>

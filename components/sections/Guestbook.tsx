@@ -93,16 +93,16 @@ export default function Guestbook() {
         <div className="flex justify-center mb-8">
           <button
             onClick={() => setExpanded(!expanded)}
-            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#B8A17E] transition-colors duration-300"
+            className="group flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#d8b28c] transition-colors duration-300"
           >
-            <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
             {expanded ? (locale === 'cs' ? 'Skrýt' : 'Hide') : (locale === 'cs' ? 'Zanechat vzkaz' : 'Leave a message')}
             <motion.span
               animate={{ rotate: expanded ? 180 : 0 }}
               transition={{ duration: 0.3 }}
-              className="text-[#B8A17E]"
+              className="text-[#d8b28c]"
             >↓</motion.span>
-            <span className="h-px w-10 bg-[#B8A17E]/30 group-hover:bg-[#B8A17E]/60 transition-colors duration-300" />
+            <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
           </button>
         </div>
 
@@ -134,7 +134,7 @@ export default function Guestbook() {
                 exit={{ opacity: 0 }}
               >
                 <div className="text-4xl mb-4">💛</div>
-                <p className="text-[#B8A17E] text-lg">
+                <p className="text-[#d8b28c] text-lg">
                   {t('guestbook.success') as string}
                 </p>
               </motion.div>
@@ -148,7 +148,7 @@ export default function Guestbook() {
                 exit={{ opacity: 0 }}
               >
                 <div>
-                  <label className="block mb-2 text-sm text-[#B8A17E]">
+                  <label className="block mb-2 text-sm text-[#d8b28c]">
                     {t('guestbook.name') as string}
                   </label>
                   <input
@@ -156,13 +156,13 @@ export default function Guestbook() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
-                    className="w-full rounded-xl border border-[#2A2520] bg-[#1A1A1A] px-4 py-3 text-[#F5F0E8] placeholder-[#4A4540] focus:border-[#B8A17E]/50 focus:outline-none transition-colors"
+                    className="w-full rounded-xl border border-[#2A2520] bg-[#1A1A1A] px-4 py-3 text-[#F5F0E8] placeholder-[#4A4540] focus:border-[#d8b28c]/50 focus:outline-none transition-colors"
                     placeholder="..."
                   />
                 </div>
 
                 <div>
-                  <label className="block mb-2 text-sm text-[#B8A17E]">
+                  <label className="block mb-2 text-sm text-[#d8b28c]">
                     {t('guestbook.message') as string}
                   </label>
                   <textarea
@@ -170,17 +170,17 @@ export default function Guestbook() {
                     onChange={(e) => setMessage(e.target.value)}
                     required
                     rows={4}
-                    className="w-full rounded-xl border border-[#2A2520] bg-[#1A1A1A] px-4 py-3 text-[#F5F0E8] placeholder-[#4A4540] focus:border-[#B8A17E]/50 focus:outline-none transition-colors resize-none"
+                    className="w-full rounded-xl border border-[#2A2520] bg-[#1A1A1A] px-4 py-3 text-[#F5F0E8] placeholder-[#4A4540] focus:border-[#d8b28c]/50 focus:outline-none transition-colors resize-none"
                     placeholder="..."
                   />
                 </div>
 
                 {/* Photo upload */}
                 <div>
-                  <label className="block mb-2 text-sm text-[#B8A17E]">
+                  <label className="block mb-2 text-sm text-[#d8b28c]">
                     {t('guestbook.photos') as string}
                   </label>
-                  <label className="inline-flex items-center gap-2 cursor-pointer rounded-xl border border-[#2A2520] px-6 py-3 text-sm text-[#B8A99A] hover:border-[#B8A17E]/30 transition-colors">
+                  <label className="inline-flex items-center gap-2 cursor-pointer rounded-xl border border-[#2A2520] px-6 py-3 text-sm text-[#B8A99A] hover:border-[#d8b28c]/30 transition-colors">
                     📷 {t('guestbook.photos') as string}
                     <input
                       type="file"
@@ -218,7 +218,7 @@ export default function Guestbook() {
 
                 {/* Visibility toggle */}
                 <div>
-                  <label className="block mb-3 text-sm text-[#B8A17E]">
+                  <label className="block mb-3 text-sm text-[#d8b28c]">
                     {t('guestbook.visibility') as string}
                   </label>
                   <div className="flex gap-3">
@@ -227,23 +227,23 @@ export default function Guestbook() {
                       onClick={() => setIsPublic(true)}
                       className={`flex-1 rounded-xl border px-4 py-4 text-left transition-all duration-300 ${
                         isPublic
-                          ? 'border-[#B8A17E] bg-[#B8A17E]/10'
+                          ? 'border-[#d8b28c] bg-[#d8b28c]/10'
                           : 'border-[#2A2520] bg-[#1A1A1A] hover:border-[#2A2520]/80'
                       }`}
                     >
                       <div className="flex items-center gap-3 mb-1">
                         <div
                           className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
-                            isPublic ? 'border-[#B8A17E]' : 'border-[#4A4540]'
+                            isPublic ? 'border-[#d8b28c]' : 'border-[#4A4540]'
                           }`}
                         >
                           {isPublic && (
-                            <div className="w-2.5 h-2.5 rounded-full bg-[#B8A17E]" />
+                            <div className="w-2.5 h-2.5 rounded-full bg-[#d8b28c]" />
                           )}
                         </div>
                         <span
                           className={`text-sm font-semibold ${
-                            isPublic ? 'text-[#B8A17E]' : 'text-[#B8A99A]'
+                            isPublic ? 'text-[#d8b28c]' : 'text-[#B8A99A]'
                           }`}
                         >
                           🌐 {t('guestbook.public') as string}
@@ -259,23 +259,23 @@ export default function Guestbook() {
                       onClick={() => setIsPublic(false)}
                       className={`flex-1 rounded-xl border px-4 py-4 text-left transition-all duration-300 ${
                         !isPublic
-                          ? 'border-[#B8A17E] bg-[#B8A17E]/10'
+                          ? 'border-[#d8b28c] bg-[#d8b28c]/10'
                           : 'border-[#2A2520] bg-[#1A1A1A] hover:border-[#2A2520]/80'
                       }`}
                     >
                       <div className="flex items-center gap-3 mb-1">
                         <div
                           className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
-                            !isPublic ? 'border-[#B8A17E]' : 'border-[#4A4540]'
+                            !isPublic ? 'border-[#d8b28c]' : 'border-[#4A4540]'
                           }`}
                         >
                           {!isPublic && (
-                            <div className="w-2.5 h-2.5 rounded-full bg-[#B8A17E]" />
+                            <div className="w-2.5 h-2.5 rounded-full bg-[#d8b28c]" />
                           )}
                         </div>
                         <span
                           className={`text-sm font-semibold ${
-                            !isPublic ? 'text-[#B8A17E]' : 'text-[#B8A99A]'
+                            !isPublic ? 'text-[#d8b28c]' : 'text-[#B8A99A]'
                           }`}
                         >
                           🔒 {t('guestbook.private') as string}
@@ -290,7 +290,7 @@ export default function Guestbook() {
 
                 <button
                   type="submit"
-                  className="rounded-full border border-[#B8A17E] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#B8A17E] transition-all duration-500 hover:bg-[#B8A17E]/10"
+                  className="rounded-full border border-[#d8b28c] px-8 py-3 text-sm tracking-[0.15em] uppercase text-[#d8b28c] transition-all duration-500 hover:bg-[#d8b28c]/10"
                 >
                   {t('guestbook.submit') as string}
                 </button>
@@ -318,7 +318,7 @@ export default function Guestbook() {
                 .map((entry, i) => (
                   <motion.div
                     key={entry.id}
-                    className="break-inside-avoid rounded-xl border border-[#2A2520] bg-[#111111] p-5 hover:border-[#B8A17E]/20 transition-colors duration-500"
+                    className="break-inside-avoid rounded-xl border border-[#2A2520] bg-[#111111] p-5 hover:border-[#d8b28c]/20 transition-colors duration-500"
                     initial={{ opacity: 0, y: 15 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -363,13 +363,13 @@ export default function Guestbook() {
                     )}
 
                     {/* Message content */}
-                    <p className="text-sm text-[#B8A17E]/80 leading-relaxed mb-4 italic">
+                    <p className="text-sm text-[#d8b28c]/80 leading-relaxed mb-4 italic">
                       &ldquo;{entry.message}&rdquo;
                     </p>
 
                     {/* Author & date */}
                     <div className="flex items-center gap-3 pt-3 border-t border-[#2A2520]/50">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#B8A17E]/30 to-[#B8A17E]/10 flex items-center justify-center text-xs text-[#B8A17E] font-semibold">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#d8b28c]/30 to-[#d8b28c]/10 flex items-center justify-center text-xs text-[#d8b28c] font-semibold">
                         {entry.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
@@ -417,7 +417,7 @@ export default function Guestbook() {
             </motion.div>
             <button
               onClick={() => setLightboxPhoto(null)}
-              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#B8A17E] hover:border-[#B8A17E]/50 transition-all duration-300"
+              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#141414]/80 border border-[#2A2520] flex items-center justify-center text-[#B8A99A] hover:text-[#d8b28c] hover:border-[#d8b28c]/50 transition-all duration-300"
             >
               ✕
             </button>

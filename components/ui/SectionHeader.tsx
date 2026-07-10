@@ -11,7 +11,7 @@ export default function SectionHeader({ title, subtitle }: SectionHeaderProps) {
   return (
     <div className="text-center mb-16 md:mb-20">
       <motion.span
-        className="block font-[family-name:var(--font-great-vibes)] text-xl sm:text-2xl text-[#B8A17E] mb-2"
+        className="block font-[family-name:var(--font-great-vibes)] text-xl sm:text-2xl text-[#d8b28c] mb-2"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-100px' }}
@@ -29,7 +29,7 @@ export default function SectionHeader({ title, subtitle }: SectionHeaderProps) {
         {title}
       </motion.h2>
       <motion.div
-        className="mx-auto mt-6 h-[1px] bg-gradient-to-r from-transparent via-[#B8A17E] to-transparent"
+        className="mx-auto mt-6 h-[1px] bg-gradient-to-r from-transparent via-[#d8b28c] to-transparent"
         initial={{ width: 0 }}
         whileInView={{ width: 120 }}
         viewport={{ once: true, margin: '-100px' }}

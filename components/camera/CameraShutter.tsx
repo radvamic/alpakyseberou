@@ -129,7 +129,7 @@ export default function CameraShutter({
       </AnimatePresence>
 
       <div className="text-center w-full shrink-0">
-        <span className="block font-[family-name:var(--font-great-vibes)] text-xl text-[#B8A17E]">
+        <span className="block font-[family-name:var(--font-great-vibes)] text-xl text-[#d8b28c]">
           Klára &amp; Michal
         </span>
         <p className="text-[#B8A99A] text-sm mt-1">
@@ -139,11 +139,11 @@ export default function CameraShutter({
 
       {/* Live viewfinder — no iOS "Retake" sheet */}
       <div className="relative flex-1 min-h-0 w-full max-w-sm my-2 flex items-center justify-center">
-        <div className="relative h-full max-h-full w-full aspect-[3/4] max-w-sm overflow-hidden border border-[#B8A17E]/20 bg-[#111]">
-        <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#B8A17E]/40 z-10" />
-        <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#B8A17E]/40 z-10" />
-        <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#B8A17E]/40 z-10" />
-        <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#B8A17E]/40 z-10" />
+        <div className="relative h-full max-h-full w-full aspect-[3/4] max-w-sm overflow-hidden border border-[#d8b28c]/20 bg-[#111]">
+        <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#d8b28c]/40 z-10" />
+        <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#d8b28c]/40 z-10" />
+        <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#d8b28c]/40 z-10" />
+        <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#d8b28c]/40 z-10" />
 
         {cameraError ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center">
@@ -151,7 +151,7 @@ export default function CameraShutter({
             <button
               type="button"
               onClick={startCamera}
-              className="text-[#B8A17E] text-sm underline underline-offset-2"
+              className="text-[#d8b28c] text-sm underline underline-offset-2"
             >
               Zkusit znovu
             </button>
@@ -167,7 +167,7 @@ export default function CameraShutter({
             />
             {!cameraReady && (
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-8 h-8 rounded-full border-2 border-[#B8A17E] border-t-transparent animate-spin" />
+                <div className="w-8 h-8 rounded-full border-2 border-[#d8b28c] border-t-transparent animate-spin" />
               </div>
             )}
           </>
@@ -192,7 +192,7 @@ export default function CameraShutter({
               key={i}
               className="flex-1 h-1.5 rounded-full transition-colors duration-300"
               style={{
-                backgroundColor: i < photosTaken ? '#B8A17E' : '#2A2520',
+                backgroundColor: i < photosTaken ? '#d8b28c' : '#2A2520',
               }}
             />
           ))}
@@ -208,10 +208,10 @@ export default function CameraShutter({
           onClick={capturePhoto}
           disabled={uploading || !cameraReady || !!cameraError}
           whileTap={{ scale: 0.94 }}
-          className="relative w-24 h-24 rounded-full bg-[#B8A17E] shadow-[0_0_40px_rgba(201,169,110,0.3)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+          className="relative w-24 h-24 rounded-full bg-[#d8b28c] shadow-[0_0_40px_rgba(201,169,110,0.3)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           aria-label="Vyfotit"
         >
-          <div className="w-16 h-16 rounded-full border-4 border-[#0A0A0A] bg-[#C8AF93]" />
+          <div className="w-16 h-16 rounded-full border-4 border-[#0A0A0A] bg-[#e8c9a0]" />
           {uploading && (
             <div className="absolute inset-0 rounded-full border-4 border-[#F5F0E8] border-t-transparent animate-spin" />
           )}
@@ -230,7 +230,7 @@ export default function CameraShutter({
                 type="button"
                 onClick={capturePhoto}
                 disabled={!cameraReady || uploading}
-                className="text-[#B8A17E] text-sm underline underline-offset-2 disabled:opacity-50"
+                className="text-[#d8b28c] text-sm underline underline-offset-2 disabled:opacity-50"
               >
                 Zkusit znovu
               </button>

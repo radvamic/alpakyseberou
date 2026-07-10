@@ -65,7 +65,7 @@ export default function Navbar() {
       <motion.nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
-            ? 'bg-[#0A0A0A]/90 backdrop-blur-md border-b border-[#B8A17E]/10'
+            ? 'bg-[#0A0A0A]/90 backdrop-blur-md border-b border-[#d8b28c]/10'
             : 'bg-transparent'
         }`}
         initial={{ y: -100 }}
@@ -76,7 +76,7 @@ export default function Navbar() {
           {/* Logo */}
           <a
             href={resolveHref('#hero')}
-            className="font-[family-name:var(--font-great-vibes)] text-2xl text-[#B8A17E] hover:text-[#C8AF93] transition-colors"
+            className="font-[family-name:var(--font-great-vibes)] text-2xl text-[#d8b28c] hover:text-[#e8c9a0] transition-colors"
           >
             K & M
           </a>
@@ -89,9 +89,9 @@ export default function Navbar() {
                   href={resolveHref(item.href)}
                   className={`text-xs tracking-[0.15em] uppercase transition-colors duration-300 ${
                     item.external
-                      ? 'border border-[#B8A17E]/20 rounded-full px-3 py-1 hover:bg-[#B8A17E]/10 text-[#B8A17E]'
+                      ? 'border border-[#d8b28c]/20 rounded-full px-3 py-1 hover:bg-[#d8b28c]/10 text-[#d8b28c]'
                       : activeSection === item.href
-                        ? 'text-[#B8A17E]'
+                        ? 'text-[#d8b28c]'
                         : 'text-[#B8A99A] hover:text-[#F5F0E8]'
                   }`}
                 >
@@ -102,7 +102,7 @@ export default function Navbar() {
             <li>
               <button
                 onClick={toggleLang}
-                className="ml-2 text-xs tracking-[0.15em] uppercase text-[#B8A17E] border border-[#B8A17E]/30 px-3 py-1 rounded-full hover:bg-[#B8A17E]/10 transition-all"
+                className="ml-2 text-xs tracking-[0.15em] uppercase text-[#d8b28c] border border-[#d8b28c]/30 px-3 py-1 rounded-full hover:bg-[#d8b28c]/10 transition-all"
               >
                 {t('nav.langSwitch') as string}
               </button>
@@ -116,15 +116,15 @@ export default function Navbar() {
             aria-label="Menu"
           >
             <motion.span
-              className="block h-[1px] w-6 bg-[#B8A17E]"
+              className="block h-[1px] w-6 bg-[#d8b28c]"
               animate={mobileOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
             />
             <motion.span
-              className="block h-[1px] w-6 bg-[#B8A17E]"
+              className="block h-[1px] w-6 bg-[#d8b28c]"
               animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
             />
             <motion.span
-              className="block h-[1px] w-6 bg-[#B8A17E]"
+              className="block h-[1px] w-6 bg-[#d8b28c]"
               animate={mobileOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }}
             />
           </button>
@@ -148,7 +148,7 @@ export default function Navbar() {
                   href={resolveHref(item.href)}
                   onClick={() => setMobileOpen(false)}
                   className={`font-[family-name:var(--font-cormorant)] text-2xl tracking-wider transition-colors ${
-                    activeSection === item.href ? 'text-[#B8A17E]' : 'text-[#F5F0E8]'
+                    activeSection === item.href ? 'text-[#d8b28c]' : 'text-[#F5F0E8]'
                   }`}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -163,7 +163,7 @@ export default function Navbar() {
                   toggleLang();
                   setMobileOpen(false);
                 }}
-                className="mt-4 text-sm tracking-[0.2em] uppercase text-[#B8A17E] border border-[#B8A17E]/30 px-6 py-2 rounded-full"
+                className="mt-4 text-sm tracking-[0.2em] uppercase text-[#d8b28c] border border-[#d8b28c]/30 px-6 py-2 rounded-full"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
