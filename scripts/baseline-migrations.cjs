@@ -44,6 +44,20 @@ const ALREADY_APPLIED_PROBES = {
       .map((row) => row.name);
     return tables.includes('camera_sessions') && tables.includes('camera_photos');
   },
+
+  '0004_add_thumbnail_columns': (sqlite) => {
+    const hasColumn = (table, column) =>
+      sqlite
+        .prepare(`PRAGMA table_info(${table})`)
+        .all()
+        .some((info) => info.name === column);
+
+    return (
+      hasColumn('photos', 'thumbnail_url') &&
+      hasColumn('photos', 'challenge_text') &&
+      hasColumn('camera_photos', 'thumbnail_url')
+    );
+  },
 };
 
 if (!fs.existsSync(DB_PATH)) {
