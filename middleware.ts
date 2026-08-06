@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getAdminPassword } from '@/lib/admin-auth';
 
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
@@ -8,7 +9,7 @@ export function middleware(request: NextRequest) {
   }
 
   const cookie = request.cookies.get('admin-auth');
-  const password = process.env.ADMIN_PASSWORD || 'alpaky2026';
+  const password = getAdminPassword();
 
   if (!cookie || cookie.value !== password) {
     return NextResponse.redirect(new URL('/admin/login', request.url));

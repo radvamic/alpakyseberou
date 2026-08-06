@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getAdminPassword } from '@/lib/admin-auth';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { password } = body;
 
-    const adminPassword = process.env.ADMIN_PASSWORD || 'alpaky2026';
+    const adminPassword = getAdminPassword();
 
     if (password !== adminPassword) {
       return NextResponse.json({ error: 'Nesprávné heslo' }, { status: 401 });
@@ -21,7 +22,8 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-  } catch {
+  } catch (error) {
+    console.error('[admin/login]', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }

@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `camera_sessions` (
 	`max_photos` integer NOT NULL DEFAULT 25,
 	`created_at` text DEFAULT (datetime('now')) NOT NULL
 );
-
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS `camera_photos` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`session_id` integer NOT NULL REFERENCES `camera_sessions`(`id`) ON DELETE CASCADE,
