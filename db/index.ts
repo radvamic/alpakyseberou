@@ -70,3 +70,6 @@ safeAddColumn('photos', 'challenge_text', "TEXT NOT NULL DEFAULT ''");
 
 export const db = drizzle(sqlite, { schema });
 export type DB = typeof db;
+
+// Syrové připojení pro operace mimo ORM (baseline migrací při startu).
+export { sqlite };

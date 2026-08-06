@@ -3,6 +3,7 @@ import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
 import path from 'path';
 import fs from 'fs';
+import { baselineMigrations } from './baseline';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const DB_PATH = path.join(DATA_DIR, 'wedding.db');
@@ -16,6 +17,12 @@ console.log('Running migrations...');
 const sqlite = new Database(DB_PATH);
 sqlite.pragma('journal_mode = WAL');
 sqlite.pragma('foreign_keys = ON');
+
+// Musí předcházet migracím — viz komentář v db/baseline.ts.
+const baseline = baselineMigrations(sqlite, MIGRATIONS_DIR);
+if (baseline.inserted.length > 0) {
+  console.log('Doplněny záznamy migrací:', baseline.inserted.join(', '));
+}
 
 const db = drizzle(sqlite);
 migrate(db, { migrationsFolder: MIGRATIONS_DIR });
