@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 import GoldParticles from '@/components/ui/GoldParticles';
 
-const WEDDING_DATE = new Date('2026-09-26T14:00:00+02:00').getTime();
+const WEDDING_DATE = new Date('2026-09-26T12:00:00+02:00').getTime();
 
 function splitText(text: string) {
   return text.split('').map((char, i) => (
