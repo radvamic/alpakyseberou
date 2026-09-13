@@ -3,45 +3,55 @@ import { db } from '@/db';
 import { cameraSessions } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { randomUUID } from 'crypto';
+import { guestIdentitySchema, identityKey } from '@/lib/guest-identity';
+
+type CameraSession = typeof cameraSessions.$inferSelect;
+
+function sessionResponse(session: CameraSession) {
+  return NextResponse.json({
+    token: session.token,
+    photosTaken: session.photosTaken,
+    maxPhotos: session.maxPhotos,
+    guestName: session.guestName,
+    guestSurname: session.guestSurname,
+  });
+}
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const name = (body.name as string)?.trim();
+    const parsed = guestIdentitySchema.safeParse({
+      firstName: body.name,
+      lastName: body.surname,
+    });
 
-    if (!name) {
-      return NextResponse.json({ error: 'Name is required' }, { status: 400 });
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Name and surname are required' }, { status: 400 });
     }
 
-    // Find existing session for this name (case-insensitive)
+    const { firstName, lastName } = parsed.data;
+    const key = identityKey(firstName, lastName);
+
+    // Stejné jméno + příjmení (bez ohledu na velikost písmen a diakritiku)
+    // = stejný film, i z jiného telefonu. Jmenovci s jiným příjmením mají
+    // každý svůj film.
     const existing = await db
       .select()
       .from(cameraSessions)
-      .where(eq(cameraSessions.guestName, name))
+      .where(eq(cameraSessions.identityKey, key))
       .get();
 
     if (existing) {
-      return NextResponse.json({
-        token: existing.token,
-        photosTaken: existing.photosTaken,
-        maxPhotos: existing.maxPhotos,
-        guestName: existing.guestName,
-      });
+      return sessionResponse(existing);
     }
 
-    const token = randomUUID();
     const session = await db
       .insert(cameraSessions)
-      .values({ token, guestName: name })
+      .values({ token: randomUUID(), guestName: firstName, guestSurname: lastName, identityKey: key })
       .returning()
       .get();
 
-    return NextResponse.json({
-      token: session.token,
-      photosTaken: session.photosTaken,
-      maxPhotos: session.maxPhotos,
-      guestName: session.guestName,
-    });
+    return sessionResponse(session);
   } catch (error) {
     console.error('Camera session POST error:', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
@@ -66,12 +76,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Session not found' }, { status: 404 });
     }
 
-    return NextResponse.json({
-      token: session.token,
-      photosTaken: session.photosTaken,
-      maxPhotos: session.maxPhotos,
-      guestName: session.guestName,
-    });
+    return sessionResponse(session);
   } catch (error) {
     console.error('Camera session GET error:', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });

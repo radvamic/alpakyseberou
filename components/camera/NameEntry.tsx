@@ -1,29 +1,24 @@
 'use client';
 
-import { useState } from 'react';
 import { motion } from 'framer-motion';
+import GuestIdentityForm from '@/components/guest/GuestIdentityForm';
+import type { GuestIdentity } from '@/lib/guest-identity';
 
 interface NameEntryProps {
-  onSubmit: (name: string) => Promise<void>;
+  onSubmit: (identity: GuestIdentity) => Promise<void>;
   loading: boolean;
 }
 
+const FORM_TEXTS = {
+  firstName: 'Jméno',
+  lastName: 'Příjmení',
+  hint: 'Příjmení potřebujeme, aby dva stejní Petrové neměli jeden film.',
+  submit: 'Začít fotit',
+  loading: 'Načítám…',
+  error: 'Něco se pokazilo. Zkus to znovu.',
+};
+
 export default function NameEntry({ onSubmit, loading }: NameEntryProps) {
-  const [name, setName] = useState('');
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmed = name.trim();
-    if (!trimmed) return;
-    setError(null);
-    try {
-      await onSubmit(trimmed);
-    } catch {
-      setError('Něco se pokazilo. Zkus to znovu.');
-    }
-  };
-
   return (
     <div className="min-h-screen bg-[#0A0A0A] flex flex-col items-center justify-center px-6">
       <motion.div
@@ -44,31 +39,7 @@ export default function NameEntry({ onSubmit, loading }: NameEntryProps) {
           My to pak vyvoláme.
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Tvoje jméno"
-              maxLength={60}
-              autoFocus
-              className="w-full bg-[#141414] border border-[#2A2520] rounded-lg px-4 py-3 text-[#F5F0E8] placeholder-[#4A4540] focus:outline-none focus:border-[#d8b28c] transition-colors text-center text-lg"
-            />
-          </div>
-          <motion.button
-            type="submit"
-            disabled={!name.trim() || loading}
-            whileTap={{ scale: 0.97 }}
-            className="w-full py-3 rounded-lg font-medium text-[#0A0A0A] bg-[#d8b28c] disabled:opacity-40 disabled:cursor-not-allowed transition-opacity text-lg"
-          >
-            {loading ? 'Načítám…' : 'Začít fotit'}
-          </motion.button>
-
-          {error && (
-            <p className="text-red-400 text-sm text-center pt-1">{error}</p>
-          )}
-        </form>
+        <GuestIdentityForm texts={FORM_TEXTS} onSubmit={onSubmit} loading={loading} />
 
         <p className="mt-8 text-[#4A4540] text-xs">
           26. září 2026 · Hotel Všetice

@@ -36,6 +36,13 @@
       "when": 1786023902400,
       "tag": "0004_add_thumbnail_columns",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1789325162097,
+      "tag": "0005_quiz",
+      "breakpoints": true
     }
   ]
 }

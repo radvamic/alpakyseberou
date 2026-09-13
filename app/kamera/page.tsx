@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import NameEntry from '@/components/camera/NameEntry';
 import CameraShutter from '@/components/camera/CameraShutter';
 import FilmFull from '@/components/camera/FilmFull';
+import type { GuestIdentity } from '@/lib/guest-identity';
 
 type ViewState = 'loading' | 'name-entry' | 'camera' | 'film-full';
 
@@ -47,13 +48,13 @@ export default function KameraPage() {
       });
   }, []);
 
-  const handleNameSubmit = useCallback(async (name: string) => {
+  const handleNameSubmit = useCallback(async ({ firstName, lastName }: GuestIdentity) => {
     setNameLoading(true);
     try {
       const res = await fetch('/api/camera/session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name: firstName, surname: lastName }),
       });
       if (!res.ok) throw new Error('Server error');
       const data: SessionData = await res.json();
