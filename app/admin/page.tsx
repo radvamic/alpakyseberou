@@ -3,6 +3,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { QRCodeSVG } from 'qrcode.react';
+import StatCard from '@/components/admin/StatCard';
+import QuizAdmin from '@/components/admin/QuizAdmin';
+import type { QuizAdminData } from '@/lib/quiz-types';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -56,6 +59,7 @@ interface CameraSession {
   id: number;
   token: string;
   guestName: string;
+  guestSurname?: string;
   photosTaken: number;
   maxPhotos: number;
   createdAt: string;
@@ -83,7 +87,9 @@ interface TableChallengeStats {
   avgPhotosPerGuest: number;
 }
 
-type Tab = 'rsvp' | 'guestbook' | 'photobooth' | 'camera' | 'table-challenge' | 'guest-photos';
+type Tab = 'rsvp' | 'guestbook' | 'photobooth' | 'camera' | 'table-challenge' | 'guest-photos' | 'quiz';
+
+const EMPTY_QUIZ: QuizAdminData = { questions: [], players: [], organizerPath: '' };
 type GuestbookFilter = 'all' | 'public' | 'private';
 
 const STAY_LABELS: Record<string, string> = {
@@ -107,20 +113,6 @@ function formatDate(iso: string) {
   });
 }
 
-function StatCard({ label, value, sub }: { label: string; value: string | number; sub?: string }) {
-  return (
-    <div className="relative border border-[#d8b28c]/15 px-6 py-5">
-      <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#d8b28c]/40" />
-      <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#d8b28c]/40" />
-      <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#d8b28c]/40" />
-      <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#d8b28c]/40" />
-      <p className="text-xs tracking-[0.15em] uppercase text-[#7a6e65] mb-1">{label}</p>
-      <p className="font-[family-name:var(--font-playfair)] text-3xl text-[#d8b28c]">{value}</p>
-      {sub && <p className="text-xs text-[#5a5248] mt-1">{sub}</p>}
-    </div>
-  );
-}
-
 // ---------------------------------------------------------------------------
 // Page
 // ---------------------------------------------------------------------------
@@ -132,6 +124,7 @@ export default function AdminPage() {
   const [guestbook, setGuestbook] = useState<GuestbookEntry[]>([]);
   const [photobooth, setPhotobooth] = useState<PhotoboothPhoto[]>([]);
   const [cameraSessions, setCameraSessions] = useState<CameraSession[]>([]);
+  const [quizData, setQuizData] = useState<QuizAdminData>(EMPTY_QUIZ);
   const [tableChallengeGuests, setTableChallengeGuests] = useState<TableChallengeGuest[]>([]);
   const [tableChallengeStats, setTableChallengeStats] = useState<TableChallengeStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -147,13 +140,14 @@ export default function AdminPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [r, g, p, c, tc, gp] = await Promise.all([
+      const [r, g, p, c, tc, gp, q] = await Promise.all([
         fetch('/api/rsvp').then((x) => x.json()),
         fetch('/api/guestbook').then((x) => x.json()),
         fetch('/api/admin/photobooth').then((x) => x.json()),
         fetch('/api/admin/camera').then((x) => x.json()),
         fetch('/api/admin/table-challenge').then((x) => x.json()),
         fetch('/api/admin/photos?type=wedding').then((x) => x.json()),
+        fetch('/api/admin/quiz').then((x) => x.json()),
       ]);
       setRsvps(Array.isArray(r) ? r : []);
       setGuestbook(Array.isArray(g) ? g : []);
@@ -167,6 +161,7 @@ export default function AdminPage() {
         setTableChallengeStats(null);
       }
       setGuestPhotos(Array.isArray(gp) ? gp : []);
+      setQuizData(q && Array.isArray(q.questions) ? q : EMPTY_QUIZ);
     } catch {
       // ignore
     } finally {
@@ -300,6 +295,7 @@ export default function AdminPage() {
     { id: 'camera', label: 'Kamera', count: totalCameraPhotos },
     { id: 'table-challenge', label: 'Úkoly', count: totalTablePhotos },
     { id: 'guest-photos', label: 'Fotky hostů', count: guestPhotos.length },
+    { id: 'quiz', label: 'Kvíz', count: quizData.players.length },
   ];
 
   const siteBase = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://alpakyseberou.cz';
@@ -715,7 +711,7 @@ export default function AdminPage() {
                       >
                         <div className="flex items-center gap-4">
                           <span className="font-[family-name:var(--font-playfair)] text-[#F5F0E8]">
-                            {s.guestName}
+                            {[s.guestName, s.guestSurname].filter(Boolean).join(' ')}
                           </span>
                           <span className="text-xs text-[#5a5248]">{formatDate(s.createdAt)}</span>
                         </div>
@@ -1014,6 +1010,13 @@ export default function AdminPage() {
                 </div>
               )}
             </div>
+          )}
+
+          {/* ================================================================
+              QUIZ TAB
+          ================================================================ */}
+          {tab === 'quiz' && (
+            <QuizAdmin data={quizData} setData={setQuizData} siteBase={siteBase} />
           )}
         </>
       )}

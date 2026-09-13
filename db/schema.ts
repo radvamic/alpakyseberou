@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, real, uniqueIndex } from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
 
 // ---------------------------------------------------------------------------
@@ -142,6 +142,10 @@ export const cameraSessions = sqliteTable('camera_sessions', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   token: text('token').notNull().unique(),
   guestName: text('guest_name').notNull(),
+  // Příjmení a normalizovaný klíč (viz lib/guest-identity.ts) odlišují
+  // jmenovce. Starší sessions je mají prázdné a obnovují se jen tokenem.
+  guestSurname: text('guest_surname').notNull().default(''),
+  identityKey: text('identity_key').notNull().default(''),
   photosTaken: integer('photos_taken').notNull().default(0),
   maxPhotos: integer('max_photos').notNull().default(25),
   createdAt: text('created_at')
@@ -160,6 +164,60 @@ export const cameraPhotos = sqliteTable('camera_photos', {
     .notNull()
     .default(sql`(datetime('now'))`),
 });
+
+// ---------------------------------------------------------------------------
+// Svatební kvíz (QR stanoviště)
+// ---------------------------------------------------------------------------
+export type QuizOption = { cs: string; en: string };
+
+export const quizQuestions = sqliteTable('quiz_questions', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  // Číslo stanoviště — zároveň URL /kviz/<number> a text na lístečku s QR.
+  number: integer('number').notNull().unique(),
+  imageUrl: text('image_url').notNull().default(''),
+  questionCs: text('question_cs').notNull(),
+  questionEn: text('question_en').notNull().default(''),
+  options: text('options', { mode: 'json' }).$type<QuizOption[]>().notNull(),
+  correctOption: integer('correct_option').notNull(),
+  createdAt: text('created_at')
+    .notNull()
+    .default(sql`(datetime('now'))`),
+  updatedAt: text('updated_at')
+    .notNull()
+    .default(sql`(datetime('now'))`),
+});
+
+export const quizPlayers = sqliteTable('quiz_players', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  token: text('token').notNull().unique(),
+  firstName: text('first_name').notNull(),
+  lastName: text('last_name').notNull(),
+  identityKey: text('identity_key').notNull().unique(),
+  createdAt: text('created_at')
+    .notNull()
+    .default(sql`(datetime('now'))`),
+});
+
+export const quizAnswers = sqliteTable(
+  'quiz_answers',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    playerId: integer('player_id')
+      .references(() => quizPlayers.id, { onDelete: 'cascade' })
+      .notNull(),
+    questionId: integer('question_id')
+      .references(() => quizQuestions.id, { onDelete: 'cascade' })
+      .notNull(),
+    selectedOption: integer('selected_option').notNull(),
+    answeredAt: text('answered_at')
+      .notNull()
+      .default(sql`(datetime('now'))`),
+    updatedAt: text('updated_at')
+      .notNull()
+      .default(sql`(datetime('now'))`),
+  },
+  (t) => [uniqueIndex('quiz_answers_player_question_unique').on(t.playerId, t.questionId)],
+);
 
 // ---------------------------------------------------------------------------
 // AI Photo Booth
