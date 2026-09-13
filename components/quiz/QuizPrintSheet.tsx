@@ -1,22 +1,45 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import { QUIZ_ORGANIZER_HEADER, type QuizAdminData, type QuizAdminQuestion } from '@/lib/quiz-types';
 
 const SITE_BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://alpakyseberou.cz';
 const DISPLAY_BASE = SITE_BASE.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
-// A4 na výšku, okraje 10 mm → 277 mm výšky = dvě karty po 136 mm + mezera.
-const PRINT_CSS = `
-  @page { size: A4 portrait; margin: 10mm; }
+type PrintLayout = 'one' | 'two';
+
+const BASE_CSS = `
   .print-card { width: 190mm; height: 136mm; box-sizing: border-box; break-inside: avoid; page-break-inside: avoid; }
   @media print {
     html, body, body > * { background: #fff !important; }
     .no-print { display: none !important; }
-    .print-sheet { gap: 5mm !important; padding: 0 !important; }
+    .print-sheet { padding: 0 !important; }
   }
 `;
+
+const LAYOUT_CSS: Record<PrintLayout, string> = {
+  // A4 na šířku, okraje 10 mm → 277 × 190 mm; karta 190 × 136 mm zvětšená 1,38× ≈ 262 × 188 mm.
+  one: `
+    @page { size: A4 landscape; margin: 10mm; }
+    @media print {
+      .print-sheet { gap: 0 !important; }
+      .print-card { zoom: 1.38; break-after: page; page-break-after: always; }
+      .print-card:last-child { break-after: auto; page-break-after: auto; }
+    }
+  `,
+  // A4 na výšku, okraje 10 mm → 277 mm výšky = dvě karty po 136 mm + mezera.
+  two: `
+    @page { size: A4 portrait; margin: 10mm; }
+    @media print {
+      .print-sheet { gap: 5mm !important; }
+    }
+  `,
+};
+
+const PRINT_BUTTON =
+  'px-4 py-2 text-sm tracking-[0.08em] uppercase disabled:opacity-40 transition-colors';
 
 function CardFrame({ children }: { children: React.ReactNode }) {
   return (
@@ -111,6 +134,13 @@ export default function QuizPrintSheet({
   const [questions, setQuestions] = useState<QuizAdminQuestion[] | null>(null);
   const [only, setOnly] = useState<number | null>(null);
   const [error, setError] = useState(false);
+  const [layout, setLayout] = useState<PrintLayout>('two');
+
+  // Rozvržení (a s ním @page) se musí propsat do DOM dřív, než se otevře tiskový dialog.
+  const printWith = (next: PrintLayout) => {
+    flushSync(() => setLayout(next));
+    window.print();
+  };
 
   useEffect(() => {
     const onlyParam = Number(new URLSearchParams(window.location.search).get('only'));
@@ -132,7 +162,7 @@ export default function QuizPrintSheet({
 
   return (
     <div className="min-h-screen bg-[#e9e4dc] text-[#0A0A0A] py-8 print:py-0">
-      <style>{PRINT_CSS}</style>
+      <style>{BASE_CSS + LAYOUT_CSS[layout]}</style>
 
       <div className="no-print max-w-[190mm] mx-auto mb-6 px-4 flex flex-wrap items-end justify-between gap-4">
         <div>
@@ -149,22 +179,31 @@ export default function QuizPrintSheet({
                 .
               </>
             ) : (
-              'Start na stánek a lísteček pro každé stanoviště. Dvě karty na stránku A4 — rozstříhej podle čárkované čáry.'
+              'Start na stánek a lísteček pro každé stanoviště.'
             )}{' '}
-            V dialogu tisku nech měřítko 100 %.
+            Jedna otázka na stránku A4 na šířku, nebo dvě na výšku (rozstříhej podle čárkované čáry). V dialogu
+            tisku nech měřítko 100 %.
           </p>
         </div>
-        <div className="flex items-center gap-4">
-          <a href={backHref} className="text-sm text-[#5a5248] underline underline-offset-2">
+        <div className="flex flex-wrap items-center gap-3">
+          <a href={backHref} className="text-sm text-[#5a5248] underline underline-offset-2 mr-1">
             {backLabel}
           </a>
           <button
             type="button"
-            onClick={() => window.print()}
+            onClick={() => printWith('one')}
             disabled={!cards?.length}
-            className="bg-[#0A0A0A] text-[#F5F0E8] px-5 py-2 text-sm tracking-[0.12em] uppercase disabled:opacity-40"
+            className={`${PRINT_BUTTON} bg-[#0A0A0A] text-[#F5F0E8] hover:bg-[#2A2520]`}
           >
-            Tisknout / PDF
+            Tisk / PDF — 1 na stránku (na šířku)
+          </button>
+          <button
+            type="button"
+            onClick={() => printWith('two')}
+            disabled={!cards?.length}
+            className={`${PRINT_BUTTON} border border-[#0A0A0A] text-[#0A0A0A] hover:bg-[#0A0A0A]/5`}
+          >
+            Tisk / PDF — 2 na stránku (na výšku)
           </button>
         </div>
       </div>
