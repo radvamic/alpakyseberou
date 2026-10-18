@@ -13,12 +13,12 @@ export default function WeddingPhotos() {
           {
             step: '1',
             title: 'Otevřete galerii',
-            desc: 'Stačí zadat svatební kód',
+            desc: 'Bez hesla i bez aplikace, rovnou v telefonu',
           },
           {
             step: '2',
             title: 'Prohlížejte a stahujte',
-            desc: 'Fotky od fotografa, video i fotky od hostů',
+            desc: 'Fotky od fotografky, video i fotky od hostů',
           },
           {
             step: '3',
@@ -30,7 +30,7 @@ export default function WeddingPhotos() {
           {
             step: '1',
             title: 'Open the gallery',
-            desc: 'Just enter the wedding code',
+            desc: 'No password, no app — right on your phone',
           },
           {
             step: '2',

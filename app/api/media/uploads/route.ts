@@ -4,7 +4,7 @@ import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '@/db';
 import { media } from '@/db/schema';
-import { deviceHash, forbidden, hasMediaAccess } from '@/lib/media/access';
+import { deviceHash } from '@/lib/media/access';
 import { createMultipart, listUploadedParts, originalKeyFor } from '@/lib/media/r2';
 import {
   COLLECTION_AUTHOR,
@@ -36,7 +36,6 @@ const bodySchema = guestIdentitySchema.extend({
  * částí. Díky tomu může host po výpadku prostě vybrat fotky znovu.
  */
 export async function POST(request: NextRequest) {
-  if (!hasMediaAccess(request)) return forbidden();
   const device = deviceHash(request);
   if (!device) return NextResponse.json({ error: 'Chybí token zařízení' }, { status: 400 });
 

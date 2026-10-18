@@ -20,7 +20,6 @@ import Guestbook from '@/components/sections/Guestbook';
 import WeddingPhotos from '@/components/sections/WeddingPhotos';
 import QuizResults from '@/components/sections/QuizResults';
 import WhyAlpacas from '@/components/sections/WhyAlpacas';
-import WeddingColors from '@/components/sections/WeddingColors';
 // import PhotoBoothTeaser from '@/components/sections/PhotoBoothTeaser';
 import AlpacaSectionDivider from '@/components/ui/AlpacaSectionDivider';
 import Footer from '@/components/layout/Footer';
@@ -58,33 +57,30 @@ export default function Home() {
             </div>
             <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/rsvp.png" imageWidth={165} imageHeight={75} />
             <RSVP /> */}
+            {/* Po svatbě: fotky ze svatby → výsledky kvízu → nástěnka → příběh. Barvy skryté. */}
             <div className="bg-[#141414]">
-              <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/story.png" imageWidth={220} imageHeight={146} />
-              <Story />
-              <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/gallery.png" imageWidth={220} imageHeight={100} />
-              <Gallery />
-            </div>
-            <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/why.png" imageWidth={200} imageHeight={140} />
-            <WhyAlpacas />
-            {/* <AlpacaSectionDivider />
-            <Gifts />
-            <AlpacaSectionDivider />
-            <FAQ /> */}
-            <div className="bg-[#141414]">
-              <AlpacaSectionDivider />
-              <WeddingColors />
-            </div>
-            <div className="bg-[#141414]">
-              <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/guestbook.png" imageWidth={165} imageHeight={90} />
-              <Guestbook />
+              <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/photos.png" imageWidth={165} imageHeight={75} />
+              <WeddingPhotos />
             </div>
             <AlpacaSectionDivider />
             <QuizResults />
             {/* <PhotoBoothTeaser /> */}
             <div className="bg-[#141414]">
-              <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/photos.png" imageWidth={165} imageHeight={75} />
-              <WeddingPhotos />
+              <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/guestbook.png" imageWidth={165} imageHeight={90} />
+              <Guestbook />
             </div>
+            <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/story.png" imageWidth={220} imageHeight={146} />
+            <Story />
+            <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/gallery.png" imageWidth={220} imageHeight={100} />
+            <Gallery />
+            <div className="bg-[#141414]">
+              <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/why.png" imageWidth={200} imageHeight={140} />
+              <WhyAlpacas />
+            </div>
+            {/* <AlpacaSectionDivider />
+            <Gifts />
+            <AlpacaSectionDivider />
+            <FAQ /> */}
           </main>
 
           <Footer />

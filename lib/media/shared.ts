@@ -10,7 +10,7 @@ export const MEDIA_COLLECTIONS: readonly MediaCollection[] = ['guests', 'photogr
 
 /** Jméno, pod kterým se v galerii a v ZIPu ukazují soubory od profesionálů. */
 export const COLLECTION_AUTHOR: Record<Exclude<MediaCollection, 'guests'>, string> = {
-  photographer: 'Svatební fotograf',
+  photographer: 'Svatební fotografka',
   film: 'Kameraman',
 };
 export type MediaVariant = 'thumb' | 'preview' | 'play' | 'download';

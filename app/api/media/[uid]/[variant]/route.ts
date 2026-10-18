@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { forbidden, hasMediaAccess } from '@/lib/media/access';
 import { presignGet } from '@/lib/media/r2';
 import { findMedia } from '@/lib/media/server';
 
@@ -18,8 +17,6 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ uid: string; variant: string }> },
 ) {
-  if (!hasMediaAccess(request)) return forbidden();
-
   try {
     const { uid, variant } = await params;
     const row = await findMedia(uid);

@@ -5,7 +5,6 @@ import { inArray } from 'drizzle-orm';
 import { ZipArchive } from 'archiver';
 import { db } from '@/db';
 import { media } from '@/db/schema';
-import { forbidden, hasMediaAccess } from '@/lib/media/access';
 import { getObjectStream } from '@/lib/media/r2';
 
 const MAX_ITEMS = 20_000;
@@ -25,8 +24,6 @@ function safeSegment(value: string): string {
  * mezisouborů na disku. Velikost proto předem neznáme.
  */
 export async function POST(request: NextRequest) {
-  if (!hasMediaAccess(request)) return forbidden();
-
   let uids: string[];
   try {
     const form = await request.formData();

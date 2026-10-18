@@ -3,13 +3,11 @@ import { ne } from 'drizzle-orm';
 import { db } from '@/db';
 import { media } from '@/db/schema';
 import { isAdmin } from '@/lib/admin-auth';
-import { deviceHash, forbidden, hasMediaAccess } from '@/lib/media/access';
+import { deviceHash } from '@/lib/media/access';
 import type { MediaListResponse } from '@/lib/media/shared';
 
 /** Celá galerie — rozpracovaná nahrávání se nevrací. */
 export async function GET(request: NextRequest) {
-  if (!hasMediaAccess(request)) return forbidden();
-
   try {
     const device = deviceHash(request);
     const rows = await db

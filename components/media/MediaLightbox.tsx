@@ -369,6 +369,9 @@ export default function MediaLightbox({
           {item.kind === 'video' && item.status === 'processing' && (
             <p className="text-xs text-[#d8b28c]">{texts.processing}</p>
           )}
+          {item.collection === 'photographer' && (
+            <p className="mt-1 text-xs text-[#d8b28c]">{texts.noCrop}</p>
+          )}
         </div>
         <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-end">
           {canDelete(item) && (

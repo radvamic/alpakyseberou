@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { deviceHash, forbidden, hasMediaAccess } from '@/lib/media/access';
+import { deviceHash } from '@/lib/media/access';
 import { presignPart } from '@/lib/media/r2';
 import { findMedia } from '@/lib/media/server';
 import { partCountFor } from '@/lib/media/shared';
@@ -14,7 +14,6 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ uid: string }> },
 ) {
-  if (!hasMediaAccess(request)) return forbidden();
   const device = deviceHash(request);
 
   try {

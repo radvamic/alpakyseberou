@@ -1,8 +1,10 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 import GoldParticles from '@/components/ui/GoldParticles';
+import heroPhoto from '@/public/assets/images/hero-svatba.jpg';
 
 function splitText(text: string) {
   return text.split('').map((char, i) => (
@@ -27,23 +29,21 @@ export default function Hero() {
 
   return (
     <section id="hero" className="relative h-screen w-full overflow-hidden">
-      {/* Video Background */}
+      {/* Svatební fotka — na telefonu (na výšku) zůstává novomanželský pár uprostřed */}
       <div className="absolute inset-0">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster="/assets/images/hero-poster.jpg"
-          className="hero-video"
-        >
-          <source src="/assets/video/hero.webm" type="video/webm" />
-          <source src="/assets/video/hero.mp4" type="video/mp4" />
-        </video>
+        <Image
+          src={heroPhoto}
+          alt="Klára a Michal na mole u jezírka"
+          fill
+          priority
+          sizes="100vw"
+          placeholder="blur"
+          className="object-cover object-[67%_70%]"
+        />
       </div>
 
       {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70 z-[1]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-black/70 z-[1]" />
 
       {/* Gold Particles */}
       <GoldParticles />
@@ -99,7 +99,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 5 }}
         >
           <a
-            href="#story"
+            href="#wedding-photos"
             className="font-[family-name:var(--font-cormorant)] text-sm tracking-[0.2em] uppercase text-[#B8A99A] hover:text-[#d8b28c] transition-colors"
           >
             {t('hero.cta') as string}

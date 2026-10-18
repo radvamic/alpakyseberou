@@ -10,15 +10,18 @@ const cs = {
   lang: 'EN',
   back: '← Zpět na web',
   title: 'Fotky a videa ze svatby',
-  subtitle: 'Fotky od fotografa, video od kameramana a vše, co jste nafotili vy.',
+  subtitle: 'Fotky od fotografky, video od kameramana a vše, co jste nafotili vy.',
   sections: {
-    photographer: 'Fotograf',
+    photographer: 'Fotografka',
     film: 'Video',
     guests: 'Od hostů',
   },
   photographer: {
-    intro: 'Profesionální fotky z celého dne. Stáhněte si, co se vám líbí, nebo rovnou sdílejte.',
-    empty: 'Fotky od fotografa sem přidáme, jakmile je dostaneme.',
+    intro: 'Profesionální fotky z celého dne od naší fotografky. Stáhněte si, co se vám líbí, nebo rovnou sdílejte.',
+    empty: 'Fotky od fotografky sem přidáme, jakmile je dostaneme.',
+    noCropTitle: 'Malá prosba',
+    noCrop:
+      'Pokud budete fotky zveřejňovat na sociálních sítích, prosíme, neořezávejte je — máme to tak domluvené s fotografkou. Děkujeme!',
   },
   film: {
     title: 'Svatební video',
@@ -30,14 +33,6 @@ const cs = {
   admin: {
     upload: (section: string) => `Nahrát do sekce „${section}“`,
     hint: 'Vidíte jen vy jako admin. Originály se uloží v plné kvalitě.',
-  },
-  access: {
-    intro: 'Galerie je jen pro svatebčany. Zadejte prosím svatební kód.',
-    placeholder: 'Svatební kód',
-    submit: 'Vstoupit',
-    checking: 'Ověřuji…',
-    wrong: 'Tenhle kód nesedí. Zkuste to prosím znovu.',
-    error: 'Něco se pokazilo. Zkuste to prosím znovu.',
   },
   identity: {
     intro: 'Kdo nahrává? Jméno uvidí ostatní u vašich fotek.',
@@ -105,6 +100,7 @@ const cs = {
     delete: 'Smazat',
     confirmDelete: 'Opravdu smazat? Nejde to vrátit.',
     deleteFailed: 'Smazání se nepovedlo.',
+    noCrop: 'Při zveřejnění prosíme fotku neořezávejte (domluva s fotografkou).',
     processing: 'Video se ještě převádí pro přehrávání — zatím hraje originál.',
     noPreview: 'Tenhle formát prohlížeč neumí zobrazit — originál si ale můžete stáhnout.',
   },
@@ -121,8 +117,11 @@ const en: typeof cs = {
     guests: 'From guests',
   },
   photographer: {
-    intro: 'Professional photos from the whole day. Download what you like or share it right away.',
+    intro: 'Professional photos from the whole day by our photographer. Download what you like or share it right away.',
     empty: 'We’ll add the photographer’s photos as soon as we get them.',
+    noCropTitle: 'A small request',
+    noCrop:
+      'If you post these photos on social media, please don’t crop them — we agreed on this with our photographer. Thank you!',
   },
   film: {
     title: 'Wedding film',
@@ -134,14 +133,6 @@ const en: typeof cs = {
   admin: {
     upload: (section: string) => `Upload to “${section}”`,
     hint: 'Only visible to you as admin. Originals are stored in full quality.',
-  },
-  access: {
-    intro: 'The gallery is for wedding guests only. Please enter the wedding code.',
-    placeholder: 'Wedding code',
-    submit: 'Enter',
-    checking: 'Checking…',
-    wrong: 'That code doesn’t match. Please try again.',
-    error: 'Something went wrong. Please try again.',
   },
   identity: {
     intro: 'Who is uploading? Others will see your name next to your photos.',
@@ -209,6 +200,7 @@ const en: typeof cs = {
     delete: 'Delete',
     confirmDelete: 'Really delete? This can’t be undone.',
     deleteFailed: 'Delete failed.',
+    noCrop: 'When posting, please don’t crop the photo (agreed with our photographer).',
     processing: 'The video is still being converted — playing the original for now.',
     noPreview: 'Your browser can’t display this format — but you can download the original.',
   },
