@@ -16,6 +16,9 @@ interface MediaLightboxProps {
   onClose: () => void;
 }
 
+/** Delší videa se do sdílení nenabízejí — na telefonu by se stahovala celá do paměti. */
+const MAX_SHARE_VIDEO_MS = 5 * 60_000;
+
 function formatTaken(iso: string | null, lang: MediaLang): string | null {
   if (!iso) return null;
   const date = new Date(iso);
@@ -28,24 +31,111 @@ function formatTaken(iso: string | null, lang: MediaLang): string | null {
   });
 }
 
-/** Velká fotka; formát, který prohlížeč neumí (HEIC z Androidu), nahradí popiskem. */
-function PhotoView({ uid, noPreview }: { uid: string; noPreview: string }) {
+/**
+ * Sdílení souboru přes systémovou nabídku telefonu (Instagram, Facebook,
+ * WhatsApp…) — Web Share API s soubory. Na počítačích bez podpory se
+ * tlačítko neukazuje, tam zůstává stažení.
+ */
+function canShareFiles(): boolean {
+  try {
+    return (
+      typeof navigator !== 'undefined' &&
+      typeof navigator.canShare === 'function' &&
+      navigator.canShare({ files: [new File([new Blob()], 'test.jpg', { type: 'image/jpeg' })] })
+    );
+  } catch {
+    return false;
+  }
+}
+
+function isShareable(item: MediaItem): boolean {
+  if (item.kind === 'photo') return item.hasThumb;
+  return (item.durationMs ?? Infinity) <= MAX_SHARE_VIDEO_MS;
+}
+
+async function loadShareFile(item: MediaItem): Promise<File> {
+  const variant = item.kind === 'photo' ? 'preview' : 'play';
+  // Mimo mezipaměť: <img> už tutéž URL načetl bez CORS a prohlížeč by tu
+  // odpověď (bez Access-Control-Allow-Origin) použil i pro fetch → chyba CORS
+  const res = await fetch(mediaUrl(item.uid, variant), { cache: 'no-store' });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const blob = await res.blob();
+  const base = item.fileName.replace(/\.[^.]+$/, '') || 'svatba';
+  const type = item.kind === 'photo' ? 'image/jpeg' : blob.type || 'video/mp4';
+  const ext = item.kind === 'photo' ? 'jpg' : type.includes('quicktime') ? 'mov' : 'mp4';
+  return new File([blob], `${base}.${ext}`, { type });
+}
+
+/** Velká fotka: hned náhled z mřížky, ostrá verze se načte přes něj. */
+function PhotoView({ item, noPreview }: { item: MediaItem; noPreview: string }) {
+  const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
   if (failed) {
     return (
-      <div className="flex h-64 w-64 items-center justify-center rounded-lg border border-[#2A2520] text-sm text-[#7a6e65]">
+      <div className="flex h-64 w-64 items-center justify-center rounded-lg border border-[#2A2520] p-6 text-center text-sm text-[#7a6e65]">
         {noPreview}
       </div>
     );
   }
+  // Náhled i ostrá verze leží přes sebe ve stejném rámečku (object-contain), takže lícují
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={mediaUrl(uid, 'preview')}
-      alt=""
-      onError={() => setFailed(true)}
-      className="max-h-[calc(100dvh-11rem)] max-w-full rounded-lg object-contain shadow-2xl"
-    />
+    <div className="relative h-full w-full">
+      {item.hasThumb && !loaded && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={mediaUrl(item.uid, 'thumb')}
+          alt=""
+          className="absolute inset-0 h-full w-full object-contain"
+        />
+      )}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={mediaUrl(item.uid, 'preview')}
+        alt=""
+        draggable={false}
+        onLoad={() => setLoaded(true)}
+        onError={() => setFailed(true)}
+        className={`absolute inset-0 h-full w-full select-none object-contain transition-opacity duration-300 ${
+          loaded ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
+    </div>
+  );
+}
+
+function IconButton({
+  label,
+  onClick,
+  href,
+  disabled,
+  tone = 'default',
+  children,
+}: {
+  label: string;
+  onClick?: () => void;
+  href?: string;
+  disabled?: boolean;
+  tone?: 'default' | 'primary' | 'danger';
+  children: React.ReactNode;
+}) {
+  const toneClass =
+    tone === 'primary'
+      ? 'bg-[#d8b28c] text-[#0A0A0A]'
+      : tone === 'danger'
+        ? 'border border-red-400/40 text-red-300'
+        : 'border border-[#3a332c] text-[#F5F0E8]';
+  const className = `flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full px-4 text-sm font-medium transition-opacity disabled:opacity-40 ${toneClass}`;
+  if (href) {
+    return (
+      <a href={href} className={className} aria-label={label}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <button type="button" onClick={onClick} disabled={disabled} className={className} aria-label={label}>
+      {children}
+    </button>
   );
 }
 
@@ -62,7 +152,11 @@ export default function MediaLightbox({
   const item = items[index];
   const total = items.length;
   const [deleting, setDeleting] = useState(false);
+  const [shareSupported] = useState(canShareFiles);
+  const [shareState, setShareState] = useState<{ uid: string; status: 'preparing' | 'ready' } | null>(null);
+  const shareFiles = useRef(new Map<string, Promise<File>>());
   const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const [dragY, setDragY] = useState(0);
 
   const prev = () => onIndex((index - 1 + total) % total);
   const next = () => onIndex((index + 1) % total);
@@ -85,7 +179,60 @@ export default function MediaLightbox({
     };
   }, []);
 
+  // Sousední fotky se načtou dopředu, aby listování bylo plynulé
+  useEffect(() => {
+    for (const offset of [1, -1]) {
+      const neighbour = items[(index + offset + total) % total];
+      if (neighbour?.kind === 'photo' && neighbour.hasThumb) {
+        const img = new Image();
+        img.src = mediaUrl(neighbour.uid, 'preview');
+      }
+    }
+  }, [index, items, total]);
+
+  // Fotka ke sdílení se připraví hned po otevření — iPhone dovolí sdílet jen
+  // bezprostředně po klepnutí, na stahování by se čekat nedalo
+  useEffect(() => {
+    if (!shareSupported || !item || item.kind !== 'photo' || !isShareable(item)) return;
+    if (!shareFiles.current.has(item.uid)) {
+      const pending = loadShareFile(item);
+      pending.catch(() => shareFiles.current.delete(item.uid));
+      shareFiles.current.set(item.uid, pending);
+    }
+  }, [item, shareSupported]);
+
   if (!item) return null;
+
+  const share = async () => {
+    let pending = shareFiles.current.get(item.uid);
+    if (!pending) {
+      pending = loadShareFile(item);
+      shareFiles.current.set(item.uid, pending);
+    }
+    setShareState({ uid: item.uid, status: 'preparing' });
+    let file: File;
+    try {
+      file = await pending;
+    } catch {
+      shareFiles.current.delete(item.uid);
+      setShareState(null);
+      window.alert(texts.shareFailed);
+      return;
+    }
+    setShareState({ uid: item.uid, status: 'ready' });
+    try {
+      await navigator.share({ files: [file] });
+      setShareState(null);
+    } catch (err) {
+      const name = (err as DOMException)?.name;
+      // NotAllowedError = vypršelo „klepnutí“ během stahování → stačí klepnout znovu
+      if (name === 'AbortError') setShareState(null);
+      else if (name !== 'NotAllowedError') {
+        setShareState(null);
+        window.alert(texts.shareFailed);
+      }
+    }
+  };
 
   const remove = async () => {
     if (!window.confirm(texts.confirmDelete)) return;
@@ -100,51 +247,74 @@ export default function MediaLightbox({
   };
 
   const onTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length !== 1) {
+      touchStart.current = null;
+      return;
+    }
     const touch = e.touches[0];
     touchStart.current = { x: touch.clientX, y: touch.clientY };
+  };
+  const onTouchMove = (e: React.TouchEvent) => {
+    const start = touchStart.current;
+    if (!start || item.kind === 'video') return;
+    const dy = e.touches[0].clientY - start.y;
+    const dx = e.touches[0].clientX - start.x;
+    if (dy > 0 && Math.abs(dy) > Math.abs(dx)) setDragY(dy);
   };
   const onTouchEnd = (e: React.TouchEvent) => {
     const start = touchStart.current;
     touchStart.current = null;
-    if (!start || total < 2) return;
+    setDragY(0);
+    if (!start) return;
     const touch = e.changedTouches[0];
     const dx = touch.clientX - start.x;
     const dy = touch.clientY - start.y;
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+    if (dy > 110 && Math.abs(dy) > Math.abs(dx) && item.kind !== 'video') {
+      onClose();
+      return;
+    }
+    if (total > 1 && Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) {
       if (dx > 0) prev();
       else next();
     }
   };
 
   const taken = formatTaken(item.takenAt ?? item.uploadedAt, lang);
-  const controlClass =
-    'flex h-10 w-10 items-center justify-center rounded-full border border-[#2A2520] bg-[#1A1A1A]/80 text-[#B8A99A] transition-all hover:border-[#d8b28c]/50 hover:text-[#d8b28c]';
+  const sharing = shareState?.uid === item.uid ? shareState.status : null;
+  const roundButton =
+    'flex h-11 w-11 items-center justify-center rounded-full bg-[#1A1A1A]/80 text-lg text-[#F5F0E8] transition-colors hover:text-[#d8b28c]';
 
   return (
     <motion.div
-      className="fixed inset-0 z-[200] flex flex-col bg-black/95 backdrop-blur-sm"
+      className="fixed inset-0 z-[200] flex flex-col bg-black"
+      style={{ backgroundColor: `rgba(0,0,0,${Math.max(0.4, 1 - dragY / 400)})` }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       role="dialog"
       aria-modal="true"
     >
-      <div className="flex items-center justify-between gap-3 px-4 pt-[max(1rem,env(safe-area-inset-top))]">
-        <span className="rounded-full bg-[#1A1A1A]/80 px-3 py-1 text-xs text-[#B8A99A]">
+      <div className="flex items-center justify-between gap-3 px-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
+        <span className="rounded-full bg-[#1A1A1A]/80 px-3 py-1.5 text-xs tabular-nums text-[#B8A99A]">
           {index + 1} / {total}
         </span>
-        <button type="button" onClick={onClose} className={controlClass} aria-label={texts.close}>
+        <button type="button" onClick={onClose} className={roundButton} aria-label={texts.close}>
           ✕
         </button>
       </div>
 
       <div
-        className="relative flex min-h-0 flex-1 items-center justify-center px-2 py-3 sm:px-16"
+        className="relative flex min-h-0 flex-1 touch-pan-y items-center justify-center px-1 py-2 sm:px-16"
         onClick={onClose}
         onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
-        <div className="flex max-h-full max-w-full items-center justify-center" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="flex h-full w-full items-center justify-center transition-transform duration-75"
+          style={{ transform: dragY ? `translateY(${dragY}px) scale(${1 - dragY / 2000})` : undefined }}
+          onClick={(e) => e.stopPropagation()}
+        >
           {item.kind === 'video' ? (
             <video
               key={item.uid}
@@ -153,10 +323,10 @@ export default function MediaLightbox({
               controls
               playsInline
               preload="metadata"
-              className="max-h-[calc(100dvh-11rem)] max-w-full rounded-lg bg-black"
+              className="max-h-full max-w-full rounded-md bg-black"
             />
           ) : (
-            <PhotoView key={item.uid} uid={item.uid} noPreview={texts.noPreview} />
+            <PhotoView key={item.uid} item={item} noPreview={texts.noPreview} />
           )}
         </div>
 
@@ -168,7 +338,7 @@ export default function MediaLightbox({
                 e.stopPropagation();
                 prev();
               }}
-              className={`${controlClass} absolute left-3 hidden text-lg sm:flex`}
+              className={`${roundButton} absolute left-3 hidden sm:flex`}
               aria-label={texts.prev}
             >
               ‹
@@ -179,7 +349,7 @@ export default function MediaLightbox({
                 e.stopPropagation();
                 next();
               }}
-              className={`${controlClass} absolute right-3 hidden text-lg sm:flex`}
+              className={`${roundButton} absolute right-3 hidden sm:flex`}
               aria-label={texts.next}
             >
               ›
@@ -188,35 +358,32 @@ export default function MediaLightbox({
         )}
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 px-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-        <div className="min-w-0">
+      <div className="space-y-3 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2">
+        <div className="min-w-0 text-center sm:text-left">
           <p className="truncate font-[family-name:var(--font-cormorant)] text-lg text-[#F5F0E8]">
             {item.guestName}
           </p>
           <p className="truncate text-xs text-[#7a6e65]">
-            {[taken, item.fileName, formatBytes(item.size, lang)].filter(Boolean).join(' · ')}
+            {[taken, formatBytes(item.size, lang)].filter(Boolean).join(' · ')}
           </p>
           {item.kind === 'video' && item.status === 'processing' && (
             <p className="text-xs text-[#d8b28c]">{texts.processing}</p>
           )}
         </div>
-        <div className="flex shrink-0 gap-2">
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-end">
           {canDelete(item) && (
-            <button
-              type="button"
-              onClick={remove}
-              disabled={deleting}
-              className="rounded-full border border-red-400/40 px-4 py-2 text-xs uppercase tracking-[0.12em] text-red-300 disabled:opacity-40"
-            >
-              {texts.delete}
-            </button>
+            <IconButton label={texts.delete} onClick={remove} disabled={deleting} tone="danger">
+              🗑 <span>{texts.delete}</span>
+            </IconButton>
           )}
-          <a
-            href={mediaUrl(item.uid, 'download')}
-            className="rounded-full bg-[#d8b28c] px-4 py-2 text-xs font-medium uppercase tracking-[0.12em] text-[#0A0A0A]"
-          >
-            ↓ {texts.download}
-          </a>
+          {shareSupported && isShareable(item) && (
+            <IconButton label={texts.share} onClick={share} disabled={sharing === 'preparing'}>
+              ↗ <span>{sharing === 'preparing' ? texts.sharePreparing : texts.share}</span>
+            </IconButton>
+          )}
+          <IconButton label={texts.download} href={mediaUrl(item.uid, 'download')} tone="primary">
+            ↓ <span>{texts.download}</span>
+          </IconButton>
         </div>
       </div>
     </motion.div>

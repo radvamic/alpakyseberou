@@ -4,6 +4,15 @@
  */
 
 export type MediaKind = 'photo' | 'video';
+/** guests = nahrávají hosté; photographer / film = nahrává jen admin. */
+export type MediaCollection = 'guests' | 'photographer' | 'film';
+export const MEDIA_COLLECTIONS: readonly MediaCollection[] = ['guests', 'photographer', 'film'];
+
+/** Jméno, pod kterým se v galerii a v ZIPu ukazují soubory od profesionálů. */
+export const COLLECTION_AUTHOR: Record<Exclude<MediaCollection, 'guests'>, string> = {
+  photographer: 'Svatební fotograf',
+  film: 'Kameraman',
+};
 export type MediaVariant = 'thumb' | 'preview' | 'play' | 'download';
 
 /** Položka galerie, jak ji vrací GET /api/media. */
@@ -12,6 +21,7 @@ export interface MediaItem {
   guestName: string;
   guestKey: string;
   kind: MediaKind;
+  collection: MediaCollection;
   status: 'processing' | 'ready';
   fileName: string;
   size: number;
