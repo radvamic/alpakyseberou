@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import { motion } from 'framer-motion';
 import { I18nProvider } from '@/lib/i18n';
 import SmoothScrollProvider from '@/components/providers/SmoothScrollProvider';
@@ -24,13 +24,12 @@ import WhyAlpacas from '@/components/sections/WhyAlpacas';
 import AlpacaSectionDivider from '@/components/ui/AlpacaSectionDivider';
 import Footer from '@/components/layout/Footer';
 
+const subscribeNoop = () => () => {};
+
 export default function Home() {
   const [preloaderDone, setPreloaderDone] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // Na serveru i při hydrataci false, v prohlížeči true — stránka se kreslí až na klientu
+  const mounted = useSyncExternalStore(subscribeNoop, () => true, () => false);
 
   if (!mounted) return null;
 
