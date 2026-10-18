@@ -222,7 +222,7 @@ const translations: Record<Locale, any> = {
     weddingPhotos: {
       title: 'Fotky ze svatby',
       subtitle: 'Sdílejte s námi vaše záběry z našeho velkého dne',
-      intro: 'Najdete tu profesionální fotky od fotografa, brzy i svatební video — a hlavně místo pro fotky a videa, které jste pořídili vy. Nahrávejte přímo z telefonu, klidně stovky najednou.',
+      intro: 'Najdete tu profesionální fotky od fotografky, brzy i svatební video — a hlavně místo pro fotky a videa, které jste pořídili vy. Nahrávejte přímo z telefonu, klidně stovky najednou.',
       open: 'Otevřít fotky a video',
     },
     quiz: {

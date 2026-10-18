@@ -107,22 +107,6 @@ html.lenis body {
   z-index: 2;
 }
 
-/* Video background */
-.hero-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 65% center;
-}
-
-@media (min-width: 640px) {
-  .hero-video {
-    object-position: center center;
-  }
-}
-
 /* Text overlay shadow for readability on images/videos */
 .overlay-text {
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.6);

@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { media } from '@/db/schema';
 import { isAdmin } from '@/lib/admin-auth';
-import { deviceHash, forbidden, hasMediaAccess } from '@/lib/media/access';
+import { deviceHash } from '@/lib/media/access';
 import { abortMultipart, deleteObjects } from '@/lib/media/r2';
 import { findMedia, storedKeys } from '@/lib/media/server';
 
@@ -12,8 +12,6 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ uid: string }> },
 ) {
-  if (!hasMediaAccess(request)) return forbidden();
-
   try {
     const { uid } = await params;
     const row = await findMedia(uid);

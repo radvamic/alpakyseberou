@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { media } from '@/db/schema';
-import { deviceHash, forbidden, hasMediaAccess } from '@/lib/media/access';
+import { deviceHash } from '@/lib/media/access';
 import { completeMultipart, listUploadedParts, objectSize } from '@/lib/media/r2';
 import { findMedia } from '@/lib/media/server';
 import { partCountFor } from '@/lib/media/shared';
@@ -17,7 +17,6 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ uid: string }> },
 ) {
-  if (!hasMediaAccess(request)) return forbidden();
   const device = deviceHash(request);
 
   try {
