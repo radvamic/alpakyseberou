@@ -225,11 +225,8 @@ const translations: Record<Locale, any> = {
     weddingPhotos: {
       title: 'Vaše fotky ze svatby',
       subtitle: 'Sdílejte s námi vaše záběry z našeho velkého dne',
-      name: 'Vaše jméno',
-      upload: 'Vybrat fotky',
-      dragDrop: 'Přetáhněte fotky sem nebo klikněte',
-      submit: 'Nahrát fotky',
-      success: 'Fotky nahrány! Děkujeme!',
+      intro: 'Nahrajte nám fotky a videa, které jste na svatbě pořídili — přímo z telefonu, klidně stovky najednou. A podívejte se, co nafotili ostatní.',
+      open: 'Nahrát a prohlížet fotky',
     },
     alpacas: {
       title: 'Proč alpaky?',
@@ -509,11 +506,8 @@ const translations: Record<Locale, any> = {
     weddingPhotos: {
       title: 'Your Wedding Photos',
       subtitle: 'Share your shots from our big day',
-      name: 'Your name',
-      upload: 'Choose photos',
-      dragDrop: 'Drag photos here or click',
-      submit: 'Upload photos',
-      success: 'Photos uploaded! Thank you!',
+      intro: 'Upload the photos and videos you took at the wedding — straight from your phone, hundreds at once. And see what everyone else captured.',
+      open: 'Upload & browse photos',
     },
     alpacas: {
       title: 'Why alpacas?',

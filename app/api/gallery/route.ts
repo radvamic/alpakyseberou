@@ -5,13 +5,6 @@ import { eq, desc } from 'drizzle-orm';
 
 export async function GET() {
   try {
-    const guests = await db
-      .select()
-      .from(photos)
-      .where(eq(photos.type, 'wedding'))
-      .orderBy(desc(photos.createdAt))
-      .all();
-
     const tableChallenge = await db
       .select()
       .from(photos)
@@ -52,7 +45,6 @@ export async function GET() {
     const cameraWithPhotos = camera.filter((s) => s.photos.length > 0);
 
     return NextResponse.json({
-      guests,
       tableChallenge,
       camera: cameraWithPhotos,
     });

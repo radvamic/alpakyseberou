@@ -28,5 +28,8 @@ export async function register() {
 
   // Do not block the HTTP server — long migrations or SQLite locks during
   // Coolify rolling deploys caused 504 Gateway Timeout until register() finished.
-  void runMigrations();
+  void runMigrations().then(async () => {
+    const { startMediaWorker } = await import('./lib/media/worker');
+    startMediaWorker();
+  });
 }
