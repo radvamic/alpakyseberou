@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { db } from '@/db';
 import { quizAnswers, quizQuestions } from '@/db/schema';
 import { findPlayerByToken, playerState } from '@/lib/quiz-server';
+import { QUIZ_CLOSED } from '@/lib/quiz-types';
 
 const answerSchema = z.object({
   token: z.string().min(1),
@@ -13,6 +14,10 @@ const answerSchema = z.object({
 
 /** Uloží odpověď. Opakované odeslání odpověď přepíše (host ji může změnit). */
 export async function POST(request: NextRequest) {
+  if (QUIZ_CLOSED) {
+    return NextResponse.json({ error: 'Quiz closed' }, { status: 403 });
+  }
+
   try {
     const parsed = answerSchema.safeParse(await request.json());
     if (!parsed.success) {

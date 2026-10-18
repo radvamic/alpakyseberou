@@ -9,6 +9,7 @@ import { forbidden, hasMediaAccess } from '@/lib/media/access';
 import { getObjectStream } from '@/lib/media/r2';
 
 const MAX_ITEMS = 20_000;
+const COLLECTION_ORDER = { photographer: 0, film: 1, guests: 2 } as const;
 
 function safeSegment(value: string): string {
   return value.replace(/[\\/:*?"<>|\x00-\x1f]/g, '_').trim() || 'soubor';
@@ -48,7 +49,12 @@ export async function POST(request: NextRequest) {
   }
   const items = rows
     .filter((row) => row.status !== 'uploading')
-    .sort((a, b) => a.guestName.localeCompare(b.guestName, 'cs') || a.id - b.id);
+    .sort(
+      (a, b) =>
+        COLLECTION_ORDER[a.collection] - COLLECTION_ORDER[b.collection] ||
+        a.guestName.localeCompare(b.guestName, 'cs') ||
+        a.id - b.id,
+    );
   if (items.length === 0) {
     return NextResponse.json({ error: 'Soubory nenalezeny' }, { status: 404 });
   }

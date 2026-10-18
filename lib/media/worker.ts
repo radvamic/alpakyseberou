@@ -178,12 +178,32 @@ async function uploadVariants(uid: string, input: Buffer) {
   return { thumbKey, previewKey };
 }
 
+/** Posun pražského času v minutách pro daný okamžik (léto +120, zima +60). */
+function pragueOffsetMinutes(at: Date): number {
+  const name = new Intl.DateTimeFormat('en-US', { timeZone: 'Europe/Prague', timeZoneName: 'longOffset' })
+    .formatToParts(at)
+    .find((part) => part.type === 'timeZoneName')?.value;
+  const match = /GMT([+-])(\d{2}):(\d{2})/.exec(name ?? '');
+  return match ? (match[1] === '-' ? -1 : 1) * (Number(match[2]) * 60 + Number(match[3])) : 0;
+}
+
+/**
+ * Čas pořízení z EXIFu. EXIF ukládá místní čas bez zóny (exif-reader ho vrátí,
+ * jako by byl v UTC). Zónu bereme z OffsetTimeOriginal (iPhone, novější
+ * Android), jinak předpokládáme pražský čas — svatba byla v Česku.
+ */
 function exifDate(exif: Buffer | undefined): string | null {
   if (!exif) return null;
   try {
     const data = exifReader(exif);
-    const date = data.Photo?.DateTimeOriginal ?? data.Image?.DateTime;
-    return date instanceof Date && !Number.isNaN(date.getTime()) ? date.toISOString() : null;
+    const wallClock = data.Photo?.DateTimeOriginal ?? data.Image?.DateTime;
+    if (!(wallClock instanceof Date) || Number.isNaN(wallClock.getTime())) return null;
+    const offset = data.Photo?.OffsetTimeOriginal ?? data.Photo?.OffsetTime;
+    const match = typeof offset === 'string' ? /^([+-])(\d{2}):(\d{2})$/.exec(offset.trim()) : null;
+    const offsetMinutes = match
+      ? (match[1] === '-' ? -1 : 1) * (Number(match[2]) * 60 + Number(match[3]))
+      : pragueOffsetMinutes(wallClock);
+    return new Date(wallClock.getTime() - offsetMinutes * 60_000).toISOString();
   } catch {
     return null;
   }

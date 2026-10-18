@@ -1,0 +1,1 @@
+ALTER TABLE `media` ADD `collection` text DEFAULT 'guests' NOT NULL;

@@ -19,6 +19,7 @@ export async function GET(request: NextRequest) {
         guestKey: media.guestKey,
         deviceHash: media.deviceHash,
         kind: media.kind,
+        collection: media.collection,
         status: media.status,
         fileName: media.fileName,
         size: media.size,

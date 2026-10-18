@@ -13,14 +13,14 @@ export default function WeddingPhotos() {
   const steps =
     locale === 'cs'
       ? [
-          { step: '1', title: 'Otevřete galerii', desc: 'Zadáte svatební kód a své jméno' },
-          { step: '2', title: 'Vyberte fotky a videa', desc: 'Klidně stovky najednou, i dlouhá videa' },
-          { step: '3', title: 'Stahujte', desc: 'Prohlédněte si, co nafotili ostatní, a stáhněte si to' },
+          { step: '1', title: 'Otevřete galerii', desc: 'Stačí zadat svatební kód' },
+          { step: '2', title: 'Prohlížejte a stahujte', desc: 'Fotky od fotografa, video i fotky od hostů' },
+          { step: '3', title: 'Přidejte své', desc: 'Fotky i videa z telefonu, klidně stovky najednou' },
         ]
       : [
-          { step: '1', title: 'Open the gallery', desc: 'Enter the wedding code and your name' },
-          { step: '2', title: 'Pick photos & videos', desc: 'Hundreds at once, long videos too' },
-          { step: '3', title: 'Download', desc: 'Browse what others captured and download it' },
+          { step: '1', title: 'Open the gallery', desc: 'Just enter the wedding code' },
+          { step: '2', title: 'Browse & download', desc: 'Photographer’s photos, the film and guests’ shots' },
+          { step: '3', title: 'Add yours', desc: 'Photos and videos from your phone, hundreds at once' },
         ];
 
   return (

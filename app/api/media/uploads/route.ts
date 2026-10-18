@@ -7,7 +7,9 @@ import { media } from '@/db/schema';
 import { deviceHash, forbidden, hasMediaAccess } from '@/lib/media/access';
 import { createMultipart, listUploadedParts, originalKeyFor } from '@/lib/media/r2';
 import {
+  COLLECTION_AUTHOR,
   MAX_MEDIA_SIZE,
+  MEDIA_COLLECTIONS,
   detectKind,
   fileExtension,
   fileFingerprint,
@@ -16,12 +18,14 @@ import {
   type CreateUploadResponse,
 } from '@/lib/media/shared';
 import { formatGuestName, guestIdentitySchema, identityKey } from '@/lib/guest-identity';
+import { isAdmin } from '@/lib/admin-auth';
 
 const bodySchema = guestIdentitySchema.extend({
   name: z.string().min(1).max(255),
   size: z.number().int().positive().max(MAX_MEDIA_SIZE),
   type: z.string().max(100),
   lastModified: z.number().int().nonnegative(),
+  collection: z.enum(MEDIA_COLLECTIONS).default('guests'),
 });
 
 /**
@@ -47,7 +51,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Nepodporovaný typ souboru' }, { status: 415 });
     }
 
-    const fingerprint = fileFingerprint(body);
+    // Fotky od fotografa a video od kameramana nahrává jen admin
+    if (body.collection !== 'guests' && !isAdmin(request)) {
+      return NextResponse.json({ error: 'Jen pro administrátora' }, { status: 403 });
+    }
+
+    const fingerprint =
+      body.collection === 'guests'
+        ? fileFingerprint(body)
+        : `${body.collection}|${fileFingerprint(body)}`;
     const existing = await db
       .select()
       .from(media)
@@ -95,10 +107,12 @@ export async function POST(request: NextRequest) {
     const contentType = body.type || (kind === 'video' ? 'video/mp4' : 'application/octet-stream');
     const uploadId = await createMultipart(originalKey, contentType);
 
+    const author = body.collection === 'guests' ? null : COLLECTION_AUTHOR[body.collection];
     await db.insert(media).values({
       uid,
-      guestName: formatGuestName(body.firstName, body.lastName),
-      guestKey: identityKey(body.firstName, body.lastName),
+      collection: body.collection,
+      guestName: author ?? formatGuestName(body.firstName, body.lastName),
+      guestKey: author ? body.collection : identityKey(body.firstName, body.lastName),
       deviceHash: device,
       fingerprint,
       kind,

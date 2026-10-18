@@ -7,6 +7,7 @@ import {
   detectKind,
   fileFingerprint,
   type CreateUploadResponse,
+  type MediaCollection,
   type MediaKind,
 } from '@/lib/media/shared';
 
@@ -27,6 +28,7 @@ export interface UploadJob {
   file: File;
   fingerprint: string;
   kind: MediaKind;
+  collection: MediaCollection;
   status: UploadStatus;
   loaded: number;
   error?: string;
@@ -206,7 +208,7 @@ export class MediaUploader {
 
   getSnapshot = () => this.snapshot;
 
-  add(files: FileList | File[]): AddResult {
+  add(files: FileList | File[], collection: MediaCollection = 'guests'): AddResult {
     const result: AddResult = { added: 0, duplicates: 0, unsupported: 0, tooLarge: 0 };
     const known = new Set(this.jobs.filter((j) => j.status !== 'error').map((j) => j.fingerprint));
     for (const file of Array.from(files)) {
@@ -219,7 +221,7 @@ export class MediaUploader {
         result.tooLarge++;
         continue;
       }
-      const fingerprint = fileFingerprint(file);
+      const fingerprint = `${collection}|${fileFingerprint(file)}`;
       if (known.has(fingerprint)) {
         result.duplicates++;
         continue;
@@ -227,7 +229,7 @@ export class MediaUploader {
       known.add(fingerprint);
       // Chybný pokus o stejný soubor nahradí nový
       this.jobs = this.jobs.filter((j) => j.fingerprint !== fingerprint);
-      this.jobs.push({ id: this.nextId++, file, fingerprint, kind, status: 'queued', loaded: 0 });
+      this.jobs.push({ id: this.nextId++, file, fingerprint, kind, collection, status: 'queued', loaded: 0 });
       result.added++;
     }
     this.savePending();
@@ -288,7 +290,9 @@ export class MediaUploader {
 
   private async runJob(job: UploadJob): Promise<void> {
     try {
-      const identity = this.identity;
+      // U fotografa / kameramana jméno určí server, admin ho zadávat nemusí
+      const identity =
+        this.identity ?? (job.collection === 'guests' ? null : { firstName: 'Admin', lastName: 'Admin' });
       if (!identity) throw new Error('Chybí jméno');
       for (let restart = 0; ; restart++) {
         const created = await retrying(() =>
@@ -298,6 +302,7 @@ export class MediaUploader {
             size: job.file.size,
             type: job.file.type,
             lastModified: job.file.lastModified,
+            collection: job.collection,
           }),
         );
         if (created.state === 'done') {

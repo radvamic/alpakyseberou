@@ -9,6 +9,9 @@ import type { MediaLang, MediaTexts } from '@/lib/media/texts';
 interface MediaGalleryProps {
   items: MediaItem[];
   isAdmin: boolean;
+  /** Filtr podle hostů a „Moje“ — u fotografa nedává smysl. */
+  showGuestFilter?: boolean;
+  emptyText?: string;
   lang: MediaLang;
   texts: MediaTexts;
   onDelete: (item: MediaItem) => Promise<void>;
@@ -42,8 +45,8 @@ function Tile({
     <button
       type="button"
       onClick={onClick}
-      className={`group relative aspect-square overflow-hidden rounded-md bg-[#1A1A1A] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d8b28c] ${
-        selected ? 'ring-2 ring-[#d8b28c]' : ''
+      className={`group relative aspect-square overflow-hidden bg-[#1A1A1A] focus:outline-none sm:rounded-md focus-visible:ring-2 focus-visible:ring-[#d8b28c] ${
+        selected ? 'ring-2 ring-inset ring-[#d8b28c]' : ''
       }`}
       aria-pressed={selecting ? selected : undefined}
     >
@@ -83,7 +86,7 @@ function Tile({
 
       {selecting && (
         <span
-          className={`absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-full border text-xs ${
+          className={`absolute right-1.5 top-1.5 flex h-7 w-7 items-center justify-center rounded-full border-2 text-sm ${
             selected
               ? 'border-[#d8b28c] bg-[#d8b28c] text-[#0A0A0A]'
               : 'border-white/70 bg-black/30 text-transparent'
@@ -96,7 +99,15 @@ function Tile({
   );
 }
 
-export default function MediaGallery({ items, isAdmin, lang, texts, onDelete }: MediaGalleryProps) {
+export default function MediaGallery({
+  items,
+  isAdmin,
+  showGuestFilter = true,
+  emptyText,
+  lang,
+  texts,
+  onDelete,
+}: MediaGalleryProps) {
   const t = texts.gallery;
   const [filter, setFilter] = useState<Filter>('all');
   const [sort, setSort] = useState<Sort>('taken');
@@ -190,7 +201,7 @@ export default function MediaGallery({ items, isAdmin, lang, texts, onDelete }: 
       key={value}
       type="button"
       onClick={() => changeFilter(value)}
-      className={`shrink-0 rounded-full border px-3.5 py-1.5 text-xs transition-colors ${
+      className={`min-h-10 shrink-0 rounded-full border px-4 text-sm transition-colors ${
         filter === value
           ? 'border-[#d8b28c] bg-[#d8b28c]/10 text-[#d8b28c]'
           : 'border-[#2A2520] text-[#B8A99A] hover:border-[#d8b28c]/40'
@@ -201,44 +212,50 @@ export default function MediaGallery({ items, isAdmin, lang, texts, onDelete }: 
   );
 
   if (items.length === 0) {
-    return <p className="py-10 text-center text-sm text-[#7a6e65]">{t.empty}</p>;
+    return <p className="py-10 text-center text-sm text-[#7a6e65]">{emptyText ?? t.empty}</p>;
   }
 
   return (
     <div className={selecting ? 'pb-28' : ''}>
-      <div className="-mx-4 mb-3 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
-        {chip('all', t.all, items.length)}
-        {mineCount > 0 && chip('mine', t.mine, mineCount)}
-        {guests.map((g) => chip(`guest:${g.key}`, g.name, g.count))}
-      </div>
-
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <select
-          value={sort}
-          onChange={(e) => changeSort(e.target.value as Sort)}
-          className="rounded-lg border border-[#2A2520] bg-[#141414] px-3 py-1.5 text-xs text-[#B8A99A] focus:outline-none"
-        >
-          <option value="taken">{t.sortTaken}</option>
-          <option value="uploaded">{t.sortUploaded}</option>
-        </select>
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-[#7a6e65]">{t.count(shown.length)}</span>
-          <button
-            type="button"
-            onClick={() => {
-              setSelecting((v) => !v);
-              setSelected(new Set());
-            }}
-            className={`rounded-full border px-4 py-1.5 text-xs uppercase tracking-[0.12em] ${
-              selecting ? 'border-[#d8b28c] text-[#d8b28c]' : 'border-[#2A2520] text-[#B8A99A]'
-            }`}
-          >
-            {selecting ? t.cancelSelect : t.select}
-          </button>
+      {showGuestFilter && guests.length + (mineCount > 0 ? 1 : 0) > 1 && (
+        <div className="-mx-4 mb-3 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0 [&::-webkit-scrollbar]:hidden">
+          {chip('all', t.all, items.length)}
+          {mineCount > 0 && chip('mine', t.mine, mineCount)}
+          {guests.map((g) => chip(`guest:${g.key}`, g.name, g.count))}
         </div>
-      </div>
+      )}
 
-      <div className="grid grid-cols-3 gap-1 sm:grid-cols-4 sm:gap-1.5 md:grid-cols-5">
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <div className="flex rounded-full border border-[#2A2520] p-0.5 text-xs">
+          {(['taken', 'uploaded'] as const).map((value) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => changeSort(value)}
+              className={`min-h-9 whitespace-nowrap rounded-full px-3 transition-colors ${
+                sort === value ? 'bg-[#2A2520] text-[#F5F0E8]' : 'text-[#7a6e65]'
+              }`}
+            >
+              {value === 'taken' ? t.sortTaken : t.sortUploaded}
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setSelecting((v) => !v);
+            setSelected(new Set());
+          }}
+          className={`min-h-10 shrink-0 rounded-full border px-4 text-sm ${
+            selecting ? 'border-[#d8b28c] text-[#d8b28c]' : 'border-[#2A2520] text-[#F5F0E8]'
+          }`}
+        >
+          {selecting ? t.cancelSelect : t.select}
+        </button>
+      </div>
+      <p className="mb-2 text-xs text-[#7a6e65]">{t.count(shown.length)}</p>
+
+      <div className="-mx-4 grid grid-cols-3 gap-0.5 sm:mx-0 sm:grid-cols-4 sm:gap-1.5 md:grid-cols-5">
         {shown.slice(0, visible).map((item, i) => (
           <Tile
             key={item.uid}
@@ -266,13 +283,13 @@ export default function MediaGallery({ items, isAdmin, lang, texts, onDelete }: 
             exit={{ y: 100 }}
             className="fixed inset-x-0 bottom-0 z-[150] border-t border-[#2A2520] bg-[#0A0A0A]/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur"
           >
-            <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="text-sm text-[#F5F0E8]">{t.selected(selectedItems.length, selectedBytes)}</p>
+            <div className="mx-auto flex max-w-4xl items-center justify-between gap-3">
+              <div className="min-w-0">
+                <p className="truncate text-sm text-[#F5F0E8]">{t.selected(selectedItems.length, selectedBytes)}</p>
                 <button
                   type="button"
                   onClick={toggleAllShown}
-                  className="text-xs text-[#d8b28c] underline underline-offset-2"
+                  className="min-h-8 text-sm text-[#d8b28c] underline underline-offset-2"
                 >
                   {allShownSelected ? t.selectNone : t.selectAll}
                 </button>
@@ -281,7 +298,7 @@ export default function MediaGallery({ items, isAdmin, lang, texts, onDelete }: 
                 type="button"
                 onClick={download}
                 disabled={selectedItems.length === 0 || downloading}
-                className="rounded-full bg-[#d8b28c] px-6 py-2.5 text-sm font-medium text-[#0A0A0A] disabled:opacity-40"
+                className="min-h-11 shrink-0 rounded-full bg-[#d8b28c] px-5 text-sm font-medium text-[#0A0A0A] disabled:opacity-40"
               >
                 {downloading ? t.downloadStarting : `↓ ${t.download}`}
               </button>

@@ -250,6 +250,10 @@ export const media = sqliteTable(
     // název|velikost|lastModified — pozná stejný soubor vybraný znovu
     fingerprint: text('fingerprint').notNull(),
     kind: text('kind', { enum: ['photo', 'video'] }).notNull(),
+    // guests = od hostů; photographer / film = nahrává jen admin (fotograf, kameraman)
+    collection: text('collection', { enum: ['guests', 'photographer', 'film'] })
+      .notNull()
+      .default('guests'),
     fileName: text('file_name').notNull(),
     contentType: text('content_type').notNull(),
     size: integer('size').notNull(),
