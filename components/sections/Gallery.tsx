@@ -43,7 +43,7 @@ export default function Gallery() {
             <span className="h-px w-10 bg-[#d8b28c]/30 group-hover:bg-[#d8b28c]/60 transition-colors duration-300" />
             {expanded
               ? (locale === 'cs' ? 'Skrýt' : 'Hide')
-              : (locale === 'cs' ? 'Zobrazit galerii' : 'Show gallery')}
+              : (locale === 'cs' ? 'Zobrazit fotky' : 'Show photos')}
             <motion.span
               animate={{ rotate: expanded ? 180 : 0 }}
               transition={{ duration: 0.3 }}

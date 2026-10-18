@@ -9,16 +9,16 @@ import Navbar from '@/components/layout/Navbar';
 import CustomCursor from '@/components/ui/CustomCursor';
 import Hero from '@/components/sections/Hero';
 import Story from '@/components/sections/Story';
-import Ceremony from '@/components/sections/Ceremony';
-import Venue from '@/components/sections/Venue';
-import RSVP from '@/components/sections/RSVP';
+// Po svatbě skryto: Venue (vč. ubytování), Ceremony (program), RSVP, Gifts, FAQ
+// import Ceremony from '@/components/sections/Ceremony';
+// import Venue from '@/components/sections/Venue';
+// import RSVP from '@/components/sections/RSVP';
 import Gallery from '@/components/sections/Gallery';
-import WeddingParty from '@/components/sections/WeddingParty';
-
-import Gifts from '@/components/sections/Gifts';
-import FAQ from '@/components/sections/FAQ';
+// import Gifts from '@/components/sections/Gifts';
+// import FAQ from '@/components/sections/FAQ';
 import Guestbook from '@/components/sections/Guestbook';
 import WeddingPhotos from '@/components/sections/WeddingPhotos';
+import QuizResults from '@/components/sections/QuizResults';
 import WhyAlpacas from '@/components/sections/WhyAlpacas';
 import WeddingColors from '@/components/sections/WeddingColors';
 // import PhotoBoothTeaser from '@/components/sections/PhotoBoothTeaser';
@@ -50,28 +50,26 @@ export default function Home() {
 
           <main>
             <Hero />
-            <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/venue2.png" imageWidth={100} imageHeight={47} />
+            {/* <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/venue2.png" imageWidth={100} imageHeight={47} />
             <Venue />
             <div className="bg-[#141414]">
               <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/ceremony.png" imageWidth={240} imageHeight={140} />
               <Ceremony />
             </div>
             <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/rsvp.png" imageWidth={165} imageHeight={75} />
-            <RSVP />
+            <RSVP /> */}
             <div className="bg-[#141414]">
               <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/story.png" imageWidth={220} imageHeight={146} />
               <Story />
-            </div>
-            <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/why.png" imageWidth={200} imageHeight={140} />
-            <WhyAlpacas />
-            <div className="bg-[#141414]">
               <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/gallery.png" imageWidth={220} imageHeight={100} />
               <Gallery />
             </div>
-            <AlpacaSectionDivider />
+            <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/why.png" imageWidth={200} imageHeight={140} />
+            <WhyAlpacas />
+            {/* <AlpacaSectionDivider />
             <Gifts />
             <AlpacaSectionDivider />
-            <FAQ />
+            <FAQ /> */}
             <div className="bg-[#141414]">
               <AlpacaSectionDivider />
               <WeddingColors />
@@ -81,6 +79,7 @@ export default function Home() {
               <Guestbook />
             </div>
             <AlpacaSectionDivider />
+            <QuizResults />
             {/* <PhotoBoothTeaser /> */}
             <div className="bg-[#141414]">
               <AlpacaSectionDivider imageSrc="/assets/images/alpacas/web/photos.png" imageWidth={165} imageHeight={75} />

@@ -1,11 +1,8 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 import GoldParticles from '@/components/ui/GoldParticles';
-
-const WEDDING_DATE = new Date('2026-09-26T12:00:00+02:00').getTime();
 
 function splitText(text: string) {
   return text.split('').map((char, i) => (
@@ -27,37 +24,6 @@ function splitText(text: string) {
 
 export default function Hero() {
   const { t } = useI18n();
-  const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-
-  const updateCountdown = useCallback(() => {
-    const now = Date.now();
-    const diff = WEDDING_DATE - now;
-
-    if (diff <= 0) {
-      setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-      return;
-    }
-
-    setCountdown({
-      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-      minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-      seconds: Math.floor((diff % (1000 * 60)) / 1000),
-    });
-  }, []);
-
-  useEffect(() => {
-    updateCountdown();
-    const interval = setInterval(updateCountdown, 1000);
-    return () => clearInterval(interval);
-  }, [updateCountdown]);
-
-  const countdownItems = [
-    { value: countdown.days, label: t('hero.days') as string },
-    { value: countdown.hours, label: t('hero.hours') as string },
-    { value: countdown.minutes, label: t('hero.minutes') as string },
-    { value: countdown.seconds, label: t('hero.seconds') as string },
-  ];
 
   return (
     <section id="hero" className="relative h-screen w-full overflow-hidden">
@@ -102,24 +68,6 @@ export default function Hero() {
           </h1>
         </div>
 
-        {/* Date */}
-        <motion.p
-          className="mt-6 sm:mt-8 font-[family-name:var(--font-cormorant)] text-lg sm:text-xl md:text-2xl tracking-[0.3em] text-[#f1d5c4] uppercase"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 4.2 }}
-        >
-          {t('hero.date') as string}
-        </motion.p>
-        <motion.p
-          className="mt-2 font-[family-name:var(--font-cormorant)] text-sm sm:text-base tracking-[0.2em] text-[#B8A99A]"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 4.35 }}
-        >
-          {t('hero.weekend') as string}
-        </motion.p>
-
         {/* Divider */}
         <motion.div
           className="mt-6 h-[1px] bg-gradient-to-r from-transparent via-[#d8b28c] to-transparent"
@@ -128,25 +76,19 @@ export default function Hero() {
           transition={{ duration: 1, delay: 4.4 }}
         />
 
-        {/* Countdown */}
+        {/* Married */}
         <motion.div
-          className="mt-8 flex gap-6 sm:gap-10"
+          className="mt-8 flex flex-col items-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 4.6 }}
         >
-          {countdownItems.map((item, i) => (
-            <div key={i} className="flex flex-col items-center">
-              <span className="font-[family-name:var(--font-playfair)] text-3xl sm:text-4xl md:text-5xl font-light text-[#d8b28c]">
-                {item.label === (t('hero.days') as string)
-                  ? String(item.value)
-                  : String(item.value).padStart(2, '0')}
-              </span>
-              <span className="mt-1 text-xs sm:text-sm tracking-[0.2em] uppercase text-[#B8A99A]">
-                {item.label}
-              </span>
-            </div>
-          ))}
+          <span className="font-[family-name:var(--font-great-vibes)] text-4xl sm:text-5xl md:text-6xl text-[#d8b28c]">
+            {t('hero.married') as string}
+          </span>
+          <span className="mt-4 font-[family-name:var(--font-cormorant)] text-lg sm:text-xl md:text-2xl tracking-[0.3em] text-[#f1d5c4] uppercase">
+            {t('hero.dateTime') as string}
+          </span>
         </motion.div>
 
         {/* CTA */}

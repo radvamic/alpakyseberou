@@ -6,16 +6,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 
 const navItems: { href: string; key: string; external?: boolean }[] = [
-  { href: '#venue', key: 'nav.venue' },
-  { href: '#accommodation', key: 'nav.accommodation' },
-  { href: '#ceremony', key: 'nav.ceremony' },
-  { href: '#rsvp', key: 'nav.rsvp' },
   { href: '#story', key: 'nav.story' },
-  { href: '#gallery', key: 'nav.gallery' },
-  { href: '#gifts', key: 'nav.gifts' },
   { href: '#colors', key: 'nav.colors' },
-  { href: '#faq', key: 'nav.faq' },
   { href: '#guestbook', key: 'nav.guestbook' },
+  { href: '#quiz', key: 'nav.quiz' },
+  { href: '#wedding-photos', key: 'nav.photos' },
   // { href: '/fotokoutek', key: 'nav.photobooth', external: true },
 ];
 

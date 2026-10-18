@@ -5,6 +5,12 @@ import type { QuizOption } from '@/db/schema';
 export type { QuizOption };
 export type QuizLang = 'cs' | 'en';
 
+/**
+ * Kvíz po svatbě skončil: odpovědi už nejdou měnit, hostovské stránky /kviz
+ * přesměrují na úvodní stránku a správné odpovědi i pořadí jsou veřejné.
+ */
+export const QUIZ_CLOSED = true;
+
 export const OPTION_LETTERS = ['a', 'b', 'c', 'd', 'e'] as const;
 
 /** Hlavička, kterou stránky organizátorů autorizují správu otázek. */
@@ -60,6 +66,12 @@ export interface QuizResultPlayer {
 export interface QuizResults {
   questions: QuizResultQuestion[];
   players: QuizResultPlayer[];
+}
+
+/** Konečné výsledky pro úvodní stránku — až po uzavření kvízu. */
+export interface QuizFinalResults {
+  questions: Omit<QuizResultQuestion, 'id'>[];
+  players: { name: string; correct: number }[];
 }
 
 /** Veřejný průběh — jen kdo hraje a kolik zodpověděl, nic o správnosti. */
