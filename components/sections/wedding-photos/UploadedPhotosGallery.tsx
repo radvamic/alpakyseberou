@@ -28,19 +28,17 @@ interface CameraSession {
 }
 
 interface GalleryData {
-  guests: PhotoEntry[];
   tableChallenge: PhotoEntry[];
   camera: CameraSession[];
 }
 
-type TabId = 'guests' | 'camera' | 'table';
+type TabId = 'camera' | 'table';
 
 const LABELS = {
   cs: {
-    toggleShow: 'Nahrané fotky',
-    toggleHide: 'Skrýt nahrané fotky',
+    toggleShow: 'Fotky ze soutěží',
+    toggleHide: 'Skrýt fotky ze soutěží',
     tabs: {
-      guests: 'Fotky od hostů',
       camera: 'Camera challenge',
       table: 'Table challenge',
     },
@@ -48,10 +46,9 @@ const LABELS = {
     photoCount: (n: number) => (n === 1 ? '1 fotka' : n < 5 ? `${n} fotky` : `${n} fotek`),
   },
   en: {
-    toggleShow: 'Uploaded photos',
-    toggleHide: 'Hide uploaded photos',
+    toggleShow: 'Challenge photos',
+    toggleHide: 'Hide challenge photos',
     tabs: {
-      guests: 'Guest photos',
       camera: 'Camera challenge',
       table: 'Table challenge',
     },
@@ -165,7 +162,7 @@ function Lightbox({ photos, initialIndex, onClose }: LightboxProps) {
   );
 }
 
-// ─── Photo grid (guests / table-challenge) ───────────────────────────────────
+// ─── Photo grid (table-challenge) ─────────────────────────────────────────────
 
 function PhotoGrid({ items }: { items: PhotoEntry[] }) {
   const [lightbox, setLightbox] = useState<{ photos: { url: string; caption?: string }[]; index: number } | null>(null);
@@ -327,16 +324,10 @@ function CameraTab({ sessions, labels }: { sessions: CameraSession[]; labels: (t
 
 // ─── Main export ─────────────────────────────────────────────────────────────
 
-export default function UploadedPhotosGallery({
-  locale,
-  refreshKey = 0,
-}: {
-  locale: 'cs' | 'en';
-  refreshKey?: number;
-}) {
+export default function UploadedPhotosGallery({ locale }: { locale: 'cs' | 'en' }) {
   const labels = LABELS[locale];
   const [showGallery, setShowGallery] = useState(false);
-  const [tab, setTab] = useState<TabId>('guests');
+  const [tab, setTab] = useState<TabId>('camera');
   const [data, setData] = useState<GalleryData | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -345,16 +336,15 @@ export default function UploadedPhotosGallery({
     fetch('/api/gallery')
       .then((r) => r.json())
       .then((json: GalleryData) => setData(json))
-      .catch(() => setData({ guests: [], tableChallenge: [], camera: [] }))
+      .catch(() => setData({ tableChallenge: [], camera: [] }))
       .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
     if (showGallery) load();
-  }, [showGallery, load, refreshKey]);
+  }, [showGallery, load]);
 
   const tabs: { id: TabId; count: number }[] = [
-    { id: 'guests', count: data?.guests.length ?? 0 },
     { id: 'camera', count: data?.camera.length ?? 0 },
     { id: 'table', count: data?.tableChallenge.length ?? 0 },
   ];
@@ -362,8 +352,7 @@ export default function UploadedPhotosGallery({
   const empty =
     !loading &&
     data &&
-    ((tab === 'guests' && data.guests.length === 0) ||
-      (tab === 'camera' && data.camera.length === 0) ||
+    ((tab === 'camera' && data.camera.length === 0) ||
       (tab === 'table' && data.tableChallenge.length === 0));
 
   return (
@@ -423,7 +412,6 @@ export default function UploadedPhotosGallery({
               <p className="text-center text-sm text-[#4A4540] py-8">{labels.empty}</p>
             )}
 
-            {!loading && data && tab === 'guests' && <PhotoGrid items={data.guests} />}
             {!loading && data && tab === 'table' && <PhotoGrid items={data.tableChallenge} />}
             {!loading && data && tab === 'camera' && (
               <CameraTab sessions={data.camera} labels={labels} />

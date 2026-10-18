@@ -234,3 +234,45 @@ export const photoboothPhotos = sqliteTable('photobooth_photos', {
     .notNull()
     .default(sql`(datetime('now'))`),
 });
+
+// ---------------------------------------------------------------------------
+// Fotky a videa od hostů (originály v Cloudflare R2, tady jen evidence)
+// ---------------------------------------------------------------------------
+export const media = sqliteTable(
+  'media',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    uid: text('uid').notNull().unique(),
+    guestName: text('guest_name').notNull(),
+    guestKey: text('guest_key').notNull(),
+    // sha256 tokenu zařízení — kdo nahrál, smí mazat a navazovat přerušené nahrávání
+    deviceHash: text('device_hash').notNull(),
+    // název|velikost|lastModified — pozná stejný soubor vybraný znovu
+    fingerprint: text('fingerprint').notNull(),
+    kind: text('kind', { enum: ['photo', 'video'] }).notNull(),
+    fileName: text('file_name').notNull(),
+    contentType: text('content_type').notNull(),
+    size: integer('size').notNull(),
+    partSize: integer('part_size').notNull(),
+    originalKey: text('original_key').notNull(),
+    uploadId: text('upload_id'),
+    status: text('status', { enum: ['uploading', 'processing', 'ready'] })
+      .notNull()
+      .default('uploading'),
+    thumbKey: text('thumb_key'),
+    previewKey: text('preview_key'),
+    playbackKey: text('playback_key'),
+    width: integer('width'),
+    height: integer('height'),
+    durationMs: integer('duration_ms'),
+    takenAt: text('taken_at'),
+    processingError: text('processing_error'),
+    attempts: integer('attempts').notNull().default(0),
+    lockedUntil: text('locked_until'),
+    createdAt: text('created_at')
+      .notNull()
+      .default(sql`(datetime('now'))`),
+    uploadedAt: text('uploaded_at'),
+  },
+  (t) => [uniqueIndex('media_device_fingerprint_unique').on(t.deviceHash, t.fingerprint)],
+);

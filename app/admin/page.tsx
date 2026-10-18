@@ -779,8 +779,20 @@ export default function AdminPage() {
           ================================================================ */}
           {tab === 'guest-photos' && (
             <div className="space-y-6">
+              <div className="rounded-xl border border-[#d8b28c]/30 bg-[#d8b28c]/5 p-4">
+                <p className="text-sm text-[#F5F0E8]">
+                  Fotky a videa od hostů se teď nahrávají do galerie na <code>/fotky</code> (originály v Cloudflare R2).
+                  Jako admin tam vidíte vše bez kódu a můžete mazat cokoli.
+                </p>
+                <a
+                  href="/fotky"
+                  className="inline-block mt-2 text-xs text-[#d8b28c] underline underline-offset-2"
+                >
+                  Otevřít galerii →
+                </a>
+              </div>
               <p className="text-xs text-[#5a5248] font-[family-name:var(--font-cormorant)]">
-                Fotky nahrané hosty přes web (sekce „Vaše fotky ze svatby“). Smazáním zmizí z webu i z disku serveru.
+                Starší fotky nahrané přes web před zavedením galerie. Smazáním zmizí z webu i z disku serveru.
               </p>
 
               {guestPhotos.length === 0 ? (
