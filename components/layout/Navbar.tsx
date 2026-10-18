@@ -10,7 +10,7 @@ const navItems: { href: string; key: string; external?: boolean }[] = [
   { href: '#colors', key: 'nav.colors' },
   { href: '#guestbook', key: 'nav.guestbook' },
   { href: '#quiz', key: 'nav.quiz' },
-  { href: '#wedding-photos', key: 'nav.photos' },
+  { href: '/fotky', key: 'nav.photos', external: true },
   // { href: '/fotokoutek', key: 'nav.photobooth', external: true },
 ];
 
