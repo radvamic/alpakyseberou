@@ -671,6 +671,12 @@ export default function AdminPage() {
                       >
                         Otevřít stránku →
                       </a>
+                      <a
+                        href="/admin/kamera/tisk"
+                        className="inline-block mt-3 ml-4 text-xs text-[#d8b28c] underline underline-offset-2"
+                      >
+                        Tisk A5 →
+                      </a>
                     </div>
                   </div>
                 </div>
