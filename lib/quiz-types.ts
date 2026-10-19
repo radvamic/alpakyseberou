@@ -60,6 +60,8 @@ export interface QuizResultPlayer {
   correct: number;
   /** questionId → odpověděl správně? (chybí = neodpověděl) */
   cells: Record<number, boolean>;
+  /** questionId → index zvolené odpovědi */
+  answers: QuizAnswerMap;
 }
 
 /** Výsledky pro organizátory — včetně správnosti. */
@@ -71,7 +73,12 @@ export interface QuizResults {
 /** Konečné výsledky pro úvodní stránku — až po uzavření kvízu. */
 export interface QuizFinalResults {
   questions: Omit<QuizResultQuestion, 'id'>[];
-  players: { name: string; correct: number }[];
+  players: {
+    name: string;
+    correct: number;
+    /** číslo otázky → index zvolené odpovědi (chybí = neodpověděl) */
+    answers: Record<number, number>;
+  }[];
 }
 
 /** Veřejný průběh — jen kdo hraje a kolik zodpověděl, nic o správnosti. */
