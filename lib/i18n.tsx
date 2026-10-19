@@ -234,6 +234,9 @@ const translations: Record<Locale, any> = {
       tieNote: 'Při shodě vyhrál ten, kdo odpověděl dřív.',
       answers: 'Správné odpovědi',
       successRate: '{pct} % správně ({correct}/{answered})',
+      playerDetail: 'Zobrazit odpovědi hráče {name}',
+      notAnswered: 'Bez odpovědi',
+      correctWas: 'správně:',
     },
     alpacas: {
       title: 'Proč alpaky?',
@@ -522,6 +525,9 @@ const translations: Record<Locale, any> = {
       tieNote: 'On a tie, whoever answered first ranks higher.',
       answers: 'Correct answers',
       successRate: '{pct}% correct ({correct}/{answered})',
+      playerDetail: 'Show answers of {name}',
+      notAnswered: 'Not answered',
+      correctWas: 'correct:',
     },
     alpacas: {
       title: 'Why alpacas?',

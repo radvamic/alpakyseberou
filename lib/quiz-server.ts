@@ -78,6 +78,7 @@ export function computeResults(): QuizResults {
     answered: 0,
     correct: 0,
     cells: {} as Record<number, boolean>,
+    answers: {} as QuizAnswerMap,
     lastAnswerAt: '',
   }));
   const rowById = new Map(rows.map((row) => [row.id, row]));
@@ -89,6 +90,7 @@ export function computeResults(): QuizResults {
 
     const isCorrect = answer.selectedOption === correctOption;
     row.cells[answer.questionId] = isCorrect;
+    row.answers[answer.questionId] = answer.selectedOption;
     row.answered += 1;
     if (isCorrect) row.correct += 1;
     if (answer.updatedAt > row.lastAnswerAt) row.lastAnswerAt = answer.updatedAt;
@@ -119,12 +121,13 @@ export function computeResults(): QuizResults {
       correctCount: questionStats.get(q.id)!.correct,
     })),
     players: rows.map(
-      ({ id, name, answered, correct, cells }): QuizResultPlayer => ({
+      ({ id, name, answered, correct, cells, answers }): QuizResultPlayer => ({
         id,
         name,
         answered,
         correct,
         cells,
+        answers,
       }),
     ),
   };

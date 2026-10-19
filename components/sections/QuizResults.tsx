@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 import SectionHeader from '@/components/ui/SectionHeader';
@@ -11,6 +11,7 @@ type LoadState = 'loading' | 'ready' | 'error';
 export default function QuizResults() {
   const { t, locale } = useI18n();
   const [expanded, setExpanded] = useState(false);
+  const [openPlayer, setOpenPlayer] = useState<number | null>(null);
   const [data, setData] = useState<QuizFinalResults | null>(null);
   const [loadState, setLoadState] = useState<LoadState>('loading');
 
@@ -83,26 +84,101 @@ export default function QuizResults() {
               <div className="mx-auto max-w-xl rounded-xl border border-[#2A2520] bg-[#111111] px-5 py-2 mb-3">
                 <table className="w-full border-collapse">
                   <tbody>
-                    {data.players.map((p, i) => (
-                      <tr key={i} className="border-b border-[#1f1c19] last:border-b-0">
-                        <td
-                          className={`py-3 pr-4 w-10 font-[family-name:var(--font-playfair)] ${
-                            i < 3 ? 'text-[#d8b28c]' : 'text-[#5a5248]'
-                          }`}
-                        >
-                          {i + 1}.
-                        </td>
-                        <td className={`py-3 pr-4 ${i < 3 ? 'text-[#F5F0E8]' : 'text-[#B8A99A]'}`}>
-                          {p.name}
-                        </td>
-                        <td className="py-3 text-right whitespace-nowrap">
-                          <span className="font-[family-name:var(--font-playfair)] text-xl text-[#d8b28c]">
-                            {p.correct}
-                          </span>
-                          <span className="text-sm text-[#5a5248]"> / {total}</span>
-                        </td>
-                      </tr>
-                    ))}
+                    {data.players.map((p, i) => {
+                      const open = openPlayer === i;
+                      return (
+                        <Fragment key={i}>
+                          <tr
+                            onClick={() => setOpenPlayer(open ? null : i)}
+                            className={`cursor-pointer hover:bg-[#161412] transition-colors ${
+                              open ? '' : 'border-b border-[#1f1c19] last:border-b-0'
+                            }`}
+                          >
+                            <td
+                              className={`py-3 pr-4 w-10 font-[family-name:var(--font-playfair)] ${
+                                i < 3 ? 'text-[#d8b28c]' : 'text-[#5a5248]'
+                              }`}
+                            >
+                              {i + 1}.
+                            </td>
+                            <td className={`py-3 pr-4 ${i < 3 ? 'text-[#F5F0E8]' : 'text-[#B8A99A]'}`}>
+                              <button
+                                type="button"
+                                aria-expanded={open}
+                                aria-label={(t('quiz.playerDetail') as string).replace('{name}', p.name)}
+                                className="text-left"
+                              >
+                                {p.name}
+                              </button>
+                            </td>
+                            <td className="py-3 text-right whitespace-nowrap">
+                              <span className="font-[family-name:var(--font-playfair)] text-xl text-[#d8b28c]">
+                                {p.correct}
+                              </span>
+                              <span className="text-sm text-[#5a5248]"> / {total}</span>
+                              <motion.span
+                                animate={{ rotate: open ? 180 : 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="inline-block ml-3 text-xs text-[#7a6e65]"
+                              >
+                                ↓
+                              </motion.span>
+                            </td>
+                          </tr>
+                          {open && (
+                            <tr className="border-b border-[#1f1c19] last:border-b-0">
+                              <td colSpan={3} className="pb-4">
+                                <ul className="space-y-3 rounded-lg bg-[#0d0c0b] px-4 py-3">
+                                  {data.questions.map((q) => {
+                                    const picked = p.answers[q.number];
+                                    const answered = picked !== undefined;
+                                    const isCorrect = answered && picked === q.correctOption;
+                                    const pickedOpt = answered ? q.options[picked] : undefined;
+                                    const correctOpt = q.options[q.correctOption];
+                                    return (
+                                      <li key={q.number} className="flex gap-3 text-sm">
+                                        <span
+                                          className={`w-4 shrink-0 text-center ${
+                                            !answered
+                                              ? 'text-[#5a5248]'
+                                              : isCorrect
+                                                ? 'text-emerald-400'
+                                                : 'text-red-400/80'
+                                          }`}
+                                        >
+                                          {!answered ? '–' : isCorrect ? '✓' : '✗'}
+                                        </span>
+                                        <div className="min-w-0">
+                                          <p className="text-xs text-[#7a6e65] leading-snug">
+                                            {q.number}. {pick(q.questionCs, q.questionEn)}
+                                          </p>
+                                          <p className={isCorrect ? 'text-emerald-300/90' : answered ? 'text-[#F5F0E8]' : 'text-[#5a5248] italic'}>
+                                            {pickedOpt ? (
+                                              <>
+                                                {OPTION_LETTERS[picked]}) {pick(pickedOpt.cs, pickedOpt.en)}
+                                              </>
+                                            ) : (
+                                              (t('quiz.notAnswered') as string)
+                                            )}
+                                          </p>
+                                          {!isCorrect && correctOpt && (
+                                            <p className="text-xs text-[#B8A99A]">
+                                              {t('quiz.correctWas') as string}{' '}
+                                              <span className="text-[#d8b28c]">{OPTION_LETTERS[q.correctOption]})</span>{' '}
+                                              {pick(correctOpt.cs, correctOpt.en)}
+                                            </p>
+                                          )}
+                                        </div>
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                              </td>
+                            </tr>
+                          )}
+                        </Fragment>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

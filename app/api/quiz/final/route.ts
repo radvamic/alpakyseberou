@@ -10,6 +10,7 @@ export async function GET() {
 
   try {
     const results = computeResults();
+    const numberById = new Map(results.questions.map((q) => [q.id, q.number]));
     const body: QuizFinalResults = {
       questions: results.questions.map((q) => ({
         number: q.number,
@@ -20,7 +21,13 @@ export async function GET() {
         answeredCount: q.answeredCount,
         correctCount: q.correctCount,
       })),
-      players: results.players.map(({ name, correct }) => ({ name, correct })),
+      players: results.players.map(({ name, correct, answers }) => ({
+        name,
+        correct,
+        answers: Object.fromEntries(
+          Object.entries(answers).map(([questionId, option]) => [numberById.get(Number(questionId)), option]),
+        ),
+      })),
     };
     return NextResponse.json(body);
   } catch (error) {
