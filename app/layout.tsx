@@ -30,12 +30,14 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://alpakyseberou.cz"),
   title: "Klára & Michal — 26. 9. 2026",
-  description: "Svatební web Michala a Kláry. 26. září 2026 v Hotelu Všetice.",
+  description: "Děkujeme, že jste to s námi oslavili! Fotky a videa ze svatby najdete tady.",
   icons: { icon: "/icon.svg" },
   openGraph: {
-    title: "Klára & Michal — Svatba 2026",
-    description: "Pojďte oslavit naši lásku s námi. 26. září 2026, Hotel Všetice.",
+    title: "Klára & Michal — Děkujeme! 🤍",
+    description: "Děkujeme, že jste to s námi oslavili! Fotky a videa ze svatby najdete tady.",
+    locale: "cs_CZ",
   },
 };
 

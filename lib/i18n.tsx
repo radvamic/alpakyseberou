@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { writeSiteLang } from '@/lib/site-lang';
 
 export type Locale = 'cs' | 'en';
 
@@ -218,6 +219,19 @@ const translations: Record<Locale, any> = {
       publicDesc: 'Zobrazí se na nástěnce pro všechny',
       private: 'Soukromý',
       privateDesc: 'Uvidí ho jen Klára & Michal',
+    },
+    thanks: {
+      greeting: 'Naši milí!',
+      paragraphs: [
+        'Ještě jednou bychom vám chtěli z celého srdce poděkovat, že jste byli součástí našeho svatebního dne.',
+        'Za vaši přítomnost, úžasnou energii, veškeré alpačí skotačení, všechna krásná přání i štědré dary.',
+        'Díky vám byl ten den přesně takový, jaký jsme si ho vysnili. A možná ještě o něco krásnější! 🥹',
+      ],
+      signoff: 'S láskou',
+      signature: 'Klárka & Michal',
+      photosCta: 'Chci vidět fotky',
+      continue: 'Pokračovat na web',
+      close: 'Zavřít',
     },
     weddingPhotos: {
       title: 'Fotky ze svatby',
@@ -510,6 +524,19 @@ const translations: Record<Locale, any> = {
       private: 'Private',
       privateDesc: 'Only Klára & Michal will see it',
     },
+    thanks: {
+      greeting: 'Our dear ones!',
+      paragraphs: [
+        'Once again, we want to thank you from the bottom of our hearts for being part of our wedding day.',
+        'For being there, for your amazing energy, all the alpaca shenanigans, all the lovely wishes and generous gifts.',
+        'Thanks to you, the day was exactly as we had dreamed it would be. Maybe even a little more beautiful! 🥹',
+      ],
+      signoff: 'With love',
+      signature: 'Klárka & Michal',
+      photosCta: 'Show me the photos',
+      continue: 'Continue to the website',
+      close: 'Close',
+    },
     weddingPhotos: {
       title: 'Wedding Photos',
       subtitle: 'Share your shots from our big day',
@@ -598,8 +625,19 @@ const translations: Record<Locale, any> = {
   },
 };
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState<Locale>('cs');
+export function I18nProvider({
+  children,
+  initialLocale = 'cs',
+}: {
+  children: ReactNode;
+  initialLocale?: Locale;
+}) {
+  const [locale, setLocaleState] = useState<Locale>(initialLocale);
+
+  const setLocale = useCallback((next: Locale) => {
+    setLocaleState(next);
+    writeSiteLang(next);
+  }, []);
 
   const t = useCallback(
     (key: string) => {

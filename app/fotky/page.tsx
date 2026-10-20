@@ -16,8 +16,8 @@ import {
 } from '@/lib/media/shared';
 import { MEDIA_TEXTS, type MediaLang } from '@/lib/media/texts';
 import { getDeviceToken, readPendingCount } from '@/lib/media/uploader';
+import { readSiteLang, writeSiteLang } from '@/lib/site-lang';
 
-const LANG_KEY = 'media-lang';
 const TABS: MediaCollection[] = ['photographer', 'film', 'guests'];
 const TAB_HASH: Record<MediaCollection, string> = {
   photographer: 'fotograf',
@@ -78,12 +78,8 @@ export default function FotkyPage() {
   const { uploader, snapshot } = useMediaUploader(identity, scheduleRefresh);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(LANG_KEY);
-      if (stored === 'en' || stored === 'cs') setLang(stored);
-    } catch {
-      // výchozí čeština
-    }
+    const stored = readSiteLang();
+    if (stored) setLang(stored);
     setIdentity(readIdentity());
     setPending(readPendingCount());
     const syncTabWithHash = () => {
@@ -119,11 +115,7 @@ export default function FotkyPage() {
   const switchLang = () => {
     const next = lang === 'cs' ? 'en' : 'cs';
     setLang(next);
-    try {
-      localStorage.setItem(LANG_KEY, next);
-    } catch {
-      // jen do zavření stránky
-    }
+    writeSiteLang(next);
   };
 
   const byCollection = useMemo(() => {
