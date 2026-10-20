@@ -3,6 +3,7 @@
 import { useState, useSyncExternalStore } from 'react';
 import { motion } from 'framer-motion';
 import { I18nProvider } from '@/lib/i18n';
+import { readSiteLang } from '@/lib/site-lang';
 import SmoothScrollProvider from '@/components/providers/SmoothScrollProvider';
 import Preloader from '@/components/layout/Preloader';
 import Navbar from '@/components/layout/Navbar';
@@ -23,6 +24,7 @@ import WhyAlpacas from '@/components/sections/WhyAlpacas';
 // import PhotoBoothTeaser from '@/components/sections/PhotoBoothTeaser';
 import AlpacaSectionDivider from '@/components/ui/AlpacaSectionDivider';
 import Footer from '@/components/layout/Footer';
+import ThankYouModal from '@/components/ui/ThankYouModal';
 
 const subscribeNoop = () => () => {};
 
@@ -34,7 +36,7 @@ export default function Home() {
   if (!mounted) return null;
 
   return (
-    <I18nProvider>
+    <I18nProvider initialLocale={readSiteLang() ?? 'cs'}>
       <Preloader onComplete={() => setPreloaderDone(true)} />
 
       <motion.div
@@ -85,6 +87,9 @@ export default function Home() {
           <Footer />
         </SmoothScrollProvider>
       </motion.div>
+
+      {/* Po svatbě: poděkování hostům, jednou na zařízení */}
+      <ThankYouModal ready={preloaderDone} />
     </I18nProvider>
   );
 }
