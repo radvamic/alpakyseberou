@@ -41,15 +41,19 @@ function Tile({
   onClick: () => void;
 }) {
   const [broken, setBroken] = useState(false);
+  // Poměr stran zlehka omezený, aby panoramata a úzké výřezy nerozbily řádek
+  const ratio = item.width && item.height ? Math.min(2.5, Math.max(0.5, item.width / item.height)) : 1;
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`group relative aspect-square overflow-hidden bg-[#1A1A1A] focus:outline-none sm:rounded-md focus-visible:ring-2 focus-visible:ring-[#d8b28c] ${
+      style={{ flexGrow: ratio, flexBasis: `calc(var(--row-h) * ${ratio})` }}
+      className={`group relative overflow-hidden bg-[#1A1A1A] focus:outline-none sm:rounded-md focus-visible:ring-2 focus-visible:ring-[#d8b28c] ${
         selected ? 'ring-2 ring-inset ring-[#d8b28c]' : ''
       }`}
       aria-pressed={selecting ? selected : undefined}
     >
+      <span className="block" style={{ paddingBottom: `${100 / ratio}%` }} />
       {item.hasThumb && !broken ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -58,12 +62,12 @@ function Tile({
           loading="lazy"
           decoding="async"
           onError={() => setBroken(true)}
-          className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] ${
+          className={`absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] ${
             selected ? 'scale-[0.92]' : ''
           }`}
         />
       ) : (
-        <span className="flex h-full w-full flex-col items-center justify-center gap-1 p-2 text-center text-[10px] text-[#7a6e65]">
+        <span className="absolute inset-0 flex flex-col items-center justify-center gap-1 p-2 text-center text-[10px] text-[#7a6e65]">
           {item.status === 'processing' ? (
             <>
               <span className="h-4 w-4 animate-spin rounded-full border border-[#d8b28c]/30 border-t-[#d8b28c]" />
@@ -255,7 +259,10 @@ export default function MediaGallery({
       </div>
       <p className="mb-2 text-xs text-[#7a6e65]">{t.count(shown.length)}</p>
 
-      <div className="-mx-4 grid grid-cols-3 gap-0.5 sm:mx-0 sm:grid-cols-4 sm:gap-1.5 md:grid-cols-5">
+      {/* Mozaika po řádcích: dlaždice mají poměr stran fotky a každý řádek
+          se roztáhne na celou šířku, takže fotky na výšku i na šířku jsou celé
+          a pořadí podle času zůstává zleva doprava. */}
+      <div className="-mx-4 flex flex-wrap gap-0.5 [--row-h:7.5rem] sm:mx-0 sm:gap-1.5 sm:[--row-h:11rem] md:[--row-h:13rem]">
         {shown.slice(0, visible).map((item, i) => (
           <Tile
             key={item.uid}
@@ -266,6 +273,8 @@ export default function MediaGallery({
             onClick={() => (selecting ? toggle(item.uid) : setLightbox(i))}
           />
         ))}
+        {/* Poslední neúplný řádek se neroztahuje přes celou šířku */}
+        <span aria-hidden className="grow-[100] basis-0" />
       </div>
       {visible < shown.length && <div ref={sentinel} className="h-10" />}
 

@@ -32,6 +32,7 @@ interface Job {
   id: number;
   uid: string;
   kind: Kind;
+  collection: string;
   original_key: string;
   file_name: string;
   size: number;
@@ -115,7 +116,7 @@ function claimJob(kind: Kind): Job | undefined {
            AND (locked_until IS NULL OR locked_until < ?)
          ORDER BY id LIMIT 1
        )
-       RETURNING id, uid, kind, original_key, file_name, size, attempts`,
+       RETURNING id, uid, kind, collection, original_key, file_name, size, attempts`,
     )
     .get(lockedUntil, kind, MAX_ATTEMPTS, now.toISOString()) as Job | undefined;
 }
@@ -191,15 +192,18 @@ function pragueOffsetMinutes(at: Date): number {
  * Čas pořízení z EXIFu. EXIF ukládá místní čas bez zóny (exif-reader ho vrátí,
  * jako by byl v UTC). Zónu bereme z OffsetTimeOriginal (iPhone, novější
  * Android), jinak předpokládáme pražský čas — svatba byla v Česku.
+ *
+ * U fotografky zónu ignorujeme: její fotoaparáty měly hodiny na místní čas,
+ * ale zónu +01:00 bez letního času, takže by časy ujely o hodinu.
  */
-function exifDate(exif: Buffer | undefined): string | null {
+function exifDate(exif: Buffer | undefined, trustOffset: boolean): string | null {
   if (!exif) return null;
   try {
     const data = exifReader(exif);
     const wallClock = data.Photo?.DateTimeOriginal ?? data.Image?.DateTime;
     if (!(wallClock instanceof Date) || Number.isNaN(wallClock.getTime())) return null;
     const offset = data.Photo?.OffsetTimeOriginal ?? data.Photo?.OffsetTime;
-    const match = typeof offset === 'string' ? /^([+-])(\d{2}):(\d{2})$/.exec(offset.trim()) : null;
+    const match = trustOffset && typeof offset === 'string' ? /^([+-])(\d{2}):(\d{2})$/.exec(offset.trim()) : null;
     const offsetMinutes = match
       ? (match[1] === '-' ? -1 : 1) * (Number(match[2]) * 60 + Number(match[3]))
       : pragueOffsetMinutes(wallClock);
@@ -232,7 +236,7 @@ async function processPhoto(job: Job): Promise<void> {
     preview_key: previewKey,
     width: (rotated ? meta.height : meta.width) ?? null,
     height: (rotated ? meta.width : meta.height) ?? null,
-    taken_at: exifDate(meta.exif),
+    taken_at: exifDate(meta.exif, job.collection === 'guests'),
     processing_error: null,
   });
 }
