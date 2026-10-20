@@ -1,27 +1,34 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { useI18n } from '@/lib/i18n';
 import { setSmoothScrollPaused } from '@/components/providers/SmoothScrollProvider';
 
+// Kolikrát host poděkování zavřel (dřív jen '1' = jednou)
 const SEEN_KEY = 'thanks-seen';
+const MAX_SHOWS = 2;
 // ?dekujeme v adrese ukáže poděkování znovu (náhled pro nás)
 const PREVIEW_PARAM = 'dekujeme';
+
+function readShows(): number {
+  const shows = Number(localStorage.getItem(SEEN_KEY));
+  return Number.isFinite(shows) ? shows : 0;
+}
 
 function wasSeen(): boolean {
   try {
     if (new URLSearchParams(window.location.search).has(PREVIEW_PARAM)) return false;
-    return localStorage.getItem(SEEN_KEY) === '1';
+    return readShows() >= MAX_SHOWS;
   } catch {
     return false;
   }
 }
 
-function markSeen() {
+function countShow() {
   try {
-    localStorage.setItem(SEEN_KEY, '1');
+    localStorage.setItem(SEEN_KEY, String(readShows() + 1));
   } catch {
     // bez localStorage se poděkování ukáže i příště
   }
@@ -32,7 +39,7 @@ function hasModalHistoryEntry(): boolean {
 }
 
 /**
- * Poděkování hostům po svatbě: ukáže se jednou na zařízení, hned po preloaderu.
+ * Poděkování hostům po svatbě: ukáže se dvakrát na zařízení, hned po preloaderu.
  * Hlavní tlačítko vede rovnou na /fotky, tlačítko zpět v telefonu okno jen zavře.
  */
 export default function ThankYouModal({ ready }: { ready: boolean }) {
@@ -40,12 +47,19 @@ export default function ThankYouModal({ ready }: { ready: boolean }) {
   const reduceMotion = useReducedMotion();
   const [dismissed, setDismissed] = useState(wasSeen);
   const open = ready && !dismissed;
+  // Zavření křížkem i následný popstate z history.back() se počítají jako jedno zobrazení
+  const countedRef = useRef(false);
+  const markSeen = useCallback(() => {
+    if (countedRef.current) return;
+    countedRef.current = true;
+    countShow();
+  }, []);
 
   const close = useCallback(() => {
     markSeen();
     setDismissed(true);
     if (hasModalHistoryEntry()) window.history.back();
-  }, []);
+  }, [markSeen]);
 
   const openPhotos = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -82,7 +96,7 @@ export default function ThankYouModal({ ready }: { ready: boolean }) {
       html.style.overflow = prevOverflow;
       setSmoothScrollPaused(false);
     };
-  }, [open, close]);
+  }, [open, close, markSeen]);
 
   useEffect(() => {
     if (!open || reduceMotion) return;
