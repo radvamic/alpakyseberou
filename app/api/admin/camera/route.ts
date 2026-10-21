@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { cameraSessions, cameraPhotos } from '@/db/schema';
-import { eq, sql } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { isAdmin } from '@/lib/admin-auth';
-import { deletePhotoFile } from '@/lib/delete-stored-photo';
+import { deleteCameraPhoto } from '@/lib/media/camera';
 
 export async function GET(request: NextRequest) {
   if (!isAdmin(request)) {
@@ -50,16 +50,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
 
-    deletePhotoFile(photo.url);
-    if (photo.thumbnailUrl) deletePhotoFile(photo.thumbnailUrl);
-
-    await db.delete(cameraPhotos).where(eq(cameraPhotos.id, id));
-
-    // Decrement session counter
-    await db
-      .update(cameraSessions)
-      .set({ photosTaken: sql`MAX(0, ${cameraSessions.photosTaken} - 1)` })
-      .where(eq(cameraSessions.id, photo.sessionId));
+    await deleteCameraPhoto(photo);
 
     return NextResponse.json({ success: true });
   } catch (error) {

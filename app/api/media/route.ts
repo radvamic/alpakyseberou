@@ -4,9 +4,10 @@ import { db } from '@/db';
 import { media } from '@/db/schema';
 import { isAdmin } from '@/lib/admin-auth';
 import { deviceHash } from '@/lib/media/access';
+import { listCameraItems } from '@/lib/media/camera';
 import type { MediaListResponse } from '@/lib/media/shared';
 
-/** Celá galerie — rozpracovaná nahrávání se nevrací. */
+/** Celá galerie i se snímky z jednorázového fotoaparátu — rozpracovaná nahrávání se nevrací. */
 export async function GET(request: NextRequest) {
   try {
     const device = deviceHash(request);
@@ -42,6 +43,7 @@ export async function GET(request: NextRequest) {
         mine: !!device && owner === device,
       })),
     };
+    body.items.push(...(await listCameraItems()));
     return NextResponse.json(body, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
     console.error('Media list error:', error);

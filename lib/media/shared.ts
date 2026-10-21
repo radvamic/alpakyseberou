@@ -7,6 +7,11 @@ export type MediaKind = 'photo' | 'video';
 /** guests = nahrávají hosté; photographer / film = nahrává jen admin. */
 export type MediaCollection = 'guests' | 'photographer' | 'film';
 export const MEDIA_COLLECTIONS: readonly MediaCollection[] = ['guests', 'photographer', 'film'];
+/**
+ * Sekce galerie. camera = snímky z jednorázového fotoaparátu (/kamera) —
+ * leží na disku serveru, do galerie se jen přimíchají (viz lib/media/camera.ts).
+ */
+export type GalleryCollection = MediaCollection | 'camera';
 
 /** Jméno, pod kterým se v galerii a v ZIPu ukazují soubory od profesionálů. */
 export const COLLECTION_AUTHOR: Record<Exclude<MediaCollection, 'guests'>, string> = {
@@ -21,7 +26,7 @@ export interface MediaItem {
   guestName: string;
   guestKey: string;
   kind: MediaKind;
-  collection: MediaCollection;
+  collection: GalleryCollection;
   status: 'processing' | 'ready';
   fileName: string;
   size: number;
@@ -89,6 +94,12 @@ export function detectKind(type: string, name: string): MediaKind | null {
 
 export function fileFingerprint(file: { name: string; size: number; lastModified: number }): string {
   return `${file.name}|${file.size}|${file.lastModified}`;
+}
+
+/** Položky z jednorázového fotoaparátu mají uid „cam-<id fotky>“. */
+export function cameraPhotoId(uid: string): number | null {
+  const match = /^cam-(\d{1,9})$/.exec(uid);
+  return match ? Number(match[1]) : null;
 }
 
 export function mediaUrl(uid: string, variant: MediaVariant): string {
