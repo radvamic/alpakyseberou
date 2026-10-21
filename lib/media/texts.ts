@@ -15,6 +15,7 @@ const cs = {
     photographer: 'Fotografka',
     film: 'Video',
     guests: 'Od hostů',
+    camera: 'Jednorázovky',
   },
   photographer: {
     intro: 'Profesionální fotky z celého dne od naší fotografky. Stáhněte si, co se vám líbí, nebo rovnou sdílejte.',
@@ -30,6 +31,10 @@ const cs = {
     intro: 'Svatební video od kameramana. Pusťte si ho tady, nebo si stáhněte originál.',
   },
   guestsIntro: 'Nahrajte, co jste nafotili, a stáhněte si, co nafotili ostatní.',
+  camera: {
+    intro: 'Slíbili jsme, že to vyvoláme — tady to je! Snímky z jednorázového fotoaparátu přes QR kód, každý měl na filmu 25 políček.',
+    empty: 'Z jednorázového fotoaparátu tu zatím nic není.',
+  },
   admin: {
     upload: (section: string) => `Nahrát do sekce „${section}“`,
     hint: 'Vidíte jen vy jako admin. Originály se uloží v plné kvalitě.',
@@ -115,6 +120,7 @@ const en: typeof cs = {
     photographer: 'Photographer',
     film: 'Film',
     guests: 'From guests',
+    camera: 'Disposable',
   },
   photographer: {
     intro: 'Professional photos from the whole day by our photographer. Download what you like or share it right away.',
@@ -130,6 +136,10 @@ const en: typeof cs = {
     intro: 'The wedding film from our videographer. Watch it here or download the original.',
   },
   guestsIntro: 'Upload what you captured and download what everyone else did.',
+  camera: {
+    intro: 'We promised to develop the film — here it is! Shots from the QR-code disposable camera, 25 frames each.',
+    empty: 'Nothing from the disposable camera yet.',
+  },
   admin: {
     upload: (section: string) => `Upload to “${section}”`,
     hint: 'Only visible to you as admin. Originals are stored in full quality.',

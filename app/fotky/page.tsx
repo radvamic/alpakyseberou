@@ -10,7 +10,7 @@ import { useMediaUploader } from '@/hooks/useMediaUploader';
 import { GUEST_IDENTITY_STORAGE_KEY, type GuestIdentity } from '@/lib/guest-identity';
 import {
   MEDIA_DEVICE_HEADER,
-  type MediaCollection,
+  type GalleryCollection,
   type MediaItem,
   type MediaListResponse,
 } from '@/lib/media/shared';
@@ -18,11 +18,12 @@ import { MEDIA_TEXTS, type MediaLang } from '@/lib/media/texts';
 import { getDeviceToken, readPendingCount } from '@/lib/media/uploader';
 import { readSiteLang, writeSiteLang } from '@/lib/site-lang';
 
-const TABS: MediaCollection[] = ['photographer', 'film', 'guests'];
-const TAB_HASH: Record<MediaCollection, string> = {
+const TABS: GalleryCollection[] = ['photographer', 'film', 'guests', 'camera'];
+const TAB_HASH: Record<GalleryCollection, string> = {
   photographer: 'fotograf',
   film: 'video',
   guests: 'hoste',
+  camera: 'jednorazovky',
 };
 
 function readIdentity(): GuestIdentity | null {
@@ -48,7 +49,7 @@ export default function FotkyPage() {
   const [items, setItems] = useState<MediaItem[] | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [pending, setPending] = useState(0);
-  const [tab, setTab] = useState<MediaCollection | null>(null);
+  const [tab, setTab] = useState<GalleryCollection | null>(null);
   const texts = MEDIA_TEXTS[lang];
 
   const loadGallery = useCallback(async () => {
@@ -86,7 +87,7 @@ export default function FotkyPage() {
       const fromHash = Object.entries(TAB_HASH).find(
         ([, hash]) => `#${hash}` === window.location.hash,
       );
-      if (fromHash) setTab(fromHash[0] as MediaCollection);
+      if (fromHash) setTab(fromHash[0] as GalleryCollection);
     };
     syncTabWithHash();
     window.addEventListener('hashchange', syncTabWithHash);
@@ -119,16 +120,21 @@ export default function FotkyPage() {
   };
 
   const byCollection = useMemo(() => {
-    const groups: Record<MediaCollection, MediaItem[]> = { photographer: [], film: [], guests: [] };
+    const groups: Record<GalleryCollection, MediaItem[]> = {
+      photographer: [],
+      film: [],
+      guests: [],
+      camera: [],
+    };
     for (const item of items ?? []) groups[item.collection].push(item);
     return groups;
   }, [items]);
 
   // Bez volby z odkazu (#fotograf…) se otevře fotografka, pokud už má fotky
-  const activeTab: MediaCollection =
+  const activeTab: GalleryCollection =
     tab ?? (byCollection.photographer.length > 0 ? 'photographer' : 'guests');
 
-  const changeTab = (value: MediaCollection) => {
+  const changeTab = (value: GalleryCollection) => {
     setTab(value);
     window.history.replaceState(null, '', `#${TAB_HASH[value]}`);
   };
@@ -193,7 +199,8 @@ export default function FotkyPage() {
             className="sticky top-0 z-30 -mx-4 mb-5 bg-[#0A0A0A]/90 px-4 pb-3 pt-[max(0.5rem,env(safe-area-inset-top))] backdrop-blur"
             aria-label={texts.title}
           >
-            <div className="mx-auto grid max-w-md grid-cols-3 gap-1 rounded-full border border-[#2A2520] bg-[#111111] p-1">
+            {/* Čtyři záložky se na telefon vejdou jen s počtem pod názvem a šířkou podle textu */}
+            <div className="mx-auto flex max-w-xl gap-0.5 rounded-full border border-[#2A2520] bg-[#111111] p-1">
               {TABS.map((value) => {
                 const count = byCollection[value].length;
                 return (
@@ -202,14 +209,16 @@ export default function FotkyPage() {
                     type="button"
                     onClick={() => changeTab(value)}
                     aria-pressed={activeTab === value}
-                    className={`min-h-11 rounded-full px-2 text-sm transition-colors ${
+                    className={`flex min-h-11 min-w-0 flex-auto flex-col items-center justify-center rounded-full px-1.5 text-[13px] leading-tight max-[359px]:px-1 max-[359px]:text-[11px] transition-colors sm:flex-row sm:px-2 sm:text-sm ${
                       activeTab === value
                         ? 'bg-[#d8b28c] font-medium text-[#0A0A0A]'
                         : 'text-[#B8A99A] hover:text-[#F5F0E8]'
                     }`}
                   >
-                    {texts.sections[value]}
-                    {count > 0 && <span className="ml-1 text-xs opacity-60">{count}</span>}
+                    <span className="max-w-full truncate">{texts.sections[value]}</span>
+                    {count > 0 && (
+                      <span className="text-[10px] tabular-nums opacity-60 sm:ml-1 sm:text-xs">{count}</span>
+                    )}
                   </button>
                 );
               })}
@@ -247,6 +256,20 @@ export default function FotkyPage() {
                 isAdmin={isAdmin}
                 showGuestFilter={false}
                 emptyText={texts.photographer.empty}
+                lang={lang}
+                texts={texts}
+                onDelete={deleteItem}
+              />
+            </section>
+          ) : activeTab === 'camera' ? (
+            <section>
+              <p className="mx-auto mb-6 max-w-md text-center text-sm leading-relaxed text-[#B8A99A]">
+                {texts.camera.intro}
+              </p>
+              <MediaGallery
+                items={byCollection.camera}
+                isAdmin={isAdmin}
+                emptyText={texts.camera.empty}
                 lang={lang}
                 texts={texts}
                 onDelete={deleteItem}

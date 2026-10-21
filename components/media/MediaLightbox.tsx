@@ -66,10 +66,198 @@ async function loadShareFile(item: MediaItem): Promise<File> {
   return new File([blob], `${base}.${ext}`, { type });
 }
 
+interface ZoomView {
+  scale: number;
+  x: number;
+  y: number;
+}
+
+const MAX_ZOOM = 5;
+const DOUBLE_TAP_ZOOM = 2.5;
+const NO_ZOOM: ZoomView = { scale: 1, x: 0, y: 0 };
+
+/**
+ * Posun omezený tak, aby fotka neodjela z obrazovky. Fotka je v rámečku
+ * object-contain, takže skutečně zabírá jen část rámečku (podle poměru stran).
+ */
+function clampView(view: ZoomView, box: DOMRect, ratio: number | null): ZoomView {
+  const scale = Math.min(MAX_ZOOM, Math.max(1, view.scale));
+  let width = box.width;
+  let height = box.height;
+  if (ratio) {
+    if (box.width / box.height > ratio) width = box.height * ratio;
+    else height = box.width / ratio;
+  }
+  const maxX = Math.max(0, (scale * width - box.width) / 2);
+  const maxY = Math.max(0, (scale * height - box.height) / 2);
+  return {
+    scale,
+    x: Math.min(maxX, Math.max(-maxX, view.x)),
+    y: Math.min(maxY, Math.max(-maxY, view.y)),
+  };
+}
+
+/**
+ * Přiblížení fotky: dvěma prsty (pinch), dvojklepnutím / dvojklikem nebo
+ * kolečkem myši; přiblížená fotka se posouvá tažením. Prohlížeč sám
+ * přibližovat nesmí (touch-action: none) — zvětšil by celou stránku i s lištou.
+ */
+function useZoom(
+  ref: React.RefObject<HTMLDivElement | null>,
+  ratio: number | null,
+  onZoomed: (zoomed: boolean) => void,
+) {
+  const [view, setViewState] = useState<ZoomView>(NO_ZOOM);
+  const [gesturing, setGesturing] = useState(false);
+  const current = useRef<ZoomView>(NO_ZOOM);
+  const pointers = useRef(new Map<number, { x: number; y: number }>());
+  const gesture = useRef<{ view: ZoomView; dist: number; mid: { x: number; y: number } } | null>(null);
+  const lastTap = useRef<{ time: number; x: number; y: number } | null>(null);
+  const tapStart = useRef<{ time: number; x: number; y: number } | null>(null);
+
+  const setView = (next: ZoomView) => {
+    const box = ref.current?.getBoundingClientRect();
+    const clamped = box ? clampView(next, box, ratio) : next;
+    if ((clamped.scale > 1) !== (current.current.scale > 1)) onZoomed(clamped.scale > 1);
+    current.current = clamped;
+    setViewState(clamped);
+  };
+
+  /** Bod na obrazovce vůči středu rámečku. */
+  const local = (x: number, y: number) => {
+    const box = ref.current!.getBoundingClientRect();
+    return { x: x - box.left - box.width / 2, y: y - box.top - box.height / 2 };
+  };
+
+  /** Přiblížení tak, aby bod pod prsty / kurzorem zůstal na místě. */
+  const zoomAround = (from: ZoomView, scale: number, anchor: { x: number; y: number }, to = anchor) => {
+    const s = Math.min(MAX_ZOOM, Math.max(1, scale));
+    return {
+      scale: s,
+      x: to.x - (s * (anchor.x - from.x)) / from.scale,
+      y: to.y - (s * (anchor.y - from.y)) / from.scale,
+    };
+  };
+
+  const toggleAt = (x: number, y: number) => {
+    setView(current.current.scale > 1 ? NO_ZOOM : zoomAround(NO_ZOOM, DOUBLE_TAP_ZOOM, local(x, y)));
+  };
+
+  const startGesture = () => {
+    const points = [...pointers.current.values()];
+    if (points.length === 0) {
+      gesture.current = null;
+      setGesturing(false);
+      return;
+    }
+    const [a, b = a] = points;
+    gesture.current = {
+      view: current.current,
+      dist: Math.hypot(a.x - b.x, a.y - b.y),
+      mid: local((a.x + b.x) / 2, (a.y + b.y) / 2),
+    };
+    setGesturing(true);
+  };
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      // prst, o kterém prohlížeč neví — gesto půjde i bez zachycení
+    }
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    tapStart.current =
+      pointers.current.size === 1 ? { time: e.timeStamp, x: e.clientX, y: e.clientY } : null;
+    startGesture();
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!pointers.current.has(e.pointerId)) return;
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    const start = gesture.current;
+    if (!start) return;
+    const points = [...pointers.current.values()];
+    if (points.length >= 2) {
+      const [a, b] = points;
+      const dist = Math.hypot(a.x - b.x, a.y - b.y);
+      const mid = local((a.x + b.x) / 2, (a.y + b.y) / 2);
+      setView(zoomAround(start.view, (start.view.scale * dist) / (start.dist || 1), start.mid, mid));
+    } else if (start.view.scale > 1) {
+      // Jedním prstem jen posun přiblížené fotky (nepřiblíženou řeší listování)
+      const point = local(points[0].x, points[0].y);
+      setView({
+        scale: start.view.scale,
+        x: start.view.x + point.x - start.mid.x,
+        y: start.view.y + point.y - start.mid.y,
+      });
+    }
+  };
+
+  const onPointerUp = (e: React.PointerEvent) => {
+    if (!pointers.current.delete(e.pointerId)) return;
+    const tap = tapStart.current;
+    tapStart.current = null;
+    startGesture();
+    if (current.current.scale < 1.05 && pointers.current.size === 0) setView(NO_ZOOM);
+
+    // Dvojklepnutí prstem (myš má onDoubleClick)
+    if (e.pointerType === 'mouse' || !tap || e.type === 'pointercancel') return;
+    const short = e.timeStamp - tap.time < 250 && Math.hypot(e.clientX - tap.x, e.clientY - tap.y) < 12;
+    if (!short) return;
+    const prev = lastTap.current;
+    if (prev && e.timeStamp - prev.time < 320 && Math.hypot(e.clientX - prev.x, e.clientY - prev.y) < 40) {
+      lastTap.current = null;
+      toggleAt(e.clientX, e.clientY);
+    } else {
+      lastTap.current = { time: e.timeStamp, x: e.clientX, y: e.clientY };
+    }
+  };
+
+  // Kolečko / pinch na touchpadu — posluchač musí být aktivní, aby šel zrušit zoom stránky
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const from = current.current;
+      setView(zoomAround(from, from.scale * Math.exp(-e.deltaY * 0.004), local(e.clientX, e.clientY)));
+    };
+    node.addEventListener('wheel', onWheel, { passive: false });
+    return () => node.removeEventListener('wheel', onWheel);
+  });
+
+  return {
+    style: {
+      transform: `translate3d(${view.x}px, ${view.y}px, 0) scale(${view.scale})`,
+      transition: gesturing ? 'none' : 'transform 200ms ease-out',
+    },
+    handlers: {
+      onPointerDown,
+      onPointerMove,
+      onPointerUp,
+      onPointerCancel: onPointerUp,
+      onDoubleClick: (e: React.MouseEvent) => toggleAt(e.clientX, e.clientY),
+    },
+    zoomed: view.scale > 1,
+  };
+}
+
 /** Velká fotka: hned náhled z mřížky, ostrá verze se načte přes něj. */
-function PhotoView({ item, noPreview }: { item: MediaItem; noPreview: string }) {
+function PhotoView({
+  item,
+  noPreview,
+  onZoomed,
+}: {
+  item: MediaItem;
+  noPreview: string;
+  onZoomed: (zoomed: boolean) => void;
+}) {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [ratio, setRatio] = useState(item.width && item.height ? item.width / item.height : null);
+  const frame = useRef<HTMLDivElement>(null);
+  const zoom = useZoom(frame, ratio, onZoomed);
   if (failed) {
     return (
       <div className="flex h-64 w-64 items-center justify-center rounded-lg border border-[#2A2520] p-6 text-center text-sm text-[#7a6e65]">
@@ -79,26 +267,37 @@ function PhotoView({ item, noPreview }: { item: MediaItem; noPreview: string }) 
   }
   // Náhled i ostrá verze leží přes sebe ve stejném rámečku (object-contain), takže lícují
   return (
-    <div className="relative h-full w-full">
-      {item.hasThumb && !loaded && (
-        // eslint-disable-next-line @next/next/no-img-element
+    <div
+      ref={frame}
+      {...zoom.handlers}
+      className={`relative h-full w-full touch-none overflow-hidden ${zoom.zoomed ? 'cursor-grab' : 'cursor-zoom-in'}`}
+    >
+      <div className="absolute inset-0 will-change-transform" style={zoom.style}>
+        {item.hasThumb && !loaded && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={mediaUrl(item.uid, 'thumb')}
+            alt=""
+            draggable={false}
+            className="absolute inset-0 h-full w-full select-none object-contain"
+          />
+        )}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={mediaUrl(item.uid, 'thumb')}
+          src={mediaUrl(item.uid, 'preview')}
           alt=""
-          className="absolute inset-0 h-full w-full object-contain"
+          draggable={false}
+          onLoad={(e) => {
+            const img = e.currentTarget;
+            if (img.naturalWidth && img.naturalHeight) setRatio(img.naturalWidth / img.naturalHeight);
+            setLoaded(true);
+          }}
+          onError={() => setFailed(true)}
+          className={`absolute inset-0 h-full w-full select-none object-contain transition-opacity duration-300 ${
+            loaded ? 'opacity-100' : 'opacity-0'
+          }`}
         />
-      )}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={mediaUrl(item.uid, 'preview')}
-        alt=""
-        draggable={false}
-        onLoad={() => setLoaded(true)}
-        onError={() => setFailed(true)}
-        className={`absolute inset-0 h-full w-full select-none object-contain transition-opacity duration-300 ${
-          loaded ? 'opacity-100' : 'opacity-0'
-        }`}
-      />
+      </div>
     </div>
   );
 }
@@ -157,6 +356,9 @@ export default function MediaLightbox({
   const shareFiles = useRef(new Map<string, Promise<File>>());
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const [dragY, setDragY] = useState(0);
+  // Přiblížená fotka — tažení ji posouvá, neposouvá galerii ani nezavírá
+  const [zoomedUid, setZoomedUid] = useState<string | null>(null);
+  const zoomed = zoomedUid !== null && zoomedUid === item?.uid;
 
   const prev = () => onIndex((index - 1 + total) % total);
   const next = () => onIndex((index + 1) % total);
@@ -247,8 +449,9 @@ export default function MediaLightbox({
   };
 
   const onTouchStart = (e: React.TouchEvent) => {
-    if (e.touches.length !== 1) {
+    if (e.touches.length !== 1 || zoomed) {
       touchStart.current = null;
+      setDragY(0);
       return;
     }
     const touch = e.touches[0];
@@ -256,7 +459,7 @@ export default function MediaLightbox({
   };
   const onTouchMove = (e: React.TouchEvent) => {
     const start = touchStart.current;
-    if (!start || item.kind === 'video') return;
+    if (!start || item.kind === 'video' || e.touches.length !== 1) return;
     const dy = e.touches[0].clientY - start.y;
     const dx = e.touches[0].clientX - start.x;
     if (dy > 0 && Math.abs(dy) > Math.abs(dx)) setDragY(dy);
@@ -265,7 +468,7 @@ export default function MediaLightbox({
     const start = touchStart.current;
     touchStart.current = null;
     setDragY(0);
-    if (!start) return;
+    if (!start || zoomed) return;
     const touch = e.changedTouches[0];
     const dx = touch.clientX - start.x;
     const dy = touch.clientY - start.y;
@@ -326,7 +529,12 @@ export default function MediaLightbox({
               className="max-h-full max-w-full rounded-md bg-black"
             />
           ) : (
-            <PhotoView key={item.uid} item={item} noPreview={texts.noPreview} />
+            <PhotoView
+              key={item.uid}
+              item={item}
+              noPreview={texts.noPreview}
+              onZoomed={(value) => setZoomedUid(value ? item.uid : null)}
+            />
           )}
         </div>
 
