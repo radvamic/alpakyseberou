@@ -4,6 +4,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 import SectionHeader from '@/components/ui/SectionHeader';
+import SectionPhotoBackdrop from '@/components/ui/SectionPhotoBackdrop';
 import { OPTION_LETTERS, type QuizFinalResults } from '@/lib/quiz-types';
 
 type LoadState = 'loading' | 'ready' | 'error';
@@ -42,8 +43,9 @@ export default function QuizResults() {
   const pick = (cs: string, en: string) => (locale === 'en' && en ? en : cs);
 
   return (
-    <section id="quiz" className="relative pt-0 pb-8 bg-[#0A0A0A]">
-      <div className="mx-auto max-w-5xl px-6">
+    <section id="quiz" className="relative pt-24 md:pt-36 pb-20 md:pb-28 bg-[#0A0A0A]">
+      <SectionPhotoBackdrop src="/assets/images/sections/quiz.jpg" position="65% 35%" fadeTo="#0A0A0A" />
+      <div className="relative mx-auto max-w-5xl px-6 [text-shadow:0_2px_14px_rgba(0,0,0,0.75)]">
         <SectionHeader
           title={t('quiz.title') as string}
           subtitle={t('quiz.subtitle') as string}
