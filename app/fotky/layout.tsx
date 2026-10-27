@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 
 export const metadata: Metadata = {
   title: 'Fotky a videa ze svatby — Klára & Michal',
-  description: 'Nahrajte své fotky a videa ze svatby a stáhněte si, co nafotili ostatní.',
+  description: 'Fotky od fotografky, svatební film od kameramana a fotky a videa od hostů — prohlížejte, stahujte, přidávejte své.',
   robots: { index: false, follow: false },
 };
 
