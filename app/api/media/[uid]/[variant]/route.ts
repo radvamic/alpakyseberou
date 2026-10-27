@@ -15,7 +15,9 @@ const BROWSER_IMAGE = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
  *   thumb    — náhled do mřížky
  *   preview  — velká fotka / úvodní snímek videa
  *   play     — video pro přehrávač (převedené, jinak originál)
+ *   play-sd  — menší video pro telefon (jen u videa od kameramana)
  *   download — originál ke stažení
+ *   download-hd / download-sd — převedená videa ke stažení (1080p / 720p)
  * Snímky z jednorázového fotoaparátu jsou na disku serveru a jdou přímo odsud.
  */
 export async function GET(
@@ -50,8 +52,24 @@ export async function GET(
           });
         }
         break;
+      case 'play-sd':
+        if (row.kind === 'video') {
+          const key = row.mobileKey ?? row.playbackKey ?? row.originalKey;
+          url = await presignGet(key, { contentType: key === row.originalKey ? row.contentType : 'video/mp4' });
+        }
+        break;
       case 'download':
         url = await presignGet(row.originalKey, { downloadName: row.fileName });
+        break;
+      case 'download-hd':
+        if (row.playbackKey) {
+          url = await presignGet(row.playbackKey, { downloadName: renditionName(row.fileName, '1080p') });
+        }
+        break;
+      case 'download-sd':
+        if (row.mobileKey) {
+          url = await presignGet(row.mobileKey, { downloadName: renditionName(row.fileName, '720p') });
+        }
         break;
     }
 
@@ -64,6 +82,11 @@ export async function GET(
     console.error('Media variant error:', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
+}
+
+/** „Svatební film.mov“ → „Svatební film (720p).mp4“ */
+function renditionName(fileName: string, label: string): string {
+  return `${fileName.replace(/\.[^.]+$/, '')} (${label}).mp4`;
 }
 
 async function cameraVariant(id: number, variant: string) {

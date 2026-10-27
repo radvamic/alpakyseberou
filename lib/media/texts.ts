@@ -28,7 +28,13 @@ const cs = {
     title: 'Svatební video',
     soon: 'Již brzy',
     promise: 'Kameraman nám video slíbil mezi 22. a 29. 10. 2026. Jakmile ho budeme mít, najdete ho právě tady.',
-    intro: 'Svatební video od kameramana. Pusťte si ho tady, nebo si stáhněte originál.',
+    intro: 'Svatební film a krátký trailer od kameramana. Pusťte si je tady, nebo si je stáhněte v kvalitě, jaká se vám hodí.',
+    download: 'Stáhnout',
+    original: '4K originál',
+    hd: 'Full HD',
+    sd: 'Do mobilu',
+    downloadHint:
+      'Full HD a verze do mobilu jsou MP4, které přehraje každé zařízení. 4K originál je v nejvyšší kvalitě, ale jako MOV (HEVC) ho starší počítače s Windows nemusí přehrát.',
   },
   guestsIntro: 'Nahrajte, co jste nafotili, a stáhněte si, co nafotili ostatní.',
   camera: {
@@ -133,7 +139,13 @@ const en: typeof cs = {
     title: 'Wedding film',
     soon: 'Coming soon',
     promise: 'Our videographer promised the film between 22 and 29 October 2026. You’ll find it right here once we have it.',
-    intro: 'The wedding film from our videographer. Watch it here or download the original.',
+    intro: 'The wedding film and a short trailer from our videographer. Watch them here or download them in the quality that suits you.',
+    download: 'Download',
+    original: '4K original',
+    hd: 'Full HD',
+    sd: 'For phones',
+    downloadHint:
+      'Full HD and the phone version are MP4 files that play on any device. The 4K original has the best quality, but as a MOV (HEVC) file it may not play on older Windows computers.',
   },
   guestsIntro: 'Upload what you captured and download what everyone else did.',
   camera: {

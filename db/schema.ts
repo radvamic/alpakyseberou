@@ -266,6 +266,10 @@ export const media = sqliteTable(
     thumbKey: text('thumb_key'),
     previewKey: text('preview_key'),
     playbackKey: text('playback_key'),
+    playbackSize: integer('playback_size'),
+    // menší (720p) verze videa od kameramana — přehrávání v telefonu a stažení
+    mobileKey: text('mobile_key'),
+    mobileSize: integer('mobile_size'),
     width: integer('width'),
     height: integer('height'),
     durationMs: integer('duration_ms'),

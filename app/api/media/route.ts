@@ -25,6 +25,8 @@ export async function GET(request: NextRequest) {
         width: media.width,
         height: media.height,
         durationMs: media.durationMs,
+        hdSize: media.playbackSize,
+        sdSize: media.mobileSize,
         takenAt: media.takenAt,
         uploadedAt: media.uploadedAt,
         thumbKey: media.thumbKey,
