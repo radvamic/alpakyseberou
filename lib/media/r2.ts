@@ -67,7 +67,7 @@ export function originalKeyFor(uid: string, ext: string): string {
   return `media/${uid}/original${ext ? `.${ext}` : ''}`;
 }
 
-export function derivedKey(uid: string, name: 'thumb.jpg' | 'preview.jpg' | 'play.mp4'): string {
+export function derivedKey(uid: string, name: 'thumb.jpg' | 'preview.jpg' | 'play.mp4' | 'play-720.mp4'): string {
   return `media/${uid}/${name}`;
 }
 

@@ -18,7 +18,14 @@ export const COLLECTION_AUTHOR: Record<Exclude<MediaCollection, 'guests'>, strin
   photographer: 'Svatební fotografka',
   film: 'Kameraman',
 };
-export type MediaVariant = 'thumb' | 'preview' | 'play' | 'download';
+export type MediaVariant =
+  | 'thumb'
+  | 'preview'
+  | 'play'
+  | 'play-sd'
+  | 'download'
+  | 'download-hd'
+  | 'download-sd';
 
 /** Položka galerie, jak ji vrací GET /api/media. */
 export interface MediaItem {
@@ -33,6 +40,9 @@ export interface MediaItem {
   width: number | null;
   height: number | null;
   durationMs: number | null;
+  /** Velikost převedeného videa 1080p / 720p ke stažení (null = není). */
+  hdSize: number | null;
+  sdSize: number | null;
   takenAt: string | null;
   uploadedAt: string | null;
   hasThumb: boolean;

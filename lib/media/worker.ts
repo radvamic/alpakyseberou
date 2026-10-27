@@ -19,7 +19,8 @@ import {
  * z instrumentation.ts):
  * - fotka → náhled do mřížky (thumb) a větší verze do prohlížeče (preview),
  * - video → snímek jako náhled + převod na 1080p H.264, které přehraje každý
- *   prohlížeč (originál z iPhonu bývá 4K HEVC, často HDR).
+ *   prohlížeč (originál z iPhonu bývá 4K HEVC, často HDR). Video od
+ *   kameramana dostane navíc 720p do telefonu; obě verze jdou i stáhnout.
  *
  * Fotky a videa mají oddělené fronty, aby dlouhé video neblokovalo fotky.
  * Úlohy se zamykají atomicky v SQLite, takže při rolling deployi, kdy chvíli
@@ -44,6 +45,38 @@ const LEASE_MS: Record<Kind, number> = { photo: 10 * 60_000, video: 4 * 60 * 60_
 const IDLE_POLL_MS = 15_000;
 const MAX_PHOTO_BYTES = 150 * 1024 * 1024;
 const VIDEO_TIMEOUT_MS = 3 * 60 * 60_000;
+
+interface Rendition {
+  name: 'play.mp4' | 'play-720.mp4';
+  maxSide: number;
+  video: string[];
+  audioBitrate: string;
+}
+
+/** Videa od hostů — hlavně ať jdou rychle přehrát. */
+const GUEST_RENDITIONS: Rendition[] = [
+  { name: 'play.mp4', maxSide: 1920, video: ['-preset', 'veryfast', '-crf', '23'], audioBitrate: '128k' },
+];
+
+/**
+ * Video od kameramana se i stahuje, proto pečlivější převod. Strop datového
+ * toku drží velikost (~60 MB, resp. ~23 MB na minutu) a plynulé přehrávání
+ * přes mobilní data; klíčový snímek po 2 s zrychluje přeskakování.
+ */
+const FILM_RENDITIONS: Rendition[] = [
+  {
+    name: 'play.mp4',
+    maxSide: 1920,
+    video: ['-preset', 'medium', '-crf', '20', '-maxrate', '8M', '-bufsize', '16M', '-g', '50'],
+    audioBitrate: '192k',
+  },
+  {
+    name: 'play-720.mp4',
+    maxSide: 1280,
+    video: ['-preset', 'medium', '-crf', '23', '-maxrate', '3M', '-bufsize', '6M', '-g', '50'],
+    audioBitrate: '128k',
+  },
+];
 
 // Next.js načítá tenhle modul zvlášť pro instrumentation a pro API routy —
 // sdílený stav proto žije na globalThis, jinak by se fronta nedala probudit.
@@ -336,43 +369,56 @@ async function processVideo(job: Job): Promise<void> {
       isHdr && (await hasZscale())
         ? 'zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,'
         : '';
-    const scale =
-      "scale='min(1920,iw)':'min(1920,ih)':force_original_aspect_ratio=decrease:force_divisible_by=2";
+    const scale = (maxSide: number) =>
+      `scale='min(${maxSide},iw)':'min(${maxSide},ih)':force_original_aspect_ratio=decrease:force_divisible_by=2`;
 
     // Náhled — snímek kousek od začátku (úplně první bývá černý)
     const posterPath = path.join(tmp, 'poster.jpg');
     const seek = durationMs && durationMs > 2000 ? '1' : '0';
     await run(
       'ffmpeg',
-      ['-v', 'error', '-y', '-ss', seek, '-i', source, '-frames:v', '1', '-vf', `${tonemap}${scale},format=yuvj420p`, '-q:v', '3', posterPath],
+      ['-v', 'error', '-y', '-ss', seek, '-i', source, '-frames:v', '1', '-vf', `${tonemap}${scale(1920)},format=yuvj420p`, '-q:v', '3', posterPath],
       10 * 60_000,
     );
     const { thumbKey, previewKey } = await uploadVariants(job.uid, await fs.promises.readFile(posterPath));
 
-    // Přehrávací verze — 1080p H.264 + AAC, moov na začátku pro okamžité přehrání
-    const playPath = path.join(tmp, 'play.mp4');
+    // Přehrávací verze — H.264 + AAC, moov na začátku pro okamžité přehrání.
+    // Všechny z jednoho průchodu, 4K originál se dekóduje jen jednou.
+    const renditions = job.collection === 'film' ? FILM_RENDITIONS : GUEST_RENDITIONS;
+    const split = renditions.map((_, i) => `[s${i}]`).join('');
+    const filters = [
+      `[0:v:0]${tonemap}split=${renditions.length}${split}`,
+      ...renditions.map((r, i) => `[s${i}]${scale(r.maxSide)},format=yuv420p[v${i}]`),
+    ];
+    const outputs = renditions.flatMap((r, i) => [
+      '-map', `[v${i}]`, '-map', '0:a:0?',
+      '-c:v', 'libx264', ...r.video, '-profile:v', 'high',
+      '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709',
+      '-c:a', 'aac', '-b:a', r.audioBitrate, '-ac', '2',
+      '-movflags', '+faststart',
+      path.join(tmp, r.name),
+    ]);
     await run(
       'nice',
-      [
-        '-n', '10', 'ffmpeg', '-v', 'error', '-y', '-i', source,
-        '-map', '0:v:0', '-map', '0:a:0?',
-        '-vf', `${tonemap}${scale},format=yuv420p`,
-        '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23', '-profile:v', 'high',
-        '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709',
-        '-c:a', 'aac', '-b:a', '128k', '-ac', '2',
-        '-movflags', '+faststart',
-        playPath,
-      ],
+      ['-n', '10', 'ffmpeg', '-v', 'error', '-y', '-i', source, '-filter_complex', filters.join(';'), ...outputs],
       VIDEO_TIMEOUT_MS,
     );
-    const playbackKey = derivedKey(job.uid, 'play.mp4');
-    const { size } = await fs.promises.stat(playPath);
-    await putObject(playbackKey, fs.createReadStream(playPath), 'video/mp4', size);
+    const stored: Partial<Record<Rendition['name'], { key: string; size: number }>> = {};
+    for (const r of renditions) {
+      const file = path.join(tmp, r.name);
+      const key = derivedKey(job.uid, r.name);
+      const { size } = await fs.promises.stat(file);
+      await putObject(key, fs.createReadStream(file), 'video/mp4', size);
+      stored[r.name] = { key, size };
+    }
 
     markReady(job, {
       thumb_key: thumbKey,
       preview_key: previewKey,
-      playback_key: playbackKey,
+      playback_key: stored['play.mp4']?.key ?? null,
+      playback_size: stored['play.mp4']?.size ?? null,
+      mobile_key: stored['play-720.mp4']?.key ?? null,
+      mobile_size: stored['play-720.mp4']?.size ?? null,
       width,
       height,
       duration_ms: durationMs,

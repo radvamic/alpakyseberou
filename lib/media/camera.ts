@@ -75,6 +75,8 @@ export async function listCameraItems(): Promise<MediaItem[]> {
         width: dims?.width ?? null,
         height: dims?.height ?? null,
         durationMs: null,
+        hdSize: null,
+        sdSize: null,
         takenAt,
         uploadedAt: takenAt,
         hasThumb: true,

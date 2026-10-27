@@ -11,7 +11,7 @@ export async function findMedia(uid: string): Promise<MediaRow | undefined> {
 
 /** Všechny klíče v R2, které k položce patří. */
 export function storedKeys(row: MediaRow): string[] {
-  return [row.originalKey, row.thumbKey, row.previewKey, row.playbackKey].filter(
+  return [row.originalKey, row.thumbKey, row.previewKey, row.playbackKey, row.mobileKey].filter(
     (key): key is string => !!key,
   );
 }
