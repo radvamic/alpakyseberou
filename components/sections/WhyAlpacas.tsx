@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
 import SectionHeader from '@/components/ui/SectionHeader';
+import SectionPhotoBackdrop from '@/components/ui/SectionPhotoBackdrop';
 
 /** Small alpaca illustration for the section */
 function AlpacaIllustration() {
@@ -43,7 +44,8 @@ export default function WhyAlpacas() {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <section id="alpacas" className="relative pt-0 pb-8 bg-[#0A0A0A] overflow-hidden">
+    <section id="alpacas" className="relative pt-24 md:pt-36 pb-20 md:pb-28 bg-[#0A0A0A] overflow-hidden">
+      <SectionPhotoBackdrop src="/assets/images/sections/alpacas.jpg" position="45% 30%" fadeTo="#0A0A0A" />
       {/* Very subtle alpaca pattern background */}
       <div
         className="absolute inset-0 opacity-[0.03]"
@@ -52,7 +54,7 @@ export default function WhyAlpacas() {
           backgroundRepeat: 'repeat',
         }}
       />
-      <div className="relative mx-auto max-w-2xl px-6 text-center">
+      <div className="relative mx-auto max-w-2xl px-6 text-center [text-shadow:0_2px_14px_rgba(0,0,0,0.75)]">
         <SectionHeader
           title={t('alpacas.title') as string}
           subtitle={t('alpacas.subtitle') as string}

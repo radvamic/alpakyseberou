@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import Image from 'next/image';
 import { useI18n } from '@/lib/i18n';
 import SectionHeader from '@/components/ui/SectionHeader';
+import SectionPhotoBackdrop from '@/components/ui/SectionPhotoBackdrop';
 
 interface Chapter {
   date: string;
@@ -83,7 +84,8 @@ export default function Story() {
   const lineHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
 
   return (
-    <section id="story" className="relative pt-0 pb-8 bg-[#141414] overflow-hidden">
+    <section id="story" className="relative pt-24 md:pt-36 pb-20 md:pb-28 bg-[#141414] overflow-hidden">
+      <SectionPhotoBackdrop src="/assets/images/sections/story.jpg" position="50% 100%" fadeTo="#141414" />
       {/* Very subtle alpaca pattern */}
       <div
         className="absolute inset-0 opacity-[0.025] pointer-events-none"
@@ -92,7 +94,7 @@ export default function Story() {
           backgroundRepeat: 'repeat',
         }}
       />
-      <div className="relative mx-auto max-w-6xl px-6">
+      <div className="relative mx-auto max-w-6xl px-6 [text-shadow:0_2px_14px_rgba(0,0,0,0.75)]">
         <SectionHeader
           title={t('story.title') as string}
           subtitle={t('story.subtitle') as string}
