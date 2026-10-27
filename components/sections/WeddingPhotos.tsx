@@ -18,7 +18,7 @@ export default function WeddingPhotos() {
           {
             step: '2',
             title: 'Prohlížejte a stahujte',
-            desc: 'Fotky od fotografky, video i fotky od hostů',
+            desc: 'Fotky od fotografky, svatební film i fotky od hostů',
           },
           {
             step: '3',
